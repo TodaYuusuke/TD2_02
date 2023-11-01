@@ -13,10 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Class">
+      <UniqueIdentifier>{2bc6cc41-459f-4751-a969-e88f03595797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\scene">
+      <UniqueIdentifier>{02357ffa-f494-4ebf-aaa2-ab6f6b17441f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Class\sence\Title.cpp">
+      <Filter>Class\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\sence\GameScene.cpp">
+      <Filter>Class\scene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Class\sence\Title.h">
+      <Filter>Class\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\sence\GameScene.h">
+      <Filter>Class\scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
