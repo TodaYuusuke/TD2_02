@@ -8,7 +8,7 @@ using namespace LWP::Math;
 using namespace LWP::Utility;
 
 // 初期化
-void Title::Initialize() {
+void TestTitle::Initialize() {
 	// テクスチャ読み込み
 	uvTexture = LWP::Resource::LoadTextureLongPath("resources/system/texture/uvChecker.png");
 	monsterBall = LWP::Resource::LoadTexture("monsterBall.png");
@@ -50,24 +50,11 @@ void Title::Initialize() {
 	cubeModel->transform.scale = { 5.0f,5.0f, 0.05f };
 	cubeModel->material.enableLighting = true;
 	cubeModel->isActive = true;
-	axisModel = LWP::Resource::LoadModel("enemy/enemy.obj");
-	axisModel->material.enableLighting = true;
-	axisModel->isActive = false;
 }
 
 // 更新
-void Title::Update() {
+void TestTitle::Update() {
 #if _DEBUG
-	ImGui::Begin("Primitive");
-	ground->DebugGUI("Ground");
-	tri[0]->DebugGUI("Tri0");
-	tri[1]->DebugGUI("Tri1");
-	surface->DebugGUI("Surface");
-	sphere->DebugGUI("Sphere");
-	cubeModel->DebugGUI("cube");
-	axisModel->DebugGUI("axis");
-	ImGui::End();
-
 	// カメラ操作
 	ImGui::Begin("Camera");
 	mainCamera->DebugGUI();
@@ -92,4 +79,4 @@ void Title::Update() {
 	}
 }
 // 描画
-void Title::Draw() {}
+void TestTitle::Draw() {}
