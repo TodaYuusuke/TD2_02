@@ -54,13 +54,6 @@ void TestTitle::Initialize() {
 
 // 更新
 void TestTitle::Update() {
-#if _DEBUG
-	// カメラ操作
-	ImGui::Begin("Camera");
-	mainCamera->DebugGUI();
-	ImGui::End();
-#endif
-
 	// SPACEキーを押すとテクスチャ切り替え
 	if (Keyboard::GetTrigger(DIK_SPACE)) {
 		if (!useMonsterBall) {
