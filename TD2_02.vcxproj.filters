@@ -69,6 +69,9 @@
     <ClCompile Include="Class\sence\StageSelectScene.cpp">
       <Filter>Class\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Class\player\Lantern.cpp">
+      <Filter>Class\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\sence\Title.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Class\sence\StageSelectScene.h">
       <Filter>Class\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\player\Lantern.h">
+      <Filter>Class\player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

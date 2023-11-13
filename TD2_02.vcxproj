@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\player\Lantern.cpp" />
     <ClCompile Include="Class\player\Player.cpp" />
     <ClCompile Include="Class\sence\GameScene.cpp" />
     <ClCompile Include="Class\sence\StageSelectScene.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Class\player\Lantern.h" />
     <ClInclude Include="Class\player\Player.h" />
     <ClInclude Include="Class\sence\GameScene.h" />
     <ClInclude Include="Class\sence\StageSelectScene.h" />

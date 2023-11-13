@@ -64,4 +64,9 @@ void Stage::Init(int level) {
 }
 
 void Stage::Update() {
+	for (int y = 0; y < mapChip_.size(); y++) {
+		for (int x = 0; x < mapChip_[y].size(); x++) {
+			mapChip_[y][x]->Update();
+		}
+	}
 }
