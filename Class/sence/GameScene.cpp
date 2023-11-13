@@ -1,12 +1,11 @@
 #include "GameScene.h"
 
-// 初期化
+GameScene::GameScene(int level) : level_(level) {}
+
 void GameScene::Initialize() {
-
+	stage_.Init(level_);
 }
-// 更新
+
 void GameScene::Update() {
-
+	stage_.Update();
 }
-// 描画
-void GameScene::Draw() {}

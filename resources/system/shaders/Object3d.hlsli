@@ -76,7 +76,7 @@ Texture2D<float32_t4> gTexture[] : register(t0, space1);
 SamplerState gSampler : register(s0);
 
 // 影の濃さ
-const static float kShadowDensity = 0.2f;
+const static float kShadowDensity = 0.0f;
 
 // シャドウマップのテクスチャ
 Texture2D<float> gDirectionShadowMap[] : register(t0, space2);   // 平行光源

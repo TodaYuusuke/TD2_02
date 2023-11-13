@@ -19,6 +19,15 @@
     <Filter Include="Class\scene">
       <UniqueIdentifier>{02357ffa-f494-4ebf-aaa2-ab6f6b17441f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Class\player">
+      <UniqueIdentifier>{aa4acba2-5728-4e0b-a904-28d07d7b7c85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\stage">
+      <UniqueIdentifier>{c5feb306-f057-4498-b2c0-3747ed4512df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\stage\MapChip">
+      <UniqueIdentifier>{173b86a8-6e55-4f11-83d8-740f6ab29cae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -30,12 +39,60 @@
     <ClCompile Include="Class\sence\GameScene.cpp">
       <Filter>Class\scene</Filter>
     </ClCompile>
+    <ClCompile Include="Class\player\Player.cpp">
+      <Filter>Class\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\StageSelect.cpp">
+      <Filter>Class\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\Stage.cpp">
+      <Filter>Class\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\Floor.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\VineFloor.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\VineWall.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\Wall.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\Hole.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\Candle.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\sence\StageSelect.cpp">
+      <Filter>Class\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\sence\Title.h">
       <Filter>Class\scene</Filter>
     </ClInclude>
     <ClInclude Include="Class\sence\GameScene.h">
+      <Filter>Class\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\player\Player.h">
+      <Filter>Class\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\stage\Stage.h">
+      <Filter>Class\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\stage\StageSelect.h">
+      <Filter>Class\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\stage\MapChip\Derved.h">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\stage\MapChip\IMapChip.h">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\sence\StageSelect.h">
       <Filter>Class\scene</Filter>
     </ClInclude>
   </ItemGroup>

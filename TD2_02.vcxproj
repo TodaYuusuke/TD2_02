@@ -137,13 +137,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\player\Player.cpp" />
     <ClCompile Include="Class\sence\GameScene.cpp" />
+    <ClCompile Include="Class\sence\StageSelect.cpp" />
     <ClCompile Include="Class\sence\Title.cpp" />
+    <ClCompile Include="Class\stage\MapChip\Candle.cpp" />
+    <ClCompile Include="Class\stage\MapChip\Floor.cpp" />
+    <ClCompile Include="Class\stage\MapChip\Hole.cpp" />
+    <ClCompile Include="Class\stage\MapChip\VineFloor.cpp" />
+    <ClCompile Include="Class\stage\MapChip\VineWall.cpp" />
+    <ClCompile Include="Class\stage\MapChip\Wall.cpp" />
+    <ClCompile Include="Class\stage\Stage.cpp" />
+    <ClCompile Include="Class\stage\StageSelect.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Class\player\Player.h" />
     <ClInclude Include="Class\sence\GameScene.h" />
+    <ClInclude Include="Class\sence\StageSelect.h" />
     <ClInclude Include="Class\sence\Title.h" />
+    <ClInclude Include="Class\stage\MapChip\Derved.h" />
+    <ClInclude Include="Class\stage\MapChip\IMapChip.h" />
+    <ClInclude Include="Class\stage\Stage.h" />
+    <ClInclude Include="Class\stage\StageSelect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
