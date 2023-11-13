@@ -2,12 +2,12 @@
 #include <Adapter.h>
 #include "../Engine/scene/IScene.h"
 
-class StageSelect final
+class StageSelectScene final
 	: public IScene {
 public:
 
 	// コンストラクタの定義も自由に可
-	StageSelect() = default;
+	StageSelectScene() = default;
 
 	//*** 純粋仮想関数の実体宣言 ***//
 

@@ -139,7 +139,7 @@
   <ItemGroup>
     <ClCompile Include="Class\player\Player.cpp" />
     <ClCompile Include="Class\sence\GameScene.cpp" />
-    <ClCompile Include="Class\sence\StageSelect.cpp" />
+    <ClCompile Include="Class\sence\StageSelectScene.cpp" />
     <ClCompile Include="Class\sence\Title.cpp" />
     <ClCompile Include="Class\stage\MapChip\Candle.cpp" />
     <ClCompile Include="Class\stage\MapChip\Floor.cpp" />
@@ -154,7 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Class\player\Player.h" />
     <ClInclude Include="Class\sence\GameScene.h" />
-    <ClInclude Include="Class\sence\StageSelect.h" />
+    <ClInclude Include="Class\sence\StageSelectScene.h" />
     <ClInclude Include="Class\sence\Title.h" />
     <ClInclude Include="Class\stage\MapChip\Derved.h" />
     <ClInclude Include="Class\stage\MapChip\IMapChip.h" />

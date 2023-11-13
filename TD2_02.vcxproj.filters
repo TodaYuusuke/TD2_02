@@ -66,7 +66,7 @@
     <ClCompile Include="Class\stage\MapChip\Candle.cpp">
       <Filter>Class\stage\MapChip</Filter>
     </ClCompile>
-    <ClCompile Include="Class\sence\StageSelect.cpp">
+    <ClCompile Include="Class\sence\StageSelectScene.cpp">
       <Filter>Class\scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClInclude Include="Class\stage\MapChip\IMapChip.h">
       <Filter>Class\stage\MapChip</Filter>
     </ClInclude>
-    <ClInclude Include="Class\sence\StageSelect.h">
+    <ClInclude Include="Class\sence\StageSelectScene.h">
       <Filter>Class\scene</Filter>
     </ClInclude>
   </ItemGroup>

@@ -42,20 +42,26 @@ void Stage::Init(int level) {
 					mapChip_[y].push_back(new Candle());
 					break;
 			}
-
-			// ‰Šú‰»
-			Vector3 position = {
-				static_cast<float>(mapChip_[y].size()),
-				0.0f,
-				static_cast<float>(y)
-			};
-			mapChip_[y].back()->Init(position);
 		}
 		// —ñ‚ğ‚¸‚ç‚·
 		y++;
 	}
+
+	// ÅŒã‚ÉY‚ğ”½“]‚³‚¹‚é
+	std::reverse(mapChip_.begin(), mapChip_.end());
+	
+	// ‰Šú‰»
+	for (int y = 0; y < mapChip_.size(); y++) {
+		for (int x = 0; x < mapChip_[y].size(); x++) {
+			Vector3 position = {
+				static_cast<float>(x),
+				0.0f,
+				static_cast<float>(y)
+			};
+			mapChip_[y][x]->Init(position);
+		}
+	}
 }
 
 void Stage::Update() {
-
 }
