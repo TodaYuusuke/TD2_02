@@ -77,35 +77,17 @@ float32_t4 main(VertexShaderOutput input) : SV_TARGET {
         // -- 点光源 -- //
 
         const float far = 100.0f;  // パースペクティブのfar
-        const float near = 0.10;  // パースペクティブのnear
+        const float near = 0.01f;  // パースペクティブのnear
         for (uint n = 0; n < gStructCount.pointLight; n++) {
             // ライティング
             float3 dir = input.WorldPos - gPointLight[n].position;
             float NdotL = dot(normalize(input.normal), -normalize(dir));
-            float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+            float cos = NdotL <= 0 ? 0.0f : 1.0f;
+            //float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
             float distance = length(gPointLight[n].position - input.WorldPos);   // ポイントライトへの距離
             float factor = pow(saturate(-distance / gPointLight[n].radius + 1.0), gPointLight[n].decay);    // 逆二乗則による減衰係数
             float3 light = gPointLight[n].color.rgb * cos * gPointLight[n].intensity * factor;
             // シャドウマッピング
-            //float depth = gPointShadowMap[n].Sample(gPointShadowMapSampler, dir).x;
-            //float32_t4x4 view = {
-            //    {0.000796274282f,0.0f,0.999999702f,0.0f},
-            //    {0.0f,1.0f,0.0f,0.0f},
-            //    {-0.999999702f,0.0f,0.000796274282f,0.0f},
-            //    {-0.0995859057f,0.0f,0.520079434f,1.0f}
-            //};
-            //float32_t4x4 projection = {
-            //    {4.36919022f,0.0f,0.0f,0.0f},
-            //    {0.0f,4.36919022f,0.0f,0.0f},
-            //    {0.0f,0.0f,1.00100100f,1.0f},
-            //    {0.0f,0.0f,-0.100100100f,0.0f}
-            //};
-            //float4 Pos = mul(float4(input.WorldPos, 1.0f), gLightViewProjection[n + 1]);
-            //Pos.xyz = Pos.xyz / Pos.w;
-            //float z = 100.0f / (100.0f - 0.10f) - (100.0f * 0.10f) / (100.0f - 0.10f) / Pos.z;
-            //float sma = (z < depth) ? 1.0f : kShadowDensity;
-
-            // 現状維持
             float depth = gPointShadowMap[n].Sample(gPointShadowMapSampler, normalize(dir)).x;
             float3 absVec = abs(dir);
             float z = max(absVec.x, max(absVec.y, absVec.z));
