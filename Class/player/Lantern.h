@@ -1,39 +1,42 @@
 #pragma once
 #include <Adapter.h>
 
+// å‰æ–¹å®£è¨€
+class Stage;
+
 /// <summary>
-/// ƒ‰ƒ“ƒ^ƒ“
+/// ãƒ©ãƒ³ã‚¿ãƒ³
 /// </summary>
 class Lantern final {
-public: // ** ƒƒ“ƒoŠÖ” ** //
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	void Init();
-	// XV
-	void Update();
+	// æ›´æ–°
+	void Update(Stage* stage);
 
 
 	/// <summary>
-	/// ƒ‰ƒ“ƒ^ƒ“‚ğ’Í‚Ş
+	/// ãƒ©ãƒ³ã‚¿ãƒ³ã‚’æ´ã‚€
 	/// </summary>
-	/// <returns>ƒ‰ƒ“ƒ^ƒ“‚ğ’Ç]‚³‚¹‚é—p‚ÌƒyƒAƒŒƒ“ƒgƒ|ƒCƒ“ƒ^</returns>
-	LWP::Object::WorldTransform* Grab();
+	/// <returns>ãƒ©ãƒ³ã‚¿ãƒ³ã‚’è¿½å¾“ã•ã›ã‚‹ç”¨ã®ãƒšã‚¢ãƒ¬ãƒ³ãƒˆãƒã‚¤ãƒ³ã‚¿</returns>
+	void Grab(LWP::Object::WorldTransform* trasnform);
 
 	/// <summary>
-	/// ƒ‰ƒ“ƒ^ƒ“‚ğ“Š‚°‚é
+	/// ãƒ©ãƒ³ã‚¿ãƒ³ã‚’æŠ•ã’ã‚‹
 	/// </summary>
-	/// <param name="direction">“Š‚°‚é•ûŒü‚ÌƒxƒNƒgƒ‹i³‹K‰»Ï‚İ‚ğ‘—‚é‚±‚Æj</param>
+	/// <param name="direction">æŠ•ã’ã‚‹æ–¹å‘ã®ãƒ™ã‚¯ãƒˆãƒ«ï¼ˆæ­£è¦åŒ–æ¸ˆã¿ã‚’é€ã‚‹ã“ã¨ï¼‰</param>
 	void Throw(LWP::Math::Vector2 direction);
 
 
-private: // ** ƒƒ“ƒo•Ï” ** //
+private: // ** ãƒ¡ãƒ³ãƒå¤‰æ•° ** //
 
-	// ƒ‚ƒfƒ‹
+	// ãƒ¢ãƒ‡ãƒ«
 	LWP::Primitive::Mesh* handleModel_;
 	LWP::Primitive::Mesh* model_;
-	// ŒõŒ¹
+	// å…‰æº
 	LWP::Object::PointLight* light_;
 
-	// ’Í‚Ü‚ê‚Ä‚¢‚éƒtƒ‰ƒO
+	// æ´ã¾ã‚Œã¦ã„ã‚‹ãƒ•ãƒ©ã‚°
 	bool isGrabed;
 };

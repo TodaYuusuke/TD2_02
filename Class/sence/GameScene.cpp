@@ -4,10 +4,10 @@ GameScene::GameScene(int level) : level_(level) {}
 
 void GameScene::Initialize() {
 	stage_.Init(level_);
-	lantern_.Init();
+	player_.Init(mainCamera);
 }
 
 void GameScene::Update() {
 	stage_.Update();
-	lantern_.Update();
+	player_.Update(&stage_);
 }

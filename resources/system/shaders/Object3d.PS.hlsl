@@ -1,47 +1,5 @@
 #include "Object3d.hlsli"
 
-//// 方向ベクトルからキューブマップのテクスチャ座標を計算
-//float2 CalculateCubeMapCoords(float3 direction)
-//{
-//    float3 absVec = abs(direction);
-//
-//    float2 cubeMapCoords;
-//
-//    // X軸方向
-//    if (absVec.x >= absVec.y && absVec.x >= absVec.z)
-//    {
-//        cubeMapCoords.x = (direction.x > 0.0f) ? -direction.z : direction.z;
-//        cubeMapCoords.y = -direction.y;
-//    }
-//    // Y軸方向
-//    else if (absVec.y >= absVec.x && absVec.y >= absVec.z)
-//    {
-//        cubeMapCoords.x = direction.x;
-//        cubeMapCoords.y = (direction.y > 0.0f) ? direction.z : -direction.z;
-//    }
-//    // Z軸方向
-//    else
-//    {
-//        cubeMapCoords.x = direction.x;
-//        cubeMapCoords.y = -direction.y;
-//    }
-//
-//    return 0.5f * (cubeMapCoords + 1.0f);
-//}
-//
-//// 方向ベクトルから対応するキューブマップのテクスチャを選択
-//uint SelectCubeMapTexture(float3 direction, uint pointLightIndex)
-//{
-//    float2 cubeMapCoords = CalculateCubeMapCoords(direction);
-//
-//    // 選択されたキューブマップのインデックス
-//    uint selectedTextureIndex = (uint)(floor(cubeMapCoords.x * 6.0f + 0.5f));
-//    selectedTextureIndex = clamp(selectedTextureIndex, 0, 5);
-//    return gPointShadowMap[pointLightIndex * 6 + selectedTextureIndex].Sample(gPointShadowMapSampler, cubeMapCoords);
-//}
-
-
-
 float32_t4 main(VertexShaderOutput input) : SV_TARGET {
     // インデックスを抽出
     uint32_t m = gIndex[input.id].material;
