@@ -7,6 +7,7 @@ using namespace LWP::Primitive;
 using namespace LWP::Math;
 using namespace LWP::Utility;
 
+
 // 初期化
 void TestTitle::Initialize() {
 	// テクスチャ読み込み
@@ -50,6 +51,8 @@ void TestTitle::Initialize() {
 	cubeModel->transform.scale = { 5.0f,5.0f, 0.05f };
 	cubeModel->material.enableLighting = true;
 	cubeModel->isActive = true;
+
+
 }
 
 // 更新

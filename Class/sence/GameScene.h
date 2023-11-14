@@ -2,6 +2,11 @@
 #include <Adapter.h>
 #include "../Engine/scene/IScene.h"
 
+#include"../effect/Fire.h"
+#include"../collision/CollisionDetector.h"
+
+#include<random>
+
 class GameScene final
 	: public IScene {
 public:
@@ -21,4 +26,17 @@ public:
 	// scene遷移したい場合、ISceneポインタ型のnextSceneに次のシーンの実体を代入
 
 private: //*** これより先に必要な処理や変数を記述 ***//
+
+	//炎パーティクル
+	Fire* fire;
+	Fire* fire2;
+
+	CollisionDetector* collision;
+
+	
+	LWP::Primitive::Mesh* cubeModel;
+	LWP::Primitive::Sphere* sphere;
+
+	bool isHit;
+
 };

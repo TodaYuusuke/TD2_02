@@ -135,11 +135,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\collision\CollisionDetector.cpp" />
+    <ClCompile Include="Class\effect\Fire.cpp" />
     <ClCompile Include="Class\sence\GameScene.cpp" />
     <ClCompile Include="Class\sence\Title.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Class\collision\CollisionDetector.h" />
+    <ClInclude Include="Class\effect\Fire.h" />
     <ClInclude Include="Class\sence\GameScene.h" />
     <ClInclude Include="Class\sence\Title.h" />
   </ItemGroup>
