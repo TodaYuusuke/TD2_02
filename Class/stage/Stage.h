@@ -3,19 +3,21 @@
 #include <string>
 
 class Stage final {
-public:	// ** ƒƒ“ƒoŠÖ” ** //
+public:	// ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
 
-	// ‰Šú‰»i“Ç‚İ‚ŞƒŒƒxƒ‹j
+	// åˆæœŸåŒ–ï¼ˆèª­ã¿è¾¼ã‚€ãƒ¬ãƒ™ãƒ«ï¼‰
 	void Init(int level);
-	// XV
+	// æ›´æ–°
 	void Update();
 
 
-private: // ** ƒƒ“ƒo•Ï” ** //
+private: // ** ãƒ¡ãƒ³ãƒå¤‰æ•° ** //
 
-	// ƒ}ƒbƒvƒ`ƒbƒv
+	// ãƒãƒƒãƒ—ãƒãƒƒãƒ—
 	std::vector<std::vector<IMapChip*>> mapChip_;
 
+	// ãƒãƒƒãƒ—ãƒãƒƒãƒ—å…±é€šã®ã‚¹ã‚±ãƒ¼ãƒ«
+	float commonScale = 1.0f;
 
-private: // ** ƒvƒ‰ƒCƒx[ƒg‚ÈŠÖ” ** //
+private: // ** ãƒ—ãƒ©ã‚¤ãƒ™ãƒ¼ãƒˆãªé–¢æ•° ** //
 };

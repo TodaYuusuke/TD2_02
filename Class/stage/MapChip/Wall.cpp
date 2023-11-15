@@ -1,12 +1,23 @@
 #include "Derved.h"
 
-void Wall::Init(LWP::Math::Vector3 position) {
-	model_ = LWP::Resource::LoadModel("Floor/Floor.obj");
+void Wall::Init(LWP::Math::Vector3 position, float scale) {
+#if _DEBUG
+	model_ = LWP::Resource::LoadModel("Wall/LowPolyWall.obj");
+#else
+	model_ = LWP::Resource::LoadModel("Wall/Wall.obj");
+#endif
 	model_->transform.translation = position;
-	model_->transform.translation.y += 1.0f;
+	model_->transform.scale = { scale,scale,scale };
 	model_->material.enableLighting = true;
 }
 
 void Wall::Update() {
-	// “Á‚É‚È‚µ
+	// ç‰¹ã«ãªã—
+}
+
+bool Wall::IsMapChipCollision() {
+	return false;
+}
+bool Wall::IsGroundCollision() {
+	return true;
 }

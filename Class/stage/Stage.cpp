@@ -5,16 +5,16 @@
 using namespace LWP::Math;
 
 void Stage::Init(int level) {
-	// ƒŒƒxƒ‹‚ÌƒXƒe[ƒWƒf[ƒ^‚ğ“Ç‚İ‚Ş
+	// ãƒ¬ãƒ™ãƒ«ã®ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
 	std::ifstream ifs("resources/stage/level" + std::to_string(level) + ".csv");
-	std::string line;	// 1s•ª‚Ìƒf[ƒ^
+	std::string line;	// 1è¡Œåˆ†ã®ãƒ‡ãƒ¼ã‚¿
 	int y = 0;
 
-	// ‘Ss“Ç‚Ş‚Ü‚Åƒ‹[ƒv
+	// å…¨è¡Œèª­ã‚€ã¾ã§ãƒ«ãƒ¼ãƒ—
 	while (std::getline(ifs, line)) {
-		// 1—ñ¶¬
+		// 1åˆ—ç”Ÿæˆ
 		mapChip_.push_back(std::vector<IMapChip*>());
-		// ','‚Åˆê—ñ‚Ìî•ñ‚ğ‹æØ‚èA‚P‚Â‚¸‚ÂƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+		// ','ã§ä¸€åˆ—ã®æƒ…å ±ã‚’åŒºåˆ‡ã‚Šã€ï¼‘ã¤ãšã¤ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
 		std::istringstream stream(line);
 		std::string field;
 		while (std::getline(stream, field, ',')) {
@@ -43,14 +43,14 @@ void Stage::Init(int level) {
 					break;
 			}
 		}
-		// —ñ‚ğ‚¸‚ç‚·
+		// åˆ—ã‚’ãšã‚‰ã™
 		y++;
 	}
 
-	// ÅŒã‚ÉY‚ğ”½“]‚³‚¹‚é
+	// æœ€å¾Œã«Yã‚’åè»¢ã•ã›ã‚‹
 	std::reverse(mapChip_.begin(), mapChip_.end());
 	
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	for (int y = 0; y < mapChip_.size(); y++) {
 		for (int x = 0; x < mapChip_[y].size(); x++) {
 			Vector3 position = {
@@ -58,14 +58,29 @@ void Stage::Init(int level) {
 				0.0f,
 				static_cast<float>(y)
 			};
-			mapChip_[y][x]->Init(position);
+			mapChip_[y][x]->Init(position, commonScale);
 		}
 	}
 }
 
 void Stage::Update() {
+#if _DEBUG
+	ImGui::Begin("Stage");
+	ImGui::DragFloat("commonScale", &commonScale, 0.01f);
+	ImGui::End();
+#endif
+
 	for (int y = 0; y < mapChip_.size(); y++) {
 		for (int x = 0; x < mapChip_[y].size(); x++) {
+#if _DEBUG
+			Vector3 position = {
+				static_cast<float>(x) * commonScale,
+				0.0f,
+				static_cast<float>(y) * commonScale
+			};
+			mapChip_[y][x]->SetPosition(position);
+			mapChip_[y][x]->SetScale(commonScale);
+#endif
 			mapChip_[y][x]->Update();
 		}
 	}
