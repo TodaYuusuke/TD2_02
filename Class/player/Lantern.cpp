@@ -18,10 +18,16 @@ void Lantern::Init() {
 	model_->transform.Parent(&handleModel_->transform);
 	light_->transform.Parent(&model_->transform);
 
+	// ライトのふるまいの初期化
 	LightBehaviorNormalInit();
+	// ランタンの揺れの初期設定
+	WaitSwingAmplitude();
 }
 
 void Lantern::Update() {
+	// ランタンの揺れる処理
+	SwingUpdate();
+
 	// ライトのふるまい
 	LightBehavior();
 
@@ -39,6 +45,10 @@ void Lantern::Update() {
 		light_->DebugGUI();
 		ImGui::TreePop();
 	}
+	ImGui::DragFloat("cycleSpeed", &hontaiRotateCycleFrame_, 1);
+	ImGui::DragFloat("amplitude", &hontaiMaxAmplitude_, 0.01f);
+	ImGui::DragFloat("factorX", &factorX_, 0.01f);
+	ImGui::DragFloat("factorZ", &factorZ_, 0.01f);
 	ImGui::End();
 #endif
 }
@@ -97,7 +107,7 @@ void Lantern::LightBehaviorNormalInit() {
 	lightNormal_.currentFrame = 0;
 	// 終了フレームを乱数で生成
 	std::uniform_real_distribution<float> distribution(600.0f, 900.0f);
-	lightNormal_.EndFrame = static_cast<int>(distribution(randomEngine));
+	lightNormal_.EndFrame = 60;//static_cast<int>(distribution(randomEngine));
 }
 
 void Lantern::LightBehaviorNormalUpdate() {
@@ -126,14 +136,14 @@ void Lantern::LightBehaviorFlickerInit() {
 	lightAmplitude_ = 0;
 	intensityCycle_ = 0;
 	// 1往復何フレーム
-	intensityCycleFrame_ = 8;
+	intensityCycleFrame_ = 16;
 
 	// 乱数生成器の初期化
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 
 	// 終了フレームを乱数で生成
-	std::uniform_int_distribution<> distribution(1,3);
+	std::uniform_int_distribution<> distribution(1,2);
 	flickerCount_ = distribution(randomEngine);
 
 	// 現在のフレーム
@@ -160,7 +170,32 @@ void Lantern::LightBehaviorFlickerUpdate() {
 	light_->intensity = 1.0f - fabs(lightAmplitude_);
 
 	lightFlicker_.currentFrame++;
-	ImGui::Begin(" ");
-	ImGui::Text("FlickerCount:%d", flickerCount_);
-	ImGui::End();
+}
+
+void Lantern::SwingUpdate() {
+
+	// 周期(2秒で1往復)
+	const float kCycleSpeed = 2 * M_PI / hontaiRotateCycleFrame_;
+	hontaiRotateCycle_ += kCycleSpeed;
+
+	model_->transform.rotation.x = factorX_ * hontaiMaxAmplitude_ * sinf(hontaiRotateCycle_);
+	model_->transform.rotation.z = factorZ_ * hontaiMaxAmplitude_ / 2 * sinf(hontaiRotateCycle_ + (M_PI / 2));
+}
+
+void Lantern::WaitSwingAmplitude() {
+	// 振幅の最大値&最小値
+	hontaiMaxAmplitude_ = M_PI / 32.0f;
+	hontaiRotateCycleFrame_ = 180;
+	// 振幅の係数
+	factorX_ = 1;
+	factorZ_ = 1;
+}
+
+void Lantern::MoveSwingAmplitude() {
+	// 振幅の最大値&最小値
+	hontaiMaxAmplitude_ = M_PI / 4.0f;
+	hontaiRotateCycleFrame_ = 60;
+	// 振幅の係数
+	factorX_ = 1;
+	factorZ_ = 1;
 }

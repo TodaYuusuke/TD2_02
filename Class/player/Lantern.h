@@ -38,6 +38,13 @@ public: // ** メンバ関数 ** //
 	// 光の点滅更新
 	void LightBehaviorFlickerUpdate();
 
+	// ランタンの揺れる挙動
+	void SwingUpdate();
+	// 歩いていないときの揺れ幅
+	void WaitSwingAmplitude();
+	// 歩いているときの揺れ幅
+	void MoveSwingAmplitude();
+
 private: // ** メンバ変数 ** //
 
 	// モデル
@@ -74,8 +81,16 @@ private: // ** メンバ変数 ** //
 	float intensityCycle_;
 	// 1往復を何フレームで行うか
 	int intensityCycleFrame_;
-
 	// ライトの点滅回数(通常状態では使用しない)
 	int flickerCount_;
 
+	// ランタンの揺れ幅
+	float hontaiMaxAmplitude_;
+	// 揺れの周期
+	float hontaiRotateCycle_;
+	// 1往復するまでの時間
+	float hontaiRotateCycleFrame_;
+
+	float factorX_;
+	float factorZ_;
 };
