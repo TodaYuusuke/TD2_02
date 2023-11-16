@@ -91,6 +91,7 @@ private: // ** ƒƒ“ƒo•Ï” ** //
 	// 1‰•œ‚·‚é‚Ü‚Å‚ÌŠÔ
 	float hontaiRotateCycleFrame_;
 
+	// ƒ‰ƒ“ƒ^ƒ“‚Ì—h‚ê‚ÌŒW”
 	float factorX_;
 	float factorZ_;
 };
