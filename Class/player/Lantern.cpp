@@ -14,21 +14,21 @@ void Lantern::Init() {
 	light_->isActive = true;
 	light_->name = "Lantern";
 
-	// eqŠÖŒW‚ğƒZƒbƒg
+	// è¦ªå­é–¢ä¿‚ã‚’ã‚»ãƒƒãƒˆ
 	model_->transform.Parent(&handleModel_->transform);
 	light_->transform.Parent(&model_->transform);
 
-	// ƒ‰ƒCƒg‚Ì‚Ó‚é‚Ü‚¢‚Ì‰Šú‰»
+	// ãƒ©ã‚¤ãƒˆã®ãµã‚‹ã¾ã„ã®åˆæœŸåŒ–
 	LightBehaviorNormalInit();
-	// ƒ‰ƒ“ƒ^ƒ“‚Ì—h‚ê‚Ì‰Šúİ’è
+	// ãƒ©ãƒ³ã‚¿ãƒ³ã®æºã‚Œã®åˆæœŸè¨­å®š
 	WaitSwingAmplitude();
 }
 
 void Lantern::Update() {
-	// ƒ‰ƒ“ƒ^ƒ“‚Ì—h‚ê‚éˆ—
+	// ãƒ©ãƒ³ã‚¿ãƒ³ã®æºã‚Œã‚‹å‡¦ç†
 	SwingUpdate();
 
-	// ƒ‰ƒCƒg‚Ì‚Ó‚é‚Ü‚¢
+	// ãƒ©ã‚¤ãƒˆã®ãµã‚‹ã¾ã„
 	LightBehavior();
 
 #if _DEBUG
@@ -58,31 +58,31 @@ LWP::Object::WorldTransform* Lantern::Grab() {
 }
 
 void Lantern::LightBehavior() {
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	if (behaviorRequest_) {
-		//  U‚é‚Ü‚¢‚ğ•ÏX
+		//  æŒ¯ã‚‹ã¾ã„ã‚’å¤‰æ›´
 		behavior_ = behaviorRequest_.value();
 		switch (behavior_) {
 		case Behavior::kNormal:
 		default:
 			LightBehaviorNormalInit();
 			break;
-			// UŒ‚s“®
+			// æ”»æ’ƒè¡Œå‹•
 		case Behavior::kFlicker:
 			LightBehaviorFlickerInit();
 			break;
 		}
-		// U‚é‚Ü‚¢ƒŠƒNƒGƒXƒg‚ğƒŠƒZƒbƒg
+		// æŒ¯ã‚‹ã¾ã„ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ãƒªã‚»ãƒƒãƒˆ
 		behaviorRequest_ = std::nullopt;
 	}
 
-	// XVˆ—
+	// æ›´æ–°å‡¦ç†
 	switch (behavior_) {
 	case Behavior::kNormal:
 	default:
 		LightBehaviorNormalUpdate();
 		break;
-		// UŒ‚s“®
+		// æ”»æ’ƒè¡Œå‹•
 	case Behavior::kFlicker:
 		LightBehaviorFlickerUpdate();
 		break;
@@ -90,83 +90,83 @@ void Lantern::LightBehavior() {
 }
 
 void Lantern::LightBehaviorNormalInit() {
-	// Œõ‚Ì‹­‚³‚ğ–ß‚·
+	// å…‰ã®å¼·ã•ã‚’æˆ»ã™
 	light_->intensity = 1.0f;
-	// U•
+	// æŒ¯å¹…
 	lightAmplitude_ = 0;
-	// üŠú
+	// å‘¨æœŸ
 	intensityCycle_ = 0;
-	// 1‰•œ‰½ƒtƒŒ[ƒ€
+	// 1å¾€å¾©ä½•ãƒ•ãƒ¬ãƒ¼ãƒ 
 	intensityCycleFrame_ = 60;
 
-	// —”¶¬Ší‚Ì‰Šú‰»
+	// ä¹±æ•°ç”Ÿæˆå™¨ã®åˆæœŸåŒ–
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 
-	// Œ»İ‚ÌƒtƒŒ[ƒ€
+	// ç¾åœ¨ã®ãƒ•ãƒ¬ãƒ¼ãƒ 
 	lightNormal_.currentFrame = 0;
-	// I—¹ƒtƒŒ[ƒ€‚ğ—”‚Å¶¬
+	// çµ‚äº†ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’ä¹±æ•°ã§ç”Ÿæˆ
 	std::uniform_real_distribution<float> distribution(600.0f, 900.0f);
 	lightNormal_.EndFrame = 60;//static_cast<int>(distribution(randomEngine));
 }
 
 void Lantern::LightBehaviorNormalUpdate() {
 	if (lightNormal_.currentFrame >= lightNormal_.EndFrame) {
-		// “_–Å‚ÉˆÚs
+		// ç‚¹æ»…ã«ç§»è¡Œ
 		behaviorRequest_ = Behavior::kFlicker;
 	}
 
-	// U•‚ÌÅ‘å’l&Å¬’l
+	// æŒ¯å¹…ã®æœ€å¤§å€¤&æœ€å°å€¤
 	const float kMaxAmplitude = 0.2f;
-	// üŠú(2•b‚Å1‰•œ)
+	// å‘¨æœŸ(2ç§’ã§1å¾€å¾©)
 	const float kCycleSpeed = M_PI / intensityCycleFrame_;
 	intensityCycle_ += kCycleSpeed;
 
-	//U•‚ğŒvZ
+	//æŒ¯å¹…ã‚’è¨ˆç®—
 	lightAmplitude_ = kMaxAmplitude * sinf(intensityCycle_);
-	// light‚ÉŒvZŒ‹‰Ê‚ğ”½‰f
+	// lightã«è¨ˆç®—çµæœã‚’åæ˜ 
 	light_->intensity = 1.0f - lightAmplitude_;
 
 	lightNormal_.currentFrame++;
 }
 
 void Lantern::LightBehaviorFlickerInit() {
-	// Œõ‚Ì‹­‚³‚ğ–ß‚·
+	// å…‰ã®å¼·ã•ã‚’æˆ»ã™
 	light_->intensity = 1.0f;
 	lightAmplitude_ = 0;
 	intensityCycle_ = 0;
-	// 1‰•œ‰½ƒtƒŒ[ƒ€
+	// 1å¾€å¾©ä½•ãƒ•ãƒ¬ãƒ¼ãƒ 
 	intensityCycleFrame_ = 16;
 
-	// —”¶¬Ší‚Ì‰Šú‰»
+	// ä¹±æ•°ç”Ÿæˆå™¨ã®åˆæœŸåŒ–
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 
-	// I—¹ƒtƒŒ[ƒ€‚ğ—”‚Å¶¬
+	// çµ‚äº†ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’ä¹±æ•°ã§ç”Ÿæˆ
 	std::uniform_int_distribution<> distribution(1,2);
 	flickerCount_ = distribution(randomEngine);
 
-	// Œ»İ‚ÌƒtƒŒ[ƒ€
+	// ç¾åœ¨ã®ãƒ•ãƒ¬ãƒ¼ãƒ 
 	lightFlicker_.currentFrame = 0;
-	// ‰½‰ñ“_–Å‚³‚¹‚é‚©‚ğİ’è
+	// ä½•å›ç‚¹æ»…ã•ã›ã‚‹ã‹ã‚’è¨­å®š
 	lightFlicker_.EndFrame = intensityCycleFrame_ / 2 * flickerCount_;
 }
 
 void Lantern::LightBehaviorFlickerUpdate() {
 	if (lightFlicker_.currentFrame >= lightFlicker_.EndFrame) {
-		// ’Êíó‘Ô‚ÉˆÚs
+		// é€šå¸¸çŠ¶æ…‹ã«ç§»è¡Œ
 		behaviorRequest_ = Behavior::kNormal;
 	}
 
-	// U•‚ÌÅ‘å’l&Å¬’l
+	// æŒ¯å¹…ã®æœ€å¤§å€¤&æœ€å°å€¤
 	const float kMaxAmplitude = 0.5f;
-	// 8ƒtƒŒ[ƒ€‚Å1‰•œ
+	// 8ãƒ•ãƒ¬ãƒ¼ãƒ ã§1å¾€å¾©
 	const float kCycleSpeed = M_PI / (intensityCycleFrame_ / 2);
 	intensityCycle_ += kCycleSpeed;
 
-	//U•‚ğŒvZ
+	//æŒ¯å¹…ã‚’è¨ˆç®—
 	lightAmplitude_ = kMaxAmplitude * sinf(intensityCycle_);
-	// light‚ÉŒvZŒ‹‰Ê‚ğ”½‰f
+	// lightã«è¨ˆç®—çµæœã‚’åæ˜ 
 	light_->intensity = 1.0f - fabs(lightAmplitude_);
 
 	lightFlicker_.currentFrame++;
@@ -177,7 +177,7 @@ void Lantern::SwingUpdate() {
 		hontaiRotateCycle_ = 0.0f;
 	}
 
-	// üŠú(2•b‚Å1‰•œ)
+	// å‘¨æœŸ(2ç§’ã§1å¾€å¾©)
 	const float kCycleSpeed = 2 * M_PI / hontaiRotateCycleFrame_;
 	hontaiRotateCycle_ += kCycleSpeed;
 
@@ -186,19 +186,19 @@ void Lantern::SwingUpdate() {
 }
 
 void Lantern::WaitSwingAmplitude() {
-	// U•‚ÌÅ‘å’l&Å¬’l
+	// æŒ¯å¹…ã®æœ€å¤§å€¤&æœ€å°å€¤
 	hontaiMaxAmplitude_ = M_PI / 32.0f;
 	hontaiRotateCycleFrame_ = 180;
-	// U•‚ÌŒW”
+	// æŒ¯å¹…ã®ä¿‚æ•°
 	factorX_ = 1;
 	factorZ_ = 1;
 }
 
 void Lantern::MoveSwingAmplitude() {
-	// U•‚ÌÅ‘å’l&Å¬’l
+	// æŒ¯å¹…ã®æœ€å¤§å€¤&æœ€å°å€¤
 	hontaiMaxAmplitude_ = M_PI / 4.0f;
 	hontaiRotateCycleFrame_ = 60;
-	// U•‚ÌŒW”
+	// æŒ¯å¹…ã®ä¿‚æ•°
 	factorX_ = 1;
 	factorZ_ = 1;
 }

@@ -3,95 +3,95 @@
 #include <optional>
 
 /// <summary>
-/// ƒ‰ƒ“ƒ^ƒ“
+/// ãƒ©ãƒ³ã‚¿ãƒ³
 /// </summary>
 class Lantern final {
-public: // ** ƒƒ“ƒoŠÖ” ** //
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	void Init();
-	// XV
+	// æ›´æ–°
 	void Update();
 
 
 	/// <summary>
-	/// ƒ‰ƒ“ƒ^ƒ“‚ğ’Í‚Ş
+	/// ãƒ©ãƒ³ã‚¿ãƒ³ã‚’æ´ã‚€
 	/// </summary>
-	/// <returns>ƒ‰ƒ“ƒ^ƒ“‚ğ’Ç]‚³‚¹‚é—p‚ÌƒyƒAƒŒƒ“ƒgƒ|ƒCƒ“ƒ^</returns>
+	/// <returns>ãƒ©ãƒ³ã‚¿ãƒ³ã‚’è¿½å¾“ã•ã›ã‚‹ç”¨ã®ãƒšã‚¢ãƒ¬ãƒ³ãƒˆãƒã‚¤ãƒ³ã‚¿</returns>
 	LWP::Object::WorldTransform* Grab();
 
 	/// <summary>
-	/// ƒ‰ƒ“ƒ^ƒ“‚ğ“Š‚°‚é
+	/// ãƒ©ãƒ³ã‚¿ãƒ³ã‚’æŠ•ã’ã‚‹
 	/// </summary>
-	/// <param name="direction">“Š‚°‚é•ûŒü‚ÌƒxƒNƒgƒ‹i³‹K‰»Ï‚İ‚ğ‘—‚é‚±‚Æj</param>
+	/// <param name="direction">æŠ•ã’ã‚‹æ–¹å‘ã®ãƒ™ã‚¯ãƒˆãƒ«ï¼ˆæ­£è¦åŒ–æ¸ˆã¿ã‚’é€ã‚‹ã“ã¨ï¼‰</param>
 	void Throw(LWP::Math::Vector2 direction);
 
-	// ƒ‰ƒCƒg‚ÌU‚é‚Ü‚¢
+	// ãƒ©ã‚¤ãƒˆã®æŒ¯ã‚‹ã¾ã„
 	void LightBehavior();
 
-	// ’Êí‚Ì‰Šú‰»
+	// é€šå¸¸æ™‚ã®åˆæœŸåŒ–
 	void LightBehaviorNormalInit();
-	// ’Êí‚ÌXV
+	// é€šå¸¸æ™‚ã®æ›´æ–°
 	void LightBehaviorNormalUpdate();
-	// Œõ‚Ì“_–Å‰Šú‰»
+	// å…‰ã®ç‚¹æ»…åˆæœŸåŒ–
 	void LightBehaviorFlickerInit();
-	// Œõ‚Ì“_–ÅXV
+	// å…‰ã®ç‚¹æ»…æ›´æ–°
 	void LightBehaviorFlickerUpdate();
 
-	// ƒ‰ƒ“ƒ^ƒ“‚Ì—h‚ê‚é‹““®
+	// ãƒ©ãƒ³ã‚¿ãƒ³ã®æºã‚Œã‚‹æŒ™å‹•
 	void SwingUpdate();
-	// •à‚¢‚Ä‚¢‚È‚¢‚Æ‚«‚Ì—h‚ê•
+	// æ­©ã„ã¦ã„ãªã„ã¨ãã®æºã‚Œå¹…
 	void WaitSwingAmplitude();
-	// •à‚¢‚Ä‚¢‚é‚Æ‚«‚Ì—h‚ê•
+	// æ­©ã„ã¦ã„ã‚‹ã¨ãã®æºã‚Œå¹…
 	void MoveSwingAmplitude();
 
-private: // ** ƒƒ“ƒo•Ï” ** //
+private: // ** ãƒ¡ãƒ³ãƒå¤‰æ•° ** //
 
-	// ƒ‚ƒfƒ‹
+	// ãƒ¢ãƒ‡ãƒ«
 	LWP::Primitive::Mesh* handleModel_;
 	LWP::Primitive::Mesh* model_;
-	// ŒõŒ¹
+	// å…‰æº
 	LWP::Object::PointLight* light_;
 
-	// ’Í‚Ü‚ê‚Ä‚¢‚éƒtƒ‰ƒO
+	// æ´ã¾ã‚Œã¦ã„ã‚‹ãƒ•ãƒ©ã‚°
 	bool isGrabed;
 
-	// U‚é‚Ü‚¢
+	// æŒ¯ã‚‹ã¾ã„
 	enum class Behavior {
-		kNormal,	 // ’Êíó‘Ô
-		kFlicker // Œõ‚ªƒ`ƒJƒ`ƒJó‘Ô
+		kNormal,	 // é€šå¸¸çŠ¶æ…‹
+		kFlicker // å…‰ãŒãƒã‚«ãƒã‚«çŠ¶æ…‹
 	};
 	Behavior behavior_ = Behavior::kNormal;
-	// Ÿ‚ÌU‚é‚Ü‚¢ƒŠƒNƒGƒXƒg
+	// æ¬¡ã®æŒ¯ã‚‹ã¾ã„ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
 	std::optional<Behavior> behaviorRequest_ = std::nullopt;
 
-	// Še‚Ó‚é‚Ü‚¢‚Åˆµ‚¤ŠÔ
+	// å„ãµã‚‹ã¾ã„ã§æ‰±ã†æ™‚é–“
 	struct BehaviorFrame {
-		int currentFrame = 0;  // Œ»İ‚ÌƒtƒŒ[ƒ€
-		int EndFrame;		   // I—¹ƒtƒŒ[ƒ€
+		int currentFrame = 0;  // ç¾åœ¨ã®ãƒ•ãƒ¬ãƒ¼ãƒ 
+		int EndFrame;		   // çµ‚äº†ãƒ•ãƒ¬ãƒ¼ãƒ 
 	};
-	// ’Êíó‘Ô‚Ìƒ‰ƒCƒg
+	// é€šå¸¸çŠ¶æ…‹ã®ãƒ©ã‚¤ãƒˆ
 	BehaviorFrame lightNormal_;
-	// “_–Å‚Ìƒ‰ƒCƒg
+	// ç‚¹æ»…æ™‚ã®ãƒ©ã‚¤ãƒˆ
 	BehaviorFrame lightFlicker_;
 
-	// ƒ‰ƒCƒg‚Ì“_–Å‚ÌU•
+	// ãƒ©ã‚¤ãƒˆã®ç‚¹æ»…ã®æŒ¯å¹…
 	float lightAmplitude_;
-	// ƒ‰ƒCƒg‚Ì“_–Å‚ÌüŠú
+	// ãƒ©ã‚¤ãƒˆã®ç‚¹æ»…ã®å‘¨æœŸ
 	float intensityCycle_;
-	// 1‰•œ‚ğ‰½ƒtƒŒ[ƒ€‚Ås‚¤‚©
+	// 1å¾€å¾©ã‚’ä½•ãƒ•ãƒ¬ãƒ¼ãƒ ã§è¡Œã†ã‹
 	int intensityCycleFrame_;
-	// ƒ‰ƒCƒg‚Ì“_–Å‰ñ”(’Êíó‘Ô‚Å‚Íg—p‚µ‚È‚¢)
+	// ãƒ©ã‚¤ãƒˆã®ç‚¹æ»…å›æ•°(é€šå¸¸çŠ¶æ…‹ã§ã¯ä½¿ç”¨ã—ãªã„)
 	int flickerCount_;
 
-	// ƒ‰ƒ“ƒ^ƒ“‚Ì—h‚ê•
+	// ãƒ©ãƒ³ã‚¿ãƒ³ã®æºã‚Œå¹…
 	float hontaiMaxAmplitude_;
-	// —h‚ê‚ÌüŠú
+	// æºã‚Œã®å‘¨æœŸ
 	float hontaiRotateCycle_;
-	// 1‰•œ‚·‚é‚Ü‚Å‚ÌŠÔ
+	// 1å¾€å¾©ã™ã‚‹ã¾ã§ã®æ™‚é–“
 	float hontaiRotateCycleFrame_;
 
-	// ƒ‰ƒ“ƒ^ƒ“‚Ì—h‚ê‚ÌŒW”
+	// ãƒ©ãƒ³ã‚¿ãƒ³ã®æºã‚Œã®ä¿‚æ•°
 	float factorX_;
 	float factorZ_;
 };
