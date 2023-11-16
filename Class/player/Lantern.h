@@ -2,6 +2,9 @@
 #include <Adapter.h>
 #include <optional>
 
+// 前方宣言
+class Stage;
+
 /// <summary>
 /// ランタン
 /// </summary>
@@ -11,14 +14,14 @@ public: // ** メンバ関数 ** //
 	// 初期化
 	void Init();
 	// 更新
-	void Update();
+	void Update(Stage* stage);
 
 
 	/// <summary>
 	/// ランタンを掴む
 	/// </summary>
 	/// <returns>ランタンを追従させる用のペアレントポインタ</returns>
-	LWP::Object::WorldTransform* Grab();
+	void Grab(LWP::Object::WorldTransform* trasnform);
 
 	/// <summary>
 	/// ランタンを投げる
@@ -44,6 +47,7 @@ public: // ** メンバ関数 ** //
 	void WaitSwingAmplitude();
 	// 歩いているときの揺れ幅
 	void MoveSwingAmplitude();
+
 
 private: // ** メンバ変数 ** //
 

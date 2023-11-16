@@ -4,10 +4,15 @@ GameScene::GameScene(int level) : level_(level) {}
 
 void GameScene::Initialize() {
 	stage_.Init(level_);
-	lantern_.Init();
+	player_.Init(stage_.GetPlayerStartPosition(), mainCamera);
 }
 
 void GameScene::Update() {
 	stage_.Update();
-	lantern_.Update();
+	player_.Update(&stage_);
+
+	// 再読み込み
+	if (LWP::Input::Keyboard::GetTrigger(DIK_R)) {
+		nextScene_ = new GameScene(level_);
+	}
 }

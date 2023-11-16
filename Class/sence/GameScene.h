@@ -3,7 +3,7 @@
 #include "../Engine/scene/IScene.h"
 
 #include "../stage/Stage.h"
-#include "../player/Lantern.h"
+#include "../player/Player.h"
 
 class GameScene final
 	: public IScene {
@@ -29,6 +29,6 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	// ステージデータ
 	Stage stage_;
 
-	// ランタン
-	Lantern lantern_;
+	// プレイヤー
+	Player player_;
 };

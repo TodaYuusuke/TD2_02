@@ -3,19 +3,28 @@
 #include <string>
 
 class Stage final {
-public:	// ** �����o�֐� ** //
+public:	// ** メンバ関数 ** //
 
-	// �������i�ǂݍ��ރ��x���j
+	// 初期化（読み込むレベル）
 	void Init(int level);
-	// �X�V
+	// 更新
 	void Update();
 
+	// 当たり判定をチェックする関数
+	bool CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector, bool isPlayer);
 
-private: // ** �����o�ϐ� ** //
+	// プレイヤーのスタート地点を受け取る関数
+	LWP::Math::Vector3 GetPlayerStartPosition() { return playerStartPosition; }
 
-	// �}�b�v�`�b�v
+private: // ** メンバ変数 ** //
+
+	// マップチップ
 	std::vector<std::vector<IMapChip*>> mapChip_;
 
+	// プレイヤーのスタート地点
+	LWP::Math::Vector3 playerStartPosition = {0.0f,0.0f,0.0f};
+	// マップチップ共通のスケール
+	float commonScale = 1.0f;
 
-private: // ** �v���C�x�[�g�Ȋ֐� ** //
+private: // ** プライベートな関数 ** //
 };

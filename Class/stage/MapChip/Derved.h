@@ -1,44 +1,64 @@
 #pragma once
 #include "IMapChip.h"
 
-// ƒ}ƒbƒvƒ`ƒbƒv‚ğ’è‹`
+// ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã‚’å®šç¾©
 enum class Mapchip : int {
-	Floor = 00,	// ‰½‚à‚È‚µi°j
-	Hole = 01,	// ŒŠiŒõ‚ğ’Ê‚·A—‚¿‚éj
-	Wall = 02,	// •ÇiŒõ‚ğÕ‚éj
-	VineWall = 10,	// •Ç‚É‚È‚éƒcƒ^
-	VineFloor = 11,	// ‘«ê‚É‚È‚éƒcƒ^
-	Start = 98,	// ƒXƒ^[ƒg’n“_
-	Candle = 99	// ‚ë‚¤‚»‚­iƒNƒŠƒAğŒ	j
+	Floor = 00,	// ä½•ã‚‚ãªã—ï¼ˆåºŠï¼‰
+	Hole = 01,	// ç©´ï¼ˆå…‰ã‚’é€šã™ã€è½ã¡ã‚‹ï¼‰
+	Wall = 02,	// å£ï¼ˆå…‰ã‚’é®ã‚‹ï¼‰
+	VineWall = 10,	// å£ã«ãªã‚‹ãƒ„ã‚¿
+	VineFloor = 11,	// è¶³å ´ã«ãªã‚‹ãƒ„ã‚¿ã‚’ç”Ÿã‚„ã™ãƒ–ãƒ­ãƒƒã‚¯
+	GrownVineFloor = 21,	// æˆé•·ã—ã¦è¶³å ´ã«ãªã£ãŸãƒ„ã‚¿
+	Start = 98,	// ã‚¹ã‚¿ãƒ¼ãƒˆåœ°ç‚¹
+	Candle = 99	// ã‚ã†ããï¼ˆã‚¯ãƒªã‚¢æ¡ä»¶	ï¼‰
 };
 
 class Floor :public IMapChip {
-public: // ** ƒƒ“ƒoŠÖ” ** //
-	void Init(LWP::Math::Vector3 position) override;
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
 	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
 };
 class Hole :public IMapChip {
-public: // ** ƒƒ“ƒoŠÖ” ** //
-	void Init(LWP::Math::Vector3 position) override;
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
 	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
 };
 class Wall :public IMapChip {
-public: // ** ƒƒ“ƒoŠÖ” ** //
-	void Init(LWP::Math::Vector3 position) override;
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
 	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
 };
 class VineWall :public IMapChip {
-public: // ** ƒƒ“ƒoŠÖ” ** //
-	void Init(LWP::Math::Vector3 position) override;
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
 	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
 };
 class VineFloor :public IMapChip {
-public: // ** ƒƒ“ƒoŠÖ” ** //
-	void Init(LWP::Math::Vector3 position) override;
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
 	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
+};
+class Start :public IMapChip {
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
+	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
 };
 class Candle :public IMapChip {
-public: // ** ƒƒ“ƒoŠÖ” ** //
-	void Init(LWP::Math::Vector3 position) override;
+public: // ** ãƒ¡ãƒ³ãƒé–¢æ•° ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
 	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
 };

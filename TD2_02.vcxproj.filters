@@ -72,6 +72,12 @@
     <ClCompile Include="Class\player\Lantern.cpp">
       <Filter>Class\player</Filter>
     </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\IMapChip.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\Start.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\sence\Title.h">
