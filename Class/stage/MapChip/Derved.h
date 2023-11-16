@@ -48,6 +48,13 @@ public: // ** メンバ関数 ** //
 	bool IsMapChipCollision() override;
 	bool IsGroundCollision() override;
 };
+class Start :public IMapChip {
+public: // ** メンバ関数 ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
+	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
+};
 class Candle :public IMapChip {
 public: // ** メンバ関数 ** //
 	void Init(LWP::Math::Vector3 position, float scale) override;

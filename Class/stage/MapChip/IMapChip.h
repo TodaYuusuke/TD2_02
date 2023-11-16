@@ -26,6 +26,10 @@ public:	// ** メンバ関数 ** //
 	void SetPosition(LWP::Math::Vector3 pos) { if (model_) { model_->transform.translation = pos; } }
 	// スケールをセット
 	void SetScale(float scale) { if (model_) { model_->transform.scale = { scale,scale,scale }; } }
+	
+	// モデルの変数を受け取る
+	LWP::Primitive::Mesh* GetModel() { if (model_) { return model_; } }
+	void SetModel(LWP::Primitive::Mesh* model) { model_ = model; }
 
 
 protected: // ** メンバ変数 ** //

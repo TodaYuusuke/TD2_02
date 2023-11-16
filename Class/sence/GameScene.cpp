@@ -4,7 +4,7 @@ GameScene::GameScene(int level) : level_(level) {}
 
 void GameScene::Initialize() {
 	stage_.Init(level_);
-	player_.Init(mainCamera);
+	player_.Init(stage_.GetPlayerStartPosition(), mainCamera);
 }
 
 void GameScene::Update() {

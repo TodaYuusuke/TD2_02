@@ -9,7 +9,7 @@ class Player final {
 public: // ** メンバ関数 ** //
 
 	// 初期化
-	void Init(LWP::Object::Camera* camera);
+	void Init(LWP::Math::Vector3 startPosition, LWP::Object::Camera* camera);
 	// 更新
 	void Update(Stage* stage);
 

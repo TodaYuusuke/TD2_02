@@ -4,13 +4,13 @@
 using namespace LWP::Input;
 using namespace LWP::Math;
 
-void Player::Init(LWP::Object::Camera* camera) {
+void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 #if _DEBUG
 	model_ = LWP::Resource::LoadModel("Player/LowPolyPlayer.obj");
 #else
 	model_ = LWP::Resource::LoadModel("Player/Player.obj");
 #endif
-	model_->transform.translation = { 1.0f,0.0f,1.0f };
+	model_->transform.translation = startPosition;
 	model_->transform.scale = { 0.5f,0.5f,0.5f };
 	model_->material.enableLighting = true;
 	model_->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
@@ -80,7 +80,7 @@ void Player::Update(Stage* stage) {
 			//s[i]->Radius(0.02f);
 #endif
 			Vector3 fixVector = { 0.0f,0.0f,0.0f };
-			bool result = stage->CheckCollision(checkPos[i], &fixVector);
+			bool result = stage->CheckCollision(checkPos[i], &fixVector, true);
 			// ヒットしていればフラグをtrueに
 			if (result) {
 				isHit = result;

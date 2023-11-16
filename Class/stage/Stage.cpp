@@ -36,7 +36,7 @@ void Stage::Init(int level) {
 					mapChip_[y].push_back(new VineFloor());
 					break;
 				case Mapchip::Start:
-					mapChip_[y].push_back(new Floor());
+					mapChip_[y].push_back(new Start());
 					break;
 				case Mapchip::Candle:
 					mapChip_[y].push_back(new Candle());
@@ -59,6 +59,11 @@ void Stage::Init(int level) {
 				static_cast<float>(y) + 0.5f
 			};
 			mapChip_[y][x]->Init(position, commonScale);
+
+			// スタートのとき
+			if (dynamic_cast<Start*>(mapChip_[y][x])) {
+				playerStartPosition = mapChip_[y][x]->GetModel()->transform.translation;
+			}
 		}
 	}
 }
@@ -86,10 +91,10 @@ void Stage::Update() {
 	}
 }
 
-bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector) {
+bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector, bool isPlayer) {
 	// どのマップチップと検証するかチェック
-	int y = checkPos.z >= 0.0f ? checkPos.z / commonScale : -1;
-	int x = checkPos.x >= 0.0f ? checkPos.x / commonScale : -1;
+	int y = static_cast<int>(checkPos.z >= 0.0f ? checkPos.z / commonScale : -1);
+	int x = static_cast<int>(checkPos.x >= 0.0f ? checkPos.x / commonScale : -1);
 
 	// 場外でなければ当たり判定をチェック
 	if (y > 0 && y < mapChip_.size()) {
@@ -99,9 +104,18 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 			cPos.z -= (y * commonScale);
 			cPos.x -= (x * commonScale);
 
-			bool b = mapChip_[y][x]->CheckCollision(cPos, fixVector);
-			
-			return b;
+			bool result;
+			// もしプレイヤーの当たり判定で、かつYが0以上、かつ検証する地点がHoleの場合 -> 壁として扱う
+			if (isPlayer && checkPos.y >= 0.0f && dynamic_cast<Hole*>(mapChip_[y][x])) {
+				Wall* wall = new Wall();
+				wall->SetModel(mapChip_[y][x]->GetModel());
+				result = wall->CheckCollision(cPos, fixVector);
+			}
+			else {
+				result = mapChip_[y][x]->CheckCollision(cPos, fixVector);
+			}
+
+			return result;
 		}
 	}
 
