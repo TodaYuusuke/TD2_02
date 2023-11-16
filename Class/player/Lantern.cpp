@@ -173,6 +173,9 @@ void Lantern::LightBehaviorFlickerUpdate() {
 }
 
 void Lantern::SwingUpdate() {
+	if (hontaiRotateCycle_ >= 2 * M_PI) {
+		hontaiRotateCycle_ = 0.0f;
+	}
 
 	// üŠú(2•b‚Å1‰•œ)
 	const float kCycleSpeed = 2 * M_PI / hontaiRotateCycleFrame_;
