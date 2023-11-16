@@ -5,10 +5,16 @@ using namespace LWP::Input;
 using namespace LWP::Math;
 
 void Player::Init(LWP::Object::Camera* camera) {
+#if _DEBUG
+	model_ = LWP::Resource::LoadModel("Player/LowPolyPlayer.obj");
+#else
 	model_ = LWP::Resource::LoadModel("Player/Player.obj");
+#endif
+	model_->transform.translation = { 1.0f,0.0f,1.0f };
+	model_->transform.scale = { 0.5f,0.5f,0.5f };
 	model_->material.enableLighting = true;
 	model_->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
-	grabPosition_.translation = { 0.15f,0.3f,0.2f };
+	grabPosition_.translation = { 0.15f,0.3f,0.5f };
 
 	camera_ = camera;
 	cameraGoalRotation_ = camera_->transform.rotation;
@@ -39,14 +45,67 @@ void Player::Update(Stage* stage) {
 
 	// 移動処理
 	Move();
-
-	// 当たり判定
-
 	// ランタン更新
 	lantern_.Update(stage);
 
 	// カメラを追従させる
 	FollowCameraTurn();
+
+	// 当たり判定を取る座標4点
+	Vector3 checkPos[4] = {
+		model_->transform.translation - (Vector3{model_->transform.scale.x,0.0f,model_->transform.scale.z} / 2.0f),
+		model_->transform.translation - (Vector3{-model_->transform.scale.x,0.0f,model_->transform.scale.z} / 2.0f),
+		model_->transform.translation - (Vector3{model_->transform.scale.x,0.0f,-model_->transform.scale.z} / 2.0f),
+		model_->transform.translation - (Vector3{-model_->transform.scale.x,0.0f,-model_->transform.scale.z} / 2.0f)
+	};
+
+#if _DEBUG	// 当たり判定表示用の球
+	/*static LWP::Primitive::Sphere* s[4] = {
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
+	};*/
+#endif
+
+	// 判定がなくなるまで無限ループ
+	bool isHit = true;
+
+	// 回りの判定をとる
+	while (isHit) {
+		isHit = false;
+		for (int i = 0; i < 4; i++) {
+#if _DEBUG	// 当たり判定表示用の球
+			//s[i]->transform = checkPos[i];
+			//s[i]->Radius(0.02f);
+#endif
+			Vector3 fixVector = { 0.0f,0.0f,0.0f };
+			bool result = stage->CheckCollision(checkPos[i], &fixVector);
+			// ヒットしていればフラグをtrueに
+			if (result) {
+				isHit = result;
+
+				// もしY軸補正がされた場合
+				if (fixVector.y > 0.0f) {
+					// ある程度のY軸補正より大きい場合は無視する
+					if (fixVector.y > -kGravities) {
+						fixVector.y = 0.0f;
+					}
+					else {
+						fixVector.x = 0.0f;
+						fixVector.z = 0.0f;
+						gravitiesAT = 0.0f;
+					}
+				}
+
+				for (int j = 0; j < 4; j++) {
+					checkPos[j] += fixVector;
+				}
+
+				model_->transform.translation += fixVector;
+			}
+		}
+	}
 }
 
 void Player::Move() {
@@ -76,6 +135,10 @@ void Player::Move() {
 	dir = dir.Normalize() * kPlayerSpeed * cameraRotationMatrix;
 	model_->transform.translation += dir;
 
+	// 重力を付与
+	gravitiesAT += kGravities;
+	model_->transform.translation.y += gravitiesAT;
+	
 	// 向きを設定
 	if (dir.Length() > 0.0f) {
 		// 目的の角度

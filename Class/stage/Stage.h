@@ -10,6 +10,8 @@ public:	// ** メンバ関数 ** //
 	// 更新
 	void Update();
 
+	// 当たり判定をチェックする関数
+	bool CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector);
 
 private: // ** メンバ変数 ** //
 

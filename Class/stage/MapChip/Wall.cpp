@@ -16,7 +16,7 @@ void Wall::Update() {
 }
 
 bool Wall::IsMapChipCollision() {
-	return false;
+	return true;
 }
 bool Wall::IsGroundCollision() {
 	return true;

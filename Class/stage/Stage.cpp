@@ -54,9 +54,9 @@ void Stage::Init(int level) {
 	for (int y = 0; y < mapChip_.size(); y++) {
 		for (int x = 0; x < mapChip_[y].size(); x++) {
 			Vector3 position = {
-				static_cast<float>(x),
+				static_cast<float>(x) + 0.5f,
 				0.0f,
-				static_cast<float>(y)
+				static_cast<float>(y) + 0.5f
 			};
 			mapChip_[y][x]->Init(position, commonScale);
 		}
@@ -74,9 +74,9 @@ void Stage::Update() {
 		for (int x = 0; x < mapChip_[y].size(); x++) {
 #if _DEBUG
 			Vector3 position = {
-				static_cast<float>(x) * commonScale,
+				(static_cast<float>(x) + 0.5f) * commonScale,
 				0.0f,
-				static_cast<float>(y) * commonScale
+				(static_cast<float>(y) + 0.5f) * commonScale
 			};
 			mapChip_[y][x]->SetPosition(position);
 			mapChip_[y][x]->SetScale(commonScale);
@@ -84,4 +84,26 @@ void Stage::Update() {
 			mapChip_[y][x]->Update();
 		}
 	}
+}
+
+bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector) {
+	// どのマップチップと検証するかチェック
+	int y = checkPos.z >= 0.0f ? checkPos.z / commonScale : -1;
+	int x = checkPos.x >= 0.0f ? checkPos.x / commonScale : -1;
+
+	// 場外でなければ当たり判定をチェック
+	if (y > 0 && y < mapChip_.size()) {
+		if (x > 0 && x < mapChip_[y].size()) {
+
+			Vector3 cPos = checkPos;
+			cPos.z -= (y * commonScale);
+			cPos.x -= (x * commonScale);
+
+			bool b = mapChip_[y][x]->CheckCollision(cPos, fixVector);
+			
+			return b;
+		}
+	}
+
+	return false;
 }
