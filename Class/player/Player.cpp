@@ -11,6 +11,7 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	model_ = LWP::Resource::LoadModel("Player/Player.obj");
 #endif
 	model_->transform.translation = startPosition;
+	startPosition_ = startPosition;
 	model_->transform.scale = { 0.5f,0.5f,0.5f };
 	model_->material.enableLighting = true;
 	model_->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
@@ -60,12 +61,12 @@ void Player::Update(Stage* stage) {
 	};
 
 #if _DEBUG	// 当たり判定表示用の球
-	/*static LWP::Primitive::Sphere* s[4] = {
+	static LWP::Primitive::Sphere* s[4] = {
 		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
 		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
 		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
 		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
-	};*/
+	};
 #endif
 
 	// 判定がなくなるまで無限ループ
@@ -76,8 +77,8 @@ void Player::Update(Stage* stage) {
 		isHit = false;
 		for (int i = 0; i < 4; i++) {
 #if _DEBUG	// 当たり判定表示用の球
-			//s[i]->transform = checkPos[i];
-			//s[i]->Radius(0.02f);
+			s[i]->transform = checkPos[i];
+			s[i]->Radius(0.02f);
 #endif
 			Vector3 fixVector = { 0.0f,0.0f,0.0f };
 			bool result = stage->CheckCollision(checkPos[i], &fixVector, true);
@@ -104,6 +105,16 @@ void Player::Update(Stage* stage) {
 
 				model_->transform.translation += fixVector;
 			}
+		}
+	}
+
+	// プレイヤーが一定以上下に落ちたとき -> 元の座標に戻す
+	if (model_->transform.translation.y < -2.0f) {
+		isFollowingCamera_ = false;
+		if (model_->transform.translation.y < -8.0f) {
+			model_->transform.translation = startPosition_;
+			gravitiesAT = 0.0f;
+			isFollowingCamera_ = true;
 		}
 	}
 }

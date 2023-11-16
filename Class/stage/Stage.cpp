@@ -92,13 +92,35 @@ void Stage::Update() {
 }
 
 bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector, bool isPlayer) {
-	// どのマップチップと検証するかチェック
-	int y = static_cast<int>(checkPos.z >= 0.0f ? checkPos.z / commonScale : -1);
-	int x = static_cast<int>(checkPos.x >= 0.0f ? checkPos.x / commonScale : -1);
 
-	// 場外でなければ当たり判定をチェック
-	if (y > 0 && y < mapChip_.size()) {
-		if (x > 0 && x < mapChip_[y].size()) {
+	// どのマップチップと検証するかチェック
+	//int y = static_cast<int>(checkPos.z >= -1.0f ? checkPos.z / commonScale : -1);
+	int y = static_cast<int>(checkPos.z / commonScale);
+	//int x = static_cast<int>(checkPos.x >= -1.0f ? checkPos.x / commonScale : -1);
+	int x = static_cast<int>(checkPos.x / commonScale);
+
+
+	// 場外の場合の処理
+	if (checkPos.z < 0.0f) {
+		fixVector->z = -checkPos.z;
+		return true;
+	}
+	else if (checkPos.z > static_cast<float>(mapChip_.size())) {
+		fixVector->z = static_cast<float>(mapChip_.size()) - checkPos.z;
+		return true;
+	}
+	if (checkPos.x < 0.0f) {
+		fixVector->x = -checkPos.x;
+		return true;
+	}
+	else if (checkPos.x > static_cast<float>(mapChip_[0].size())) {
+		fixVector->x = static_cast<float>(mapChip_[0].size()) - checkPos.x;
+		return true;
+	}
+
+	// 配列の外でなければ当たり判定をチェック
+	if (y >= 0 && y < mapChip_.size()) {
+		if (x >= 0 && x < mapChip_[y].size()) {
 
 			Vector3 cPos = checkPos;
 			cPos.z -= (y * commonScale);

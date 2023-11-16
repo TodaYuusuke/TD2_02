@@ -26,10 +26,13 @@ private: // ** プライベートな定数 ** //
 	// 重力加速度
 	const float kGravities = -9.8f / 60.0f / 100.0f;
 
+
 private: // ** メンバ変数 ** //
 
 	// モデル
 	LWP::Primitive::Mesh* model_ = nullptr;
+	// プレイヤーのスタート地点
+	LWP::Math::Vector3 startPosition_;
 	// 重力による加速度
 	float gravitiesAT = 0.0f;
 
