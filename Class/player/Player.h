@@ -40,6 +40,14 @@ private: // ** メンバ変数 ** //
 	Lantern lantern_;
 	// ランタンを持つ場所
 	LWP::Object::WorldTransform grabPosition_;
+	// 振るまい
+	enum class Behavior {
+		GrabLantern, // ランタンを持っている状態
+		ReadyToThrow,	// ランタンを投げる構え
+		Throwing,	// 投げている最中
+		NoHave,	 // 何も持っていない状態
+	};
+	Behavior behavior_ = Behavior::GrabLantern;
 
 	// 追従させるカメラのポインタ
 	LWP::Object::Camera* camera_ = nullptr;
@@ -51,11 +59,13 @@ private: // ** メンバ変数 ** //
 	// カメラを追従させるかのフラグ
 	bool isFollowingCamera_ = true;
 
+
 private: // ** プライベートな関数 ** //
 
 	// 移動
 	void Move();
 	// ランタンに関する処理
+	void Action();
 
 	// カメラの追従処理
 	void FollowCameraTurn();

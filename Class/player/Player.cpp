@@ -46,6 +46,9 @@ void Player::Update(Stage* stage) {
 
 	// 移動処理
 	Move();
+	// 行動更新処理
+	Action();
+
 	// ランタン更新
 	lantern_.Update(stage);
 
@@ -61,12 +64,12 @@ void Player::Update(Stage* stage) {
 	};
 
 #if _DEBUG	// 当たり判定表示用の球
-	static LWP::Primitive::Sphere* s[4] = {
-		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
-	};
+	//static LWP::Primitive::Sphere* s[4] = {
+	//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+	//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+	//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+	//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
+	//};
 #endif
 
 	// 判定がなくなるまで無限ループ
@@ -77,8 +80,8 @@ void Player::Update(Stage* stage) {
 		isHit = false;
 		for (int i = 0; i < 4; i++) {
 #if _DEBUG	// 当たり判定表示用の球
-			s[i]->transform = checkPos[i];
-			s[i]->Radius(0.02f);
+			//s[i]->transform = checkPos[i];
+			//s[i]->Radius(0.02f);
 #endif
 			Vector3 fixVector = { 0.0f,0.0f,0.0f };
 			bool result = stage->CheckCollision(checkPos[i], &fixVector, true);
@@ -144,7 +147,18 @@ void Player::Move() {
 	// 正規化してから使用
 	Matrix4x4 cameraRotationMatrix = Matrix4x4::CreateRotateXYZMatrix({ 0.0f, camera_->transform.rotation.y, 0.0f });
 	dir = dir.Normalize() * kPlayerSpeed * cameraRotationMatrix;
-	model_->transform.translation += dir;
+	
+	// 構えているときは動かない
+	if (behavior_ != Behavior::ReadyToThrow && behavior_ != Behavior::Throwing) {
+		model_->transform.translation += dir;
+		// 歩いないときの処理
+		if (dir.Length() == 0.0f) {
+			lantern_.WaitSwingAmplitude();
+		}
+		else {
+			lantern_.MoveSwingAmplitude();
+		}
+	}
 
 	// 重力を付与
 	gravitiesAT += kGravities;
@@ -171,6 +185,41 @@ void Player::Move() {
 
 		// 角度を適応
 		model_->transform.rotation = Slerp(model_->transform.rotation, goalRotation, 0.2f);
+	}
+}
+
+void Player::Action() {
+	switch (behavior_) {
+		case Behavior::GrabLantern:
+			if (Keyboard::GetTrigger(DIK_SPACE)) {
+				behavior_ = Behavior::ReadyToThrow;
+			}
+			break;
+
+		case Behavior::ReadyToThrow:
+			if (Keyboard::GetTrigger(DIK_C)) {
+				behavior_ = Behavior::GrabLantern;
+			}
+			else if (Keyboard::GetRelease(DIK_SPACE)) {
+				behavior_ = Behavior::Throwing;
+				lantern_.Throw(model_->transform.rotation);
+			}
+			break;
+
+		case Behavior::Throwing:
+			behavior_ = Behavior::NoHave;
+			break;
+
+		case Behavior::NoHave:
+			if (Keyboard::GetTrigger(DIK_SPACE)) {
+				if ((model_->transform.translation - lantern_.GetWorldPosition()).Length() <= 0.3f) {
+					behavior_ = Behavior::Throwing;
+					lantern_.Grab(&grabPosition_);
+					behavior_ = Behavior::GrabLantern;
+				}
+			}
+			break;
+
 	}
 }
 

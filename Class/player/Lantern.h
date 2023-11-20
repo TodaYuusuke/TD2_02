@@ -21,13 +21,51 @@ public: // ** メンバ関数 ** //
 	/// ランタンを掴む
 	/// </summary>
 	/// <returns>ランタンを追従させる用のペアレントポインタ</returns>
-	void Grab(LWP::Object::WorldTransform* trasnform);
-
+	void Grab(LWP::Object::WorldTransform* transform);
 	/// <summary>
 	/// ランタンを投げる
 	/// </summary>
 	/// <param name="direction">投げる方向のベクトル（正規化済みを送ること）</param>
-	void Throw(LWP::Math::Vector2 direction);
+	void Throw(LWP::Math::Vector3 rotation);
+
+	// 歩いていないときの揺れ幅
+	void WaitSwingAmplitude();
+	// 歩いているときの揺れ幅
+	void MoveSwingAmplitude();
+
+	// ランタンのワールド座標を受け取る関数
+	LWP::Math::Vector3 GetWorldPosition() { return handleModel_->transform.GetWorldPosition(); }
+
+
+private: // ** プライベートな定数 ** //
+
+	// 重力加速度
+	const float kGravities = -9.8f / 60.0f / 100.0f;
+
+
+private: // ** メンバ変数 ** //
+
+	// モデル
+	LWP::Primitive::Mesh* handleModel_;
+	LWP::Primitive::Mesh* model_;
+	// 光源
+	LWP::Object::PointLight* light_;
+
+	// 投げられたとき用の速度
+	float gravitiesAT = 0.0f;
+
+	// 掴まれているフラグ
+	bool isGrabed = true;
+
+	
+private: // ** アニメーション関連 ** //
+
+	// 投げてる最中の更新処理
+	bool throwingHitFrag = false;
+	float throwingTimeCount_ = 99.0f;
+	LWP::Math::Vector3 throwingPositionStart_;
+	LWP::Math::Vector3 throwingPositionDiff_;
+	void ThrowingAnimationUpdate();
 
 	// ライトの振るまい
 	void LightBehavior();
@@ -43,22 +81,7 @@ public: // ** メンバ関数 ** //
 
 	// ランタンの揺れる挙動
 	void SwingUpdate();
-	// 歩いていないときの揺れ幅
-	void WaitSwingAmplitude();
-	// 歩いているときの揺れ幅
-	void MoveSwingAmplitude();
 
-
-private: // ** メンバ変数 ** //
-
-	// モデル
-	LWP::Primitive::Mesh* handleModel_;
-	LWP::Primitive::Mesh* model_;
-	// 光源
-	LWP::Object::PointLight* light_;
-
-	// 掴まれているフラグ
-	bool isGrabed;
 
 	// 振るまい
 	enum class Behavior {

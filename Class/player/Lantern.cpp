@@ -2,6 +2,8 @@
 #include <random>
 #include "../stage/Stage.h"
 
+using namespace LWP::Math;
+
 void Lantern::Init() {
 	handleModel_ = LWP::Resource::LoadModel("Lantern/Lantern_Handle.obj");
 	handleModel_->transform.scale = { 0.1f,0.1f,0.1f };
@@ -44,15 +46,144 @@ void Lantern::Update(Stage* stage) {
 	ImGui::DragFloat("amplitude", &hontaiMaxAmplitude_, 0.01f);
 	ImGui::DragFloat("factorX", &factorX_, 0.01f);
 	ImGui::DragFloat("factorZ", &factorZ_, 0.01f);
+	ImGui::Text("%f", throwingTimeCount_);
 	ImGui::End();
 #endif
-
-	// ランタンの揺れる処理
-	SwingUpdate();
 
 	// ライトのふるまい
 	LightBehavior();
 
+	// 掴まれているときの処理
+	if (isGrabed) {
+		// ランタンの揺れる処理
+		SwingUpdate();
+	}
+	else {
+		// 投げられている最中のアニメーション
+		ThrowingAnimationUpdate();
+		// 速度と重力加速度を足す
+		gravitiesAT += kGravities;
+		handleModel_->transform.translation.y += gravitiesAT;
+
+
+		// 当たり判定を取る座標8点
+		Matrix4x4 rotation = Matrix4x4::CreateRotateXYZMatrix(model_->transform.rotation);
+		Vector3 checkPos[8] = {
+			handleModel_->transform.translation - (Vector3{handleModel_->transform.scale.x,0.0f,handleModel_->transform.scale.z} / 2.0f) * rotation,
+			handleModel_->transform.translation - (Vector3{-handleModel_->transform.scale.x,0.0f,handleModel_->transform.scale.z} / 2.0f) * rotation,
+			handleModel_->transform.translation - (Vector3{handleModel_->transform.scale.x,0.0f,-handleModel_->transform.scale.z} / 2.0f) * rotation,
+			handleModel_->transform.translation - (Vector3{-handleModel_->transform.scale.x,0.0f,-handleModel_->transform.scale.z} / 2.0f) * rotation,
+			handleModel_->transform.translation - (Vector3{handleModel_->transform.scale.x,0.2f,handleModel_->transform.scale.z} / 2.0f) * rotation,
+			handleModel_->transform.translation - (Vector3{-handleModel_->transform.scale.x,0.2f,handleModel_->transform.scale.z} / 2.0f) * rotation,
+			handleModel_->transform.translation - (Vector3{handleModel_->transform.scale.x,0.2f,-handleModel_->transform.scale.z} / 2.0f) * rotation,
+			handleModel_->transform.translation - (Vector3{-handleModel_->transform.scale.x,0.2f,-handleModel_->transform.scale.z} / 2.0f) * rotation
+		};
+
+#if _DEBUG	// 当たり判定表示用の球
+		//static LWP::Primitive::Sphere* s[8] = {
+		//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
+		//};
+#endif
+
+	// 判定がなくなるまで無限ループ
+		bool isHit = true;
+
+		// 回りの判定をとる
+		while (isHit) {
+			isHit = false;
+			for (int i = 0; i < 8; i++) {
+#if _DEBUG	// 当たり判定表示用の球
+				//s[i]->transform = checkPos[i];
+				//s[i]->Radius(0.02f);
+#endif
+				Vector3 fixVector = { 0.0f,0.0f,0.0f };
+				bool result = stage->CheckCollision(checkPos[i], &fixVector, false);
+				// ヒットしていればフラグをtrueに
+				if (result) {
+					isHit = result;
+
+					// もしY軸補正がされた場合
+					if (fixVector.y > 0.0f) {
+						// 座標がある程度下に落ちてしまっているならばY補正を無視する（崖に落ちてるのに上に復帰してしまうので）
+						if (handleModel_->transform.translation.y < -0.1f) {
+							fixVector.y = 0.0f;
+						}
+						else {
+							fixVector.x = 0.0f;
+							fixVector.z = 0.0f;
+							gravitiesAT = 0.0f;
+						}
+					}
+
+					for (int j = 0; j < 8; j++) {
+						checkPos[j] += fixVector;
+					}
+
+					// もし投げるアニメーション中に、当たった場合 -> 着地点をほぼ真下に
+					if (!throwingHitFrag && throwingTimeCount_ < 1.0f) {
+						throwingTimeCount_ = 1.0f;
+						throwingHitFrag = true;
+					}
+
+					handleModel_->transform.translation += fixVector;
+				}
+			}
+		}
+	}
+
+	// 一定以上下に落ちたとき -> 
+	if (handleModel_->transform.translation.y < -2.5f) { 
+		/* 後で追加 */ 
+		handleModel_->transform.translation.y = -2.5f;
+	}
+}
+
+void Lantern::Grab(LWP::Object::WorldTransform* transform) {
+	handleModel_->transform.Parent(transform);
+	handleModel_->transform.translation = { 0.0f, 0.0f, 0.0f };
+	handleModel_->transform.scale = { 0.1f, 0.1f, 0.1f };
+	isGrabed = true;
+}
+void Lantern::Throw(Vector3 rotation) {
+	handleModel_->transform = handleModel_->transform.GetWorldPosition();
+	handleModel_->transform.Parent(nullptr);
+	handleModel_->transform.scale = { 0.05f, 0.05f, 0.05f };
+	throwingTimeCount_ = 0.0f;
+	throwingPositionStart_ = handleModel_->transform.GetWorldPosition();
+	throwingPositionDiff_ = Vector3{ 0.0f,0.0f,3.0f } * Matrix4x4::CreateRotateXYZMatrix(rotation);;
+	gravitiesAT = 0.033f;
+	isGrabed = false;
+	throwingHitFrag = false;
+}
+
+void Lantern::ThrowingAnimationUpdate() {
+	if (throwingTimeCount_ >= 1.0f) {
+		return;
+	}
+	throwingTimeCount_ += 1.0f / 60.0f;
+	if (throwingTimeCount_ > 1.0f) {
+		throwingTimeCount_ = 1.0f;
+	}
+	
+	// b = 開始の値
+	// c = 開始との差分
+	auto easeOut = [&](float b, float c) {
+		float t = throwingTimeCount_ / 1.0f;
+		float t2 = (throwingTimeCount_ - 1.0f / 60.0f) / 1.0f;
+		float result = -c * t * (t - 2.0f) + b;
+		float result2 = -c * t2 * (t2 - 2.0f) + b;
+		return result - result2;
+	};
+
+	handleModel_->transform.translation.x += easeOut(throwingPositionStart_.x, throwingPositionDiff_.x);
+	handleModel_->transform.translation.z += easeOut(throwingPositionStart_.z, throwingPositionDiff_.z);
 }
 
 void Lantern::LightBehavior() {

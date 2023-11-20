@@ -24,6 +24,9 @@ public:
 
 private: //*** これより先に必要な処理や変数を記述 ***//
 
+	// 背景
+	LWP::Primitive::Surface* backGround_;
+
 	// ステージのレベル
 	const int level_;
 	// ステージデータ
