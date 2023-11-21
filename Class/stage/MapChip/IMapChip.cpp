@@ -13,6 +13,14 @@ bool IMapChip::CheckCollision(Vector3 checkPos, Vector3* fixVector) {
 	}
 }
 
+bool IMapChip::IsToGrow() {
+	return false;
+}
+
+void IMapChip::GrawUp() {
+	// ライトが当てられているときに呼び出される処理
+}
+
 
 bool IMapChip::IsMapChipCollision() {
 	return false;

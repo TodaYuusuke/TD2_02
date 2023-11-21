@@ -40,6 +40,7 @@ public: // ** メンバ関数 ** //
 	void Update() override;
 	bool IsMapChipCollision() override;
 	bool IsGroundCollision() override;
+	bool IsToGrow() override { return true; }
 };
 class VineFloor :public IMapChip {
 public: // ** メンバ関数 ** //
@@ -47,6 +48,7 @@ public: // ** メンバ関数 ** //
 	void Update() override;
 	bool IsMapChipCollision() override;
 	bool IsGroundCollision() override;
+	bool IsToGrow() override { return true; }
 };
 class Start :public IMapChip {
 public: // ** メンバ関数 ** //

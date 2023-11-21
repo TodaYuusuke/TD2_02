@@ -1,5 +1,6 @@
 #pragma once
 #include "MapChip/Derved.h"
+#include "Flower.h"
 #include <string>
 
 class Stage final {
@@ -13,6 +14,10 @@ public:	// ** メンバ関数 ** //
 	// 当たり判定をチェックする関数
 	bool CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector, bool isPlayer);
 
+	// 光の当たり判定
+	void CheckLightCollision(LWP::Math::Vector3 center, float radius);
+
+
 	// プレイヤーのスタート地点を受け取る関数
 	LWP::Math::Vector3 GetPlayerStartPosition() { return playerStartPosition; }
 
@@ -20,6 +25,8 @@ private: // ** メンバ変数 ** //
 
 	// マップチップ
 	std::vector<std::vector<IMapChip*>> mapChip_;
+	// 花
+	Flower flower_;
 
 	// プレイヤーのスタート地点
 	LWP::Math::Vector3 playerStartPosition = {0.0f,0.0f,0.0f};
@@ -27,4 +34,10 @@ private: // ** メンバ変数 ** //
 	float commonScale = 1.0f;
 
 private: // ** プライベートな関数 ** //
+
+	// 光の当たり判定用の、ベクトルとマップチップの交差判定
+	bool IsIntersecting(LWP::Math::Vector2 start, LWP::Math::Vector2 end, LWP::Math::Vector3 mapChipTransform);
+
+	// Vector2の内積を求める関数
+	float CrossProduct(LWP::Math::Vector2 v1, LWP::Math::Vector2 v2);
 };

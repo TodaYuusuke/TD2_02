@@ -61,7 +61,6 @@ private: // ** メンバ変数 ** //
 private: // ** アニメーション関連 ** //
 
 	// 投げてる最中の更新処理
-	bool throwingHitFrag = false;
 	float throwingTimeCount_ = 99.0f;
 	LWP::Math::Vector3 throwingPositionStart_;
 	LWP::Math::Vector3 throwingPositionDiff_;

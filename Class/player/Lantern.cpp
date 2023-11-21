@@ -12,7 +12,7 @@ void Lantern::Init() {
 	model_->name = "Hontai";
 	light_ = LWP::Object::CreateInstance<LWP::Object::PointLight>();
 	light_->transform.translation.y = -1.2f;
-	light_->color = LWP::Utility::Color::KelvinToRGB(2000);
+	light_->color = LWP::Utility::Color::KelvinToRGB(1700);
 	light_->radius = 3.0f;
 	light_->decay = 1.5f;
 	light_->isActive = true;
@@ -127,9 +127,8 @@ void Lantern::Update(Stage* stage) {
 					}
 
 					// もし投げるアニメーション中に、当たった場合 -> 着地点をほぼ真下に
-					if (!throwingHitFrag && throwingTimeCount_ < 1.0f) {
+					if (throwingTimeCount_ < 1.0f) {
 						throwingTimeCount_ = 1.0f;
-						throwingHitFrag = true;
 					}
 
 					handleModel_->transform.translation += fixVector;
@@ -143,6 +142,9 @@ void Lantern::Update(Stage* stage) {
 		/* 後で追加 */ 
 		handleModel_->transform.translation.y = -2.5f;
 	}
+
+	// 光源の当たり判定をチェックする
+	stage->CheckLightCollision(light_->transform.GetWorldPosition(), 2.5f);
 }
 
 void Lantern::Grab(LWP::Object::WorldTransform* transform) {
@@ -160,7 +162,6 @@ void Lantern::Throw(Vector3 rotation) {
 	throwingPositionDiff_ = Vector3{ 0.0f,0.0f,3.0f } * Matrix4x4::CreateRotateXYZMatrix(rotation);;
 	gravitiesAT = 0.033f;
 	isGrabed = false;
-	throwingHitFrag = false;
 }
 
 void Lantern::ThrowingAnimationUpdate() {
