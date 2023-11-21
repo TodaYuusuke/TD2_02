@@ -31,6 +31,18 @@ private: // ** メンバ変数 ** //
 
 	// モデル
 	LWP::Primitive::Mesh* model_ = nullptr;
+
+	LWP::Primitive::Mesh* headModel_ = nullptr;				//頭
+	LWP::Primitive::Mesh* bodyModel_ = nullptr;				//上半身
+	LWP::Primitive::Mesh* leftForeArmModel_ = nullptr;		//左腕　手から肘
+	LWP::Primitive::Mesh* leftUpperArmModel_ = nullptr;		//左腕　肘から肩
+	LWP::Primitive::Mesh* rightForeArmModel_ = nullptr;		//右腕　手から肘
+	LWP::Primitive::Mesh* rightUpperArmModel_ = nullptr;	//右腕　肘から肩
+	LWP::Primitive::Mesh* footModel_ = nullptr;				//下半身
+
+
+
+
 	// プレイヤーのスタート地点
 	LWP::Math::Vector3 startPosition_;
 	// 重力による加速度
