@@ -78,6 +78,9 @@
     <ClCompile Include="Class\stage\MapChip\Start.cpp">
       <Filter>Class\stage\MapChip</Filter>
     </ClCompile>
+    <ClCompile Include="Class\stage\Flower.cpp">
+      <Filter>Class\stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\sence\Title.h">
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="Class\player\Lantern.h">
       <Filter>Class\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\stage\Flower.h">
+      <Filter>Class\stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

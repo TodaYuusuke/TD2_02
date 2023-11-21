@@ -22,6 +22,22 @@ public:	// ** メンバ関数 ** //
 	/// <returns></returns>
 	virtual bool CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector);
 
+	/// <summary>
+	/// 光で反応があるマップチップかを返す関数
+	/// </summary>
+	virtual bool IsToGrow();
+	/// <summary>
+	/// 光が当たっている際に呼び出される関数
+	/// </summary>
+	virtual void GrawUp();
+
+
+	// このマス自体に対する当たり判定があるかどうか
+	virtual bool IsMapChipCollision();
+	// このマスの地面に対する当たり判定
+	virtual bool IsGroundCollision();
+
+
 	// 座標をセット
 	void SetPosition(LWP::Math::Vector3 pos) { if (model_) { model_->transform.translation = pos; } }
 	// スケールをセット
@@ -40,10 +56,7 @@ protected: // ** メンバ変数 ** //
 protected: // ** プライベートな関数 ** //
 
 	// このマス自体に対する当たり判定があるかどうか
-	virtual bool IsMapChipCollision();
 	bool CheckMapChipCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector);
 	// このマスの地面に対する当たり判定
-	virtual bool IsGroundCollision();
 	bool CheckGroundCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector);
-
 };
