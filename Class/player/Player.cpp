@@ -9,13 +9,39 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	model_ = LWP::Resource::LoadModel("Player/LowPolyPlayer.obj");
 #else
 	model_ = LWP::Resource::LoadModel("Player/Player.obj");
+
 #endif
+
+	headModel_ = LWP::Resource::LoadModel("Player/player_head.obj");
+	bodyModel_ = LWP::Resource::LoadModel("Player/player_body.obj");
+	footModel_ = LWP::Resource::LoadModel("Player/player_foot.obj");
+	rightUpperArmModel_ = LWP::Resource::LoadModel("Player/player_right_upperArm.obj");
+	leftUpperArmModel_ = LWP::Resource::LoadModel("Player/player_left_upperArm.obj");
+	rightForeArmModel_ = LWP::Resource::LoadModel("Player/player_right_foreArm.obj");
+	leftForeArmModel_ = LWP::Resource::LoadModel("Player/player_left_foreArm.obj");
+
+
+
 	model_->transform.translation = startPosition;
+	bodyModel_->transform.translation = startPosition;
+	
+
+	headModel_->material.enableLighting = true;
+	bodyModel_->material.enableLighting = true;
+	footModel_->material.enableLighting = true;
+	rightUpperArmModel_->material.enableLighting = true;
+	leftUpperArmModel_->material.enableLighting = true;
+	rightForeArmModel_->material.enableLighting = true;
+	leftForeArmModel_->material.enableLighting = true;
+
+	
+
 	startPosition_ = startPosition;
 	model_->transform.scale = { 0.5f,0.5f,0.5f };
 	model_->material.enableLighting = true;
 	model_->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
-	grabPosition_.translation = { 0.15f,0.3f,0.5f };
+	grabPosition_.translation = { 0.0f,0.35f,0.35f };
+	model_->isActive = false;
 
 	camera_ = camera;
 	cameraGoalRotation_ = camera_->transform.rotation;
@@ -26,6 +52,15 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	// 親子関係を登録
 	grabPosition_.Parent(&model_->transform);
 	lantern_.Grab(&grabPosition_);
+
+	headModel_->transform.Parent(&bodyModel_->transform);
+	footModel_->transform.Parent(&bodyModel_->transform);
+	leftUpperArmModel_->transform.Parent(&bodyModel_->transform);
+	rightUpperArmModel_->transform.Parent(&bodyModel_->transform);
+
+	leftForeArmModel_->transform.Parent(&leftUpperArmModel_->transform);
+	rightForeArmModel_->transform.Parent(&rightUpperArmModel_->transform);
+
 }
 
 void Player::Update(Stage* stage) {
@@ -35,6 +70,35 @@ void Player::Update(Stage* stage) {
 		model_->DebugGUI();
 		ImGui::TreePop();
 	}
+	if (ImGui::TreeNode("PlayerHeadModel")) {
+		headModel_->DebugGUI();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("PlayerVodyModel")) {
+		bodyModel_->DebugGUI();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("PlayerFootModel")) {
+		footModel_->DebugGUI();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("PlayerLeftForeArmModel")) {
+		leftForeArmModel_->DebugGUI();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("PlayerLeftUpperArmModel")) {
+		leftUpperArmModel_->DebugGUI();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("PlayerRightForeArmModel")) {
+		rightForeArmModel_->DebugGUI();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("PlayerRightUpperArmModel")) {
+		rightUpperArmModel_->DebugGUI();
+		ImGui::TreePop();
+	}
+
 	if (ImGui::TreeNode("GrabPosition")) {
 		grabPosition_.DebugGUI();
 		ImGui::TreePop();
@@ -148,9 +212,18 @@ void Player::Move() {
 	Matrix4x4 cameraRotationMatrix = Matrix4x4::CreateRotateXYZMatrix({ 0.0f, camera_->transform.rotation.y, 0.0f });
 	dir = dir.Normalize() * kPlayerSpeed * cameraRotationMatrix;
 	
+
+
 	// 構えているときは動かない
 	if (behavior_ != Behavior::ReadyToThrow && behavior_ != Behavior::Throwing) {
 		model_->transform.translation += dir;
+
+		
+		bodyModel_->transform.translation= model_->transform.translation;
+	
+	
+		
+
 		// 歩いないときの処理
 		if (dir.Length() == 0.0f) {
 			lantern_.WaitSwingAmplitude();
@@ -185,15 +258,29 @@ void Player::Move() {
 
 		// 角度を適応
 		model_->transform.rotation = Slerp(model_->transform.rotation, goalRotation, 0.2f);
+
+		bodyModel_->transform.rotation = Slerp(model_->transform.rotation, goalRotation, 0.2f);
+	
 	}
 }
 
 void Player::Action() {
 	switch (behavior_) {
-		case Behavior::GrabLantern:
+		case Behavior::GrabLantern:	
 			if (Keyboard::GetTrigger(DIK_SPACE)) {
 				behavior_ = Behavior::ReadyToThrow;
 			}
+			
+			//左腕 :ランタン持っている腕
+			leftUpperArmModel_->transform.rotation.y = -2.0f;
+			leftUpperArmModel_->transform.translation.x = 0.04f;
+			leftUpperArmModel_->transform.translation.y = -0.02f;
+
+			//右腕
+			rightUpperArmModel_->transform.translation.x = 0.1f;
+			rightUpperArmModel_->transform.translation.y = 0.04f;
+			rightUpperArmModel_->transform.rotation.z = 0.6f;
+
 			break;
 
 		case Behavior::ReadyToThrow:
@@ -218,6 +305,13 @@ void Player::Action() {
 					behavior_ = Behavior::GrabLantern;
 				}
 			}
+
+			//左腕
+			leftUpperArmModel_->transform.rotation.y = 0.0f;
+			leftUpperArmModel_->transform.translation.x = 0.1f;
+			leftUpperArmModel_->transform.translation.y = 0.04f;
+			leftUpperArmModel_->transform.rotation.z = 0.6f;
+
 			break;
 
 	}
