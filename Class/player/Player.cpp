@@ -9,7 +9,6 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	model_ = LWP::Resource::LoadModel("Player/LowPolyPlayer.obj");
 #else
 	model_ = LWP::Resource::LoadModel("Player/Player.obj");
-
 #endif
 
 	headModel_ = LWP::Resource::LoadModel("Player/player_head.obj");
@@ -60,7 +59,6 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 
 	leftForeArmModel_->transform.Parent(&leftUpperArmModel_->transform);
 	rightForeArmModel_->transform.Parent(&rightUpperArmModel_->transform);
-
 }
 
 void Player::Update(Stage* stage) {
@@ -113,27 +111,21 @@ void Player::Update(Stage* stage) {
 	// 行動更新処理
 	Action();
 
-	// ランタン更新
-	lantern_.Update(stage);
-
-	// カメラを追従させる
-	FollowCameraTurn();
-
 	// 当たり判定を取る座標4点
 	Vector3 checkPos[4] = {
-		model_->transform.translation - (Vector3{model_->transform.scale.x,0.0f,model_->transform.scale.z} / 2.0f),
-		model_->transform.translation - (Vector3{-model_->transform.scale.x,0.0f,model_->transform.scale.z} / 2.0f),
-		model_->transform.translation - (Vector3{model_->transform.scale.x,0.0f,-model_->transform.scale.z} / 2.0f),
-		model_->transform.translation - (Vector3{-model_->transform.scale.x,0.0f,-model_->transform.scale.z} / 2.0f)
+		model_->transform.translation - (Vector3{0.3f,0.0f,0.3f} / 2.0f),
+		model_->transform.translation - (Vector3{-0.3f,0.0f,0.3f} / 2.0f),
+		model_->transform.translation - (Vector3{0.3f,0.0f,-0.3f} / 2.0f),
+		model_->transform.translation - (Vector3{-0.3f,0.0f,-0.3f} / 2.0f)
 	};
 
 #if _DEBUG	// 当たり判定表示用の球
-	//static LWP::Primitive::Sphere* s[4] = {
-	//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-	//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-	//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-	//	LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
-	//};
+	/*static LWP::Primitive::Sphere* s[4] = {
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
+	};*/
 #endif
 
 	// 判定がなくなるまで無限ループ
@@ -184,6 +176,15 @@ void Player::Update(Stage* stage) {
 			isFollowingCamera_ = true;
 		}
 	}
+
+	// プレイヤーの座標をステージに保持させる
+	stage->SetPlayerData(model_->transform.GetWorldPosition(), model_->transform.rotation);
+
+	// ランタン更新
+	lantern_.Update(stage);
+
+	// カメラを追従させる
+	FollowCameraTurn();
 }
 
 void Player::Move() {

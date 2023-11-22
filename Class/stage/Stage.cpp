@@ -216,13 +216,11 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 	}
 
 	// 花に対しても行う
-	ImGui::Begin("CollTest");
 	for (int i = 0; i < 1; i++) {
 		// 地点に対してのray（3次元）
 		Vector3 ray3 = flower_.GetWorldPosition();
 
 		// まず灯りの範囲内かをチェックする
-		ImGui::Text("Length %f", (ray3 - center).Length());
 		if ((ray3 - center).Length() > radius) {
 			continue;	// 範囲外なのでこの判定は終了
 		}
@@ -232,16 +230,17 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 		// 壁などにヒットした場合用のフラグ
 		bool isHit = false;
 
+
+		// もしプレイヤーの影になっているならば -> 処理を行わない
+		if (IsPlayerIntersecting({ center.x,center.z }, ray)) { continue; }
+
+
 		// rayと重なっている可能性のあるマップチップを洗い出す
 		std::vector<IMapChip*> mapChipArray;
 		int mapChipRangeY1 = static_cast<int>(center.z / commonScale);
 		int mapChipRangeX1 = static_cast<int>(center.x / commonScale);
 		int mapChipRangeY2 = static_cast<int>(ray3.z / commonScale);
 		int mapChipRangeX2 = static_cast<int>(ray3.x / commonScale);
-		ImGui::Text("mapChipRangeY1 %d", mapChipRangeY1);
-		ImGui::Text("mapChipRangeX1 %d", mapChipRangeX1);
-		ImGui::Text("mapChipRangeY2 %d", mapChipRangeY2);
-		ImGui::Text("mapChipRangeX2 %d", mapChipRangeX2);
 		for (int yy = min(mapChipRangeY1, mapChipRangeY2); yy <= max(mapChipRangeY1, mapChipRangeY2); yy++) {
 			for (int xx = min(mapChipRangeX1, mapChipRangeX2); xx <= max(mapChipRangeX1, mapChipRangeX2); xx++) {
 				mapChipArray.push_back(mapChip_[yy][xx]);
@@ -269,7 +268,6 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 		flower_.AddLightingTime();
 		break;	// この花に対する処理を終了する
 	}
-	ImGui::End();
 }
 
 // ベクトルと線分の交差判定
@@ -279,6 +277,40 @@ bool Stage::IsIntersecting(Vector2 start, Vector2 end, Vector3 mapChipTransform)
 	float v2 = CrossProduct(end - start, (mapChipPos + Vector2{  0.5f,-0.5f }) - start);
 	float v3 = CrossProduct(end - start, (mapChipPos + Vector2{  0.5f, 0.5f }) - start);
 	float v4 = CrossProduct(end - start, (mapChipPos + Vector2{ -0.5f, 0.5f }) - start);
+
+	// 線分と矩形の辺が交差するかどうかを判定
+	return ((v1 * v2 < 0) || (v3 * v4 < 0) || (v1 * v4 < 0) || (v2 * v3 < 0));
+}
+// プレイヤーver
+bool Stage::IsPlayerIntersecting(Vector2 start, Vector2 end) {
+	Vector2 centerPos = { playerCurrentPosition_.x,playerCurrentPosition_.z };
+	Vector3 playerPos[4] = {
+		playerCurrentPosition_ + Vector3{-0.05f,0.0f,-0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
+		playerCurrentPosition_ + Vector3{ 0.05f,0.0f,-0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
+		playerCurrentPosition_ + Vector3{ 0.05f,0.0f, 0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
+		playerCurrentPosition_ + Vector3{-0.05f,0.0f, 0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
+	};
+
+	// 判定を表示
+	static LWP::Primitive::Sphere* s[4] = {
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
+		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
+	};
+	s[0]->transform.translation = playerPos[0];
+	s[0]->Radius(0.02f);
+	s[1]->transform.translation = playerPos[1];
+	s[1]->Radius(0.02f);
+	s[2]->transform.translation = playerPos[2];
+	s[2]->Radius(0.02f);
+	s[3]->transform.translation = playerPos[3];
+	s[3]->Radius(0.02f);
+
+	float v1 = CrossProduct(end - start, Vector2{ playerPos[0].x,playerPos[0].z } - start);
+	float v2 = CrossProduct(end - start, Vector2{ playerPos[1].x,playerPos[1].z } - start);
+	float v3 = CrossProduct(end - start, Vector2{ playerPos[2].x,playerPos[2].z } - start);
+	float v4 = CrossProduct(end - start, Vector2{ playerPos[3].x,playerPos[3].z } - start);
 
 	// 線分と矩形の辺が交差するかどうかを判定
 	return ((v1 * v2 < 0) || (v3 * v4 < 0) || (v1 * v4 < 0) || (v2 * v3 < 0));
