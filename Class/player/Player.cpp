@@ -62,6 +62,8 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 }
 
 void Player::Update(Stage* stage) {
+	LWP::Input::Pad::SetVibration(0, 0.0f, 0.8f);
+
 #if _DEBUG
 	ImGui::Begin("Player");
 	if (ImGui::TreeNode("PlayerModel")) {
@@ -206,8 +208,8 @@ void Player::Move() {
 	}
 
 	// コントローラーでの移動
-	//dir.x += Pad::GetLStick().x;
-	//dir.y -= Pad::GetLStick().y;	// Yは逆
+	dir.x += Pad::GetLStick(0).x;
+	dir.z += Pad::GetLStick(0).y;
 
 	// 正規化してから使用
 	Matrix4x4 cameraRotationMatrix = Matrix4x4::CreateRotateXYZMatrix({ 0.0f, camera_->transform.rotation.y, 0.0f });
@@ -353,8 +355,8 @@ void Player::FollowCameraTurn() {
 	}
 
 	// コントローラーでの回転
-	//dir.x += Pad::GetRStick().x;
-	//dir.y -= Pad::GetRStick().y;	// Yは逆
+	dir.x += Pad::GetRStick(0).y;
+	dir.y += Pad::GetRStick(0).x;
 
 	// 正規化してから使用
 	dir = dir.Normalize();
