@@ -199,10 +199,10 @@ void Player::Move() {
 	Vector3 dir = { 0.0f,0.0f,0.0f };
 
 	// キーボードでの移動
-	if (!isParallelMoving && Keyboard::GetPress(DIK_W)) {
+	if (Keyboard::GetPress(DIK_W)) {
 		dir.z += 1.0f;
 	}
-	if (!isParallelMoving && Keyboard::GetPress(DIK_S)) {
+	if (Keyboard::GetPress(DIK_S)) {
 		dir.z -= 1.0f;
 	}
 	if (Keyboard::GetPress(DIK_D)) {
@@ -215,6 +215,11 @@ void Player::Move() {
 	// コントローラーでの移動
 	dir.x += Pad::GetLStick(0).x;
 	dir.z += Pad::GetLStick(0).y;
+
+	// 平行移動のとき、Z成分を削除
+	if (isParallelMoving) {
+		dir.z = 0.0f;
+	}
 
 	// 長さが1を超えている場合 -> 正規化してから使用
 	dir = dir.Length() > 1.0f ? dir.Normalize() : dir;

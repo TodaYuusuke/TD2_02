@@ -208,7 +208,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 			bool isHit = false;
 
 			// もしプレイヤーの影になっているならば -> 処理を行わない
-			if (IsPlayerIntersecting({ center.x,center.z }, ray)) { continue; }
+			if (IsPlayerIntersecting({center.x,center.z}, ray)) { continue; }
 
 			// rayと重なっている可能性のあるマップチップを洗い出す
 			std::vector<IMapChip*> mapChipArray;
@@ -358,7 +358,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 
 
 		// もしプレイヤーの影になっているならば -> 処理を行わない
-		if (IsPlayerIntersecting({ center.x,center.z }, ray)) { continue; }
+		if (IsPlayerIntersecting({center.x,center.z}, ray)) { continue; }
 
 
 		// rayと重なっている可能性のあるマップチップを洗い出す
@@ -415,6 +415,8 @@ bool Stage::IsPlayerIntersecting(Vector2 start, Vector2 end) {
 	Vector3 sTop = playerCurrentPosition_ - Vector3{ start.x, 0.0f, start.y };
 	// 内積が-のとき判定しない
 	if (Vector3::Dot(sToe, sTop) < 0.0f) { return false; }
+	// プレイヤーの方が遠いとき判定しない
+	if (sToe.Length() < sTop.Length()) { return false; }
 
 	Vector3 playerPos[4] = {
 		playerCurrentPosition_ + Vector3{-0.05f,0.0f,-0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
