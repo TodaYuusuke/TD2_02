@@ -35,6 +35,12 @@ void Stage::Init(int level) {
 				case Mapchip::VineFloor:
 					mapChip_[y].push_back(new VineFloor());
 					break;
+				case Mapchip::DarkVineFloor:
+					mapChip_[y].push_back(new DarkVineFloor());
+					break;
+				case Mapchip::DarkVineLeaf:
+					mapChip_[y].push_back(new DarkVineLeaf());
+					break;
 				case Mapchip::Start:
 					mapChip_[y].push_back(new Start());
 					break;
@@ -68,7 +74,7 @@ void Stage::Init(int level) {
 	}
 
 	// 花を生成
-	flower_.Init({ 3.5f,3.5f });
+	flower_.Init({ 4.5f,3.8f });
 }
 
 void Stage::Update() {
@@ -93,10 +99,23 @@ void Stage::Update() {
 		}
 	}
 
+	// 花更新
 	flower_.Update();
+	
+	// ろうそくの当たり判定を取る
+	for (int y = 0; y < mapChip_.size(); y++) {
+		for (int x = 0; x < mapChip_[y].size(); x++) {
+			if (dynamic_cast<Candle*>(mapChip_[y][x])) {
+				Candle* candle = dynamic_cast<Candle*>(mapChip_[y][x]);
+				if (candle->isIgnited) {
+					CheckLightCollision(candle->GetModel()->transform.GetWorldPosition(), 2.5f);
+				}
+			}
+		}
+	}
 }
 
-bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector, bool isPlayer) {
+bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector, bool isPlayer, bool isGrabLantern) {
 
 	// 場外の場合の処理
 	if (checkPos.z < 0.0f) {
@@ -134,12 +153,25 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 			bool result;
 			// もしプレイヤーの当たり判定で、かつYが0以上、かつ検証する地点がHoleの場合 -> 壁として扱う
 			if (isPlayer && checkPos.y >= 0.0f && dynamic_cast<Hole*>(mapChip_[y][x])) {
-				Wall* wall = new Wall();
-				wall->SetModel(mapChip_[y][x]->GetModel());
-				result = wall->CheckCollision(cPos, fixVector);
+				// ただし葉っぱが育っているならば通常の当たり判定として扱う
+				Hole* hole = dynamic_cast<Hole*>(mapChip_[y][x]);
+				if (hole->leafModel_->isActive) {
+					result = mapChip_[y][x]->CheckCollision(cPos, fixVector);
+				}
+				else {
+					Wall* wall = new Wall();
+					wall->SetModel(mapChip_[y][x]->GetModel());
+					result = wall->CheckCollision(cPos, fixVector);
+				}
 			}
 			else {
 				result = mapChip_[y][x]->CheckCollision(cPos, fixVector);
+			}
+			
+			// ヒットしていてろうそくの場合
+			if (isGrabLantern && result && dynamic_cast<Candle*>(mapChip_[y][x])) {
+				Candle* candle = dynamic_cast<Candle*>(mapChip_[y][x]);
+				candle->isIgnited = true;
 			}
 
 			return result;
@@ -150,6 +182,9 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 }
 
 void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
+	// そも光源がY-ならば判定をとらない
+	if (center.y < 0.0f) { return; }
+
 	// 光源に対してアクションがある当たり判定をチェックする
 	for (int y = 0; y < mapChip_.size(); y++) {
 		for (int x = 0; x < mapChip_[y].size(); x++) {
@@ -159,58 +194,149 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 				continue;
 			}
 
-			// 4頂点に対してのray（3次元）
-			Vector3 ray3[4] = {
-				(mapChip_[y][x]->GetModel()->transform.translation + Vector3{-0.5f,0.0f,-0.5f}) - center,
-				(mapChip_[y][x]->GetModel()->transform.translation + Vector3{-0.5f,0.0f, 0.5f}) - center,
-				(mapChip_[y][x]->GetModel()->transform.translation + Vector3{ 0.5f,0.0f,-0.5f}) - center,
-				(mapChip_[y][x]->GetModel()->transform.translation + Vector3{ 0.5f,0.0f, 0.5f}) - center
-			};
+			// 中心に対してのray（3次元）
+			Vector3 ray3 = mapChip_[y][x]->GetModel()->transform.GetWorldPosition();
 
-			// 4頂点に対してのrayをチェックする
-			for (int i = 0; i < 4; i++) {
-				// まず灯りの範囲内かをチェックする
-				if ((center - ray3[i]).Length() > radius) {
-					continue;	// 範囲外なのでこの判定は終了
-				}
+			// まず灯りの範囲内かをチェックする
+			if ((ray3 - center).Length() > radius) {
+				continue;	// 範囲外なのでこの判定は終了
+			}
 
-				// rayを二次元に
-				Vector2 ray = { ray3[i].x,ray3[i].z };
-				// 壁などにヒットした場合用のフラグ
-				bool isHit = false;
+			// rayを二次元に
+			Vector2 ray = { ray3.x,ray3.z };
+			// 壁などにヒットした場合用のフラグ
+			bool isHit = false;
 
-				// rayと重なっている可能性のあるマップチップを洗い出す
-				std::vector<IMapChip*> mapChipArray;
-				int mapChipRangeY1 = static_cast<int>(center.z / commonScale);
-				int mapChipRangeX1 = static_cast<int>(center.x / commonScale);
-				int mapChipRangeY2 = static_cast<int>(ray.y / commonScale);
-				int mapChipRangeX2 = static_cast<int>(ray.x / commonScale);
-				for (int yy = min(mapChipRangeY1, mapChipRangeY2); yy <= max(mapChipRangeY1, mapChipRangeY2); yy++) {
-					for (int xx = min(mapChipRangeX1, mapChipRangeX2); xx <= max(mapChipRangeX1, mapChipRangeX2); xx++) {
+			// もしプレイヤーの影になっているならば -> 処理を行わない
+			if (IsPlayerIntersecting({ center.x,center.z }, ray)) { continue; }
+
+			// rayと重なっている可能性のあるマップチップを洗い出す
+			std::vector<IMapChip*> mapChipArray;
+			int mapChipRangeY1 = static_cast<int>(center.z / commonScale);
+			int mapChipRangeX1 = static_cast<int>(center.x / commonScale);
+			int mapChipRangeY2 = static_cast<int>(ray3.z / commonScale);
+			int mapChipRangeX2 = static_cast<int>(ray3.x / commonScale);
+			for (int yy = min(mapChipRangeY1, mapChipRangeY2); yy <= max(mapChipRangeY1, mapChipRangeY2); yy++) {
+				for (int xx = min(mapChipRangeX1, mapChipRangeX2); xx <= max(mapChipRangeX1, mapChipRangeX2); xx++) {
+					if (yy != y && xx != x) {
 						mapChipArray.push_back(mapChip_[yy][xx]);
 					}
 				}
+			}
 
-				// rayと交差しているかチェック
-				for (IMapChip* m : mapChipArray) {
-					// マップチップの範囲とベクトルの範囲が交差するかどうかを判定
-					if (IsIntersecting({ center.x,center.z }, ray, m->GetModel()->transform.translation)) {
-						// もし当たり判定があるマップチップの場合、このrayの当たり判定チェックをやめる
-						if (m->IsMapChipCollision()) {
-							isHit = true;
+			// rayと交差しているかチェック
+			for (IMapChip* m : mapChipArray) {
+				// マップチップの範囲とベクトルの範囲が交差するかどうかを判定
+				if (IsIntersecting({ center.x,center.z }, ray, m->GetModel()->transform.translation)) {
+					// もし当たり判定があるマップチップの場合、このrayの当たり判定チェックをやめる
+					if (m->IsMapChipCollision()) {
+						isHit = true;
+						break;
+					}
+				}
+			}
+
+			// ヒットしていた場合戻る
+			if (isHit) { continue; }
+
+			// ヒットしていなかったらしいので成長の処理を呼び出す
+			mapChip_[y][x]->GrawUp();
+			// このマップチップがVineFloorの場合の処理
+			if (dynamic_cast<VineFloor*>(mapChip_[y][x])) {
+				Hole* holes[12]{ nullptr };	// 穴のポインタ
+				int i = 0;
+				// 回りの穴を検知
+				for (int plus = 1; plus <= 3; plus++) {
+					if (y + plus < mapChip_.size() && dynamic_cast<Hole*>(mapChip_[y + plus][x])) {
+						holes[i++] = dynamic_cast<Hole*>(mapChip_[y + plus][x]);
+						if (holes[i - 1]->isGrew_ > 1) {
+							holes[i - 1] = nullptr;
 							break;
 						}
 					}
+					else { break; }
+				}
+				for (int plus = 1; plus <= 3; plus++) {
+					if (y - plus >= 0 && dynamic_cast<Hole*>(mapChip_[y - plus][x])) {
+						holes[i++] = dynamic_cast<Hole*>(mapChip_[y - plus][x]);
+						if (holes[i - 1]->isGrew_ > 1) {
+							holes[i - 1] = nullptr;
+							break;
+						}
+					}
+					else { break; }
+				}
+				for (int plus = 1; plus <= 3; plus++) {
+					if (x + plus < mapChip_[0].size() && dynamic_cast<Hole*>(mapChip_[y][x + plus])) {
+						holes[i++] = dynamic_cast<Hole*>(mapChip_[y][x + plus]);
+						if (holes[i - 1]->isGrew_ > 1) {
+							holes[i - 1] = nullptr;
+							break;
+						}
+					}
+					else { break; }
+				}
+				for (int plus = 1; plus <= 3; plus++) {
+					if (x - plus >= 0 && dynamic_cast<Hole*>(mapChip_[y][x - plus])) {
+						holes[i++] = dynamic_cast<Hole*>(mapChip_[y][x - plus]);
+						if (holes[i - 1]->isGrew_ > 1) {
+							holes[i - 1] = nullptr;
+							break;
+						}
+					}
+					else { break; }
 				}
 
-				// ヒットしていた場合戻る
-				if (isHit) {
-					continue;
-				}
 
-				// ヒットしていなかったらしいので成長の処理を呼び出す
-				mapChip_[y][x]->GrawUp();
-				break;	// このマップチップに対する処理を終了する
+				// 穴の葉をOnに
+				for (int n = 0; n < 12; n++) {
+					if (holes[n] != nullptr) {
+						holes[n]->GrawUp();
+					}
+				}
+			}
+			// 照らしたら死ぬ床の場合
+			else if (dynamic_cast<DarkVineFloor*>(mapChip_[y][x])) {
+				// 死亡するフレームに到達しているかどうかを検証
+				DarkVineFloor* floor = dynamic_cast<DarkVineFloor*>(mapChip_[y][x]);
+				if (floor->isGrew_ >= floor->kFrameUntilDeath) {
+					DarkVineLeaf* leaves[12]{ nullptr };	// 葉っぱのポインタ
+					int i = 0;
+					// 回りの穴を検知
+					for (int plus = 1; plus <= 3; plus++) {
+						if (y + plus < mapChip_.size() && dynamic_cast<DarkVineLeaf*>(mapChip_[y + plus][x])) {
+							leaves[i++] = dynamic_cast<DarkVineLeaf*>(mapChip_[y + plus][x]);
+						}
+						else { break; }
+					}
+					for (int plus = 1; plus <= 3; plus++) {
+						if (y - plus >= 0 && dynamic_cast<DarkVineLeaf*>(mapChip_[y - plus][x])) {
+							leaves[i++] = dynamic_cast<DarkVineLeaf*>(mapChip_[y - plus][x]);
+						}
+						else { break; }
+					}
+					for (int plus = 1; plus <= 3; plus++) {
+						if (x + plus < mapChip_[0].size() && dynamic_cast<DarkVineLeaf*>(mapChip_[y][x + plus])) {
+							leaves[i++] = dynamic_cast<DarkVineLeaf*>(mapChip_[y][x + plus]);
+						}
+						else { break; }
+					}
+					for (int plus = 1; plus <= 3; plus++) {
+						if (x - plus >= 0 && dynamic_cast<DarkVineLeaf*>(mapChip_[y][x - plus])) {
+							leaves[i++] = dynamic_cast<DarkVineLeaf*>(mapChip_[y][x - plus]);
+						}
+						else { break; }
+					}
+
+
+					// 穴の葉をOnに
+					for (int n = 0; n < 12; n++) {
+						if (leaves[n] != nullptr) {
+							leaves[n]->isDead_ = true;
+							leaves[n]->GetModel()->isActive = false;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -283,29 +409,19 @@ bool Stage::IsIntersecting(Vector2 start, Vector2 end, Vector3 mapChipTransform)
 }
 // プレイヤーver
 bool Stage::IsPlayerIntersecting(Vector2 start, Vector2 end) {
-	Vector2 centerPos = { playerCurrentPosition_.x,playerCurrentPosition_.z };
+	// ランタンからターゲットへの方向ベクトル
+	Vector3 sToe = Vector3{ end.x,0.0f,end.y } - Vector3{ start.x, 0.0f, start.y };
+	// ランタンからプレイヤーの方向ベクトル
+	Vector3 sTop = playerCurrentPosition_ - Vector3{ start.x, 0.0f, start.y };
+	// 内積が-のとき判定しない
+	if (Vector3::Dot(sToe, sTop) < 0.0f) { return false; }
+
 	Vector3 playerPos[4] = {
 		playerCurrentPosition_ + Vector3{-0.05f,0.0f,-0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
 		playerCurrentPosition_ + Vector3{ 0.05f,0.0f,-0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
 		playerCurrentPosition_ + Vector3{ 0.05f,0.0f, 0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
 		playerCurrentPosition_ + Vector3{-0.05f,0.0f, 0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
 	};
-
-	// 判定を表示
-	static LWP::Primitive::Sphere* s[4] = {
-		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>(),
-		LWP::Primitive::CreateInstance<LWP::Primitive::Sphere>()
-	};
-	s[0]->transform.translation = playerPos[0];
-	s[0]->Radius(0.02f);
-	s[1]->transform.translation = playerPos[1];
-	s[1]->Radius(0.02f);
-	s[2]->transform.translation = playerPos[2];
-	s[2]->Radius(0.02f);
-	s[3]->transform.translation = playerPos[3];
-	s[3]->Radius(0.02f);
 
 	float v1 = CrossProduct(end - start, Vector2{ playerPos[0].x,playerPos[0].z } - start);
 	float v2 = CrossProduct(end - start, Vector2{ playerPos[1].x,playerPos[1].z } - start);

@@ -12,7 +12,7 @@ public:	// ** メンバ関数 ** //
 	void Update();
 
 	// 当たり判定をチェックする関数
-	bool CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector, bool isPlayer);
+	bool CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector, bool isPlayer, bool isGrabLantern);
 
 	// 光の当たり判定
 	void CheckLightCollision(LWP::Math::Vector3 center, float radius);

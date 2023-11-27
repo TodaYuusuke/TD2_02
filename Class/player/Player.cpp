@@ -62,8 +62,6 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 }
 
 void Player::Update(Stage* stage) {
-	LWP::Input::Pad::SetVibration(0, 0.0f, 0.8f);
-
 #if _DEBUG
 	ImGui::Begin("Player");
 	if (ImGui::TreeNode("PlayerModel")) {
@@ -142,7 +140,8 @@ void Player::Update(Stage* stage) {
 			//s[i]->Radius(0.02f);
 #endif
 			Vector3 fixVector = { 0.0f,0.0f,0.0f };
-			bool result = stage->CheckCollision(checkPos[i], &fixVector, true);
+			bool isGrab = !(behavior_ == Behavior::NoHave);
+			bool result = stage->CheckCollision(checkPos[i], &fixVector, true, isGrab);
 			// ヒットしていればフラグをtrueに
 			if (result) {
 				isHit = result;
@@ -150,7 +149,7 @@ void Player::Update(Stage* stage) {
 				// もしY軸補正がされた場合
 				if (fixVector.y > 0.0f) {
 					// ある程度のY軸補正より大きい場合は無視する
-					if (fixVector.y > -kGravities) {
+					if (fixVector.y > 0.1f) {
 						fixVector.y = 0.0f;
 					}
 					else {
@@ -180,7 +179,7 @@ void Player::Update(Stage* stage) {
 	}
 
 	// プレイヤーの座標をステージに保持させる
-	stage->SetPlayerData(model_->transform.GetWorldPosition(), model_->transform.rotation);
+	stage->SetPlayerData(model_->transform.translation, model_->transform.rotation);
 
 	// ランタン更新
 	lantern_.Update(stage);
@@ -190,14 +189,20 @@ void Player::Update(Stage* stage) {
 }
 
 void Player::Move() {
+	// 平行移動をするかのフラグ
+	bool isParallelMoving = false;
+	if (Keyboard::GetPress(DIK_LSHIFT)) {
+		isParallelMoving = true;
+	}
+
 	// 移動する向き
 	Vector3 dir = { 0.0f,0.0f,0.0f };
 
 	// キーボードでの移動
-	if (Keyboard::GetPress(DIK_W)) {
+	if (!isParallelMoving && Keyboard::GetPress(DIK_W)) {
 		dir.z += 1.0f;
 	}
-	if (Keyboard::GetPress(DIK_S)) {
+	if (!isParallelMoving && Keyboard::GetPress(DIK_S)) {
 		dir.z -= 1.0f;
 	}
 	if (Keyboard::GetPress(DIK_D)) {
@@ -211,21 +216,15 @@ void Player::Move() {
 	dir.x += Pad::GetLStick(0).x;
 	dir.z += Pad::GetLStick(0).y;
 
-	// 正規化してから使用
-	Matrix4x4 cameraRotationMatrix = Matrix4x4::CreateRotateXYZMatrix({ 0.0f, camera_->transform.rotation.y, 0.0f });
-	dir = dir.Normalize() * kPlayerSpeed * cameraRotationMatrix;
+	// 長さが1を超えている場合 -> 正規化してから使用
+	dir = dir.Length() > 1.0f ? dir.Normalize() : dir;
+	Matrix4x4 cameraRotationMatrix = isParallelMoving ? Matrix4x4::CreateRotateXYZMatrix({ 0.0f, model_->transform.rotation.y, 0.0f }) : Matrix4x4::CreateRotateXYZMatrix({ 0.0f, camera_->transform.rotation.y, 0.0f });
+	dir = dir * kPlayerSpeed * cameraRotationMatrix;
 	
-
-
 	// 構えているときは動かない
 	if (behavior_ != Behavior::ReadyToThrow && behavior_ != Behavior::Throwing) {
 		model_->transform.translation += dir;
-
-		
-		bodyModel_->transform.translation= model_->transform.translation;
-	
-	
-		
+		bodyModel_->transform.translation = model_->transform.translation;
 
 		// 歩いないときの処理
 		if (dir.Length() == 0.0f) {
@@ -260,10 +259,10 @@ void Player::Move() {
 		}
 
 		// 角度を適応
-		model_->transform.rotation = Slerp(model_->transform.rotation, goalRotation, 0.2f);
-
-		bodyModel_->transform.rotation = Slerp(model_->transform.rotation, goalRotation, 0.2f);
-	
+		if (!isParallelMoving) {
+			model_->transform.rotation = Slerp(model_->transform.rotation, goalRotation, 0.2f);
+			bodyModel_->transform.rotation = Slerp(model_->transform.rotation, goalRotation, 0.2f);
+		}
 	}
 }
 
@@ -316,7 +315,6 @@ void Player::Action() {
 			leftUpperArmModel_->transform.rotation.z = 0.6f;
 
 			break;
-
 	}
 }
 
@@ -358,8 +356,8 @@ void Player::FollowCameraTurn() {
 	dir.x += Pad::GetRStick(0).y;
 	dir.y += Pad::GetRStick(0).x;
 
-	// 正規化してから使用
-	dir = dir.Normalize();
+	// 長さが1を超えている場合 -> 正規化してから使用
+	dir = dir.Length() > 1.0f ? dir.Normalize() : dir;
 	// 次の目標回転角を計算
 	cameraGoalRotation_ += Vector3{ dir.x* kFollowCameraSpeed, dir.y* kFollowCameraSpeed, 0.0f };
 	//goalRotation += { dir.x* kFollowCameraSpeed, dir.y* kFollowCameraSpeed, 0.0f };

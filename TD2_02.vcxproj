@@ -144,6 +144,8 @@
     <ClCompile Include="Class\sence\Title.cpp" />
     <ClCompile Include="Class\stage\Flower.cpp" />
     <ClCompile Include="Class\stage\MapChip\Candle.cpp" />
+    <ClCompile Include="Class\stage\MapChip\DarkVineFloor.cpp" />
+    <ClCompile Include="Class\stage\MapChip\DarkVineLeaf.cpp" />
     <ClCompile Include="Class\stage\MapChip\Floor.cpp" />
     <ClCompile Include="Class\stage\MapChip\Hole.cpp" />
     <ClCompile Include="Class\stage\MapChip\IMapChip.cpp" />

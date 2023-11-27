@@ -56,7 +56,7 @@ protected: // ** メンバ変数 ** //
 protected: // ** プライベートな関数 ** //
 
 	// このマス自体に対する当たり判定があるかどうか
-	bool CheckMapChipCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector);
+	virtual bool CheckMapChipCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector);
 	// このマスの地面に対する当たり判定
 	bool CheckGroundCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixVector);
 };

@@ -104,7 +104,7 @@ void Lantern::Update(Stage* stage) {
 				//s[i]->Radius(0.02f);
 #endif
 				Vector3 fixVector = { 0.0f,0.0f,0.0f };
-				bool result = stage->CheckCollision(checkPos[i], &fixVector, false);
+				bool result = stage->CheckCollision(checkPos[i], &fixVector, false, false);
 				// ヒットしていればフラグをtrueに
 				if (result) {
 					isHit = result;

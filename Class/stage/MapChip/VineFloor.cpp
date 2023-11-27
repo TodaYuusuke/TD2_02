@@ -8,7 +8,7 @@ void VineFloor::Init(LWP::Math::Vector3 position, float scale) {
 }
 
 void VineFloor::Update() {
-	// 特になし
+	isGrew_--;
 }
 
 bool VineFloor::IsMapChipCollision() {
@@ -16,4 +16,8 @@ bool VineFloor::IsMapChipCollision() {
 }
 bool VineFloor::IsGroundCollision() {
 	return true;
+}
+
+void VineFloor::GrawUp() {
+	isGrew_ = 2;
 }
