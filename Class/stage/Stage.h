@@ -30,7 +30,7 @@ private: // ** メンバ変数 ** //
 	// マップチップ
 	std::vector<std::vector<IMapChip*>> mapChip_;
 	// 花
-	Flower flower_;
+	std::vector<Flower> flowers_;
 
 	// プレイヤーのスタート地点
 	LWP::Math::Vector3 playerStartPosition = {0.0f,0.0f,0.0f};

@@ -14,6 +14,11 @@ public:	// ** メンバ関数 ** //
 	// ワールド座標を受け取る
 	LWP::Math::Vector3 GetWorldPosition() { return modelLeaf_[0]->transform.GetWorldPosition(); }
 
+	// 花をONに
+	void OnActive();
+	// 花をOFFに
+	void OffActive();
+
 private: // ** メンバ変数 ** //
 
 	// 花

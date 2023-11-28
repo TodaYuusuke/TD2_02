@@ -3,12 +3,15 @@
 #include <sstream>
 
 using namespace LWP::Math;
+using namespace LWP::Utility;
 
 void Stage::Init(int level) {
 	// レベルのステージデータを読み込む
 	std::ifstream ifs("resources/stage/level" + std::to_string(level) + ".csv");
 	std::string line;	// 1行分のデータ
 	int y = 0;
+
+	int flowerCount = 0;
 
 	// 全行読むまでループ
 	while (std::getline(ifs, line)) {
@@ -22,6 +25,7 @@ void Stage::Init(int level) {
 				case Mapchip::Floor:
 				default:
 					mapChip_[y].push_back(new Floor());
+					flowerCount += 1;
 					break;
 				case Mapchip::Hole:
 					mapChip_[y].push_back(new Hole());
@@ -73,8 +77,30 @@ void Stage::Init(int level) {
 		}
 	}
 
+#if DEBUG 
+#else
 	// 花を生成
-	flower_.Init({ 4.5f,3.8f });
+	Vector2 pos = { 0.0f,0.0f };
+	for (int i = 0; i < flowerCount; i++) {
+		flowers_.push_back(Flower());
+
+		// 座標を決定
+		while (true) {
+			pos.x = static_cast<float>(GenerateRandamNum<int>(0, mapChip_[0].size() * 100 - 1)) / 100.0f;
+			pos.y = static_cast<float>(GenerateRandamNum<int>(0, mapChip_.size() * 100 - 1)) / 100.0f;
+
+			// 指定した地点が通常の床じゃなければ再生成
+			int y = static_cast<int>(pos.y / commonScale);
+			int x = static_cast<int>(pos.x / commonScale);
+			if (dynamic_cast<Floor*>(mapChip_[y][x])) {
+				break;
+			}
+		}
+
+		flowers_.back().Init(pos);
+		flowers_.back().OffActive();
+	}
+#endif
 }
 
 void Stage::Update() {
@@ -100,7 +126,9 @@ void Stage::Update() {
 	}
 
 	// 花更新
-	flower_.Update();
+	for (int i = 0; i < flowers_.size(); i++) {
+		flowers_[i].Update();
+	}
 	
 	// ろうそくの当たり判定を取る
 	for (int y = 0; y < mapChip_.size(); y++) {
@@ -342,14 +370,22 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 	}
 
 	// 花に対しても行う
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < flowers_.size(); i++) {
 		// 地点に対してのray（3次元）
-		Vector3 ray3 = flower_.GetWorldPosition();
+		Vector3 ray3 = flowers_[i].GetWorldPosition();
 
 		// まず灯りの範囲内かをチェックする
 		if ((ray3 - center).Length() > radius) {
+			// かなり離れてる場合はactiveじゃなくさせる
+			if ((ray3 - center).Length() > radius + 1.0f) {
+				flowers_[i].OffActive();
+			}
+			else {
+				flowers_[i].OnActive();
+			}
 			continue;	// 範囲外なのでこの判定は終了
 		}
+		flowers_[i].OnActive();
 
 		// rayを二次元に
 		Vector2 ray = { ray3.x,ray3.z };
@@ -391,8 +427,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 		}
 
 		// ヒットしていなかったらしいので成長の処理を呼び出す
-		flower_.AddLightingTime();
-		break;	// この花に対する処理を終了する
+		flowers_[i].AddLightingTime();
 	}
 }
 

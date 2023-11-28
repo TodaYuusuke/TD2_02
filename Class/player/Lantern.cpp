@@ -249,7 +249,7 @@ void Lantern::LightBehaviorNormalUpdate() {
 	// 振幅の最大値&最小値
 	const float kMaxAmplitude = 0.2f;
 	// 周期(2秒で1往復)
-	const float kCycleSpeed = M_PI / intensityCycleFrame_;
+	const float kCycleSpeed = static_cast<float>(M_PI / intensityCycleFrame_);
 	intensityCycle_ += kCycleSpeed;
 
 	//振幅を計算

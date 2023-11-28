@@ -71,3 +71,17 @@ void Flower::Update() {
 		model_->transform.scale = { value,value,value };
 	}
 }
+
+void Flower::OnActive() {
+	modelLeaf_[0]->isActive = true;
+	modelLeaf_[1]->isActive = true;
+	modelStem_->isActive = true;
+	model_->isActive = true;
+}
+// 花をOFFに
+void Flower::OffActive() {
+	modelLeaf_[0]->isActive = false;
+	modelLeaf_[1]->isActive = false;
+	modelStem_->isActive = false;
+	model_->isActive = false;
+}
