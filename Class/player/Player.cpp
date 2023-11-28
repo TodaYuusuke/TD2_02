@@ -23,7 +23,7 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 
 
 	model_->transform.translation = startPosition;
-	
+
 
 	headModel_->material.enableLighting = true;
 	bodyModel_->material.enableLighting = true;
@@ -33,12 +33,12 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	rightForeArmModel_->material.enableLighting = true;
 	leftForeArmModel_->material.enableLighting = true;
 
-	
+
 
 	startPosition_ = startPosition;
 	model_->transform.scale = { 0.5f,0.5f,0.5f };
 
-	
+
 	model_->material.enableLighting = true;
 	//model_->commonColor = new LWP::Utility::Color(LWP::Utility::ColorPattern::BLUE);
 	grabPosition_.translation = { 0.0f,0.35f,0.35f };
@@ -63,9 +63,9 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	leftForeArmModel_->transform.Parent(&leftUpperArmModel_->transform);
 	rightForeArmModel_->transform.Parent(&rightUpperArmModel_->transform);
 
-	InitArmPosition();
-	InitializeFloatingGimmick();
 
+	InitializeFloatingGimmick();
+	InitArmPosition();
 }
 
 void Player::Update(Stage* stage) {
@@ -115,8 +115,9 @@ void Player::Update(Stage* stage) {
 
 	// 移動処理
 	Move();
-	//腕の座標を指定位置に
+
 	InitArmPosition();
+
 	// 行動更新処理
 	Action();
 
@@ -198,7 +199,7 @@ void Player::Update(Stage* stage) {
 void Player::Move() {
 	// 移動する向き
 	Vector3 dir = { 0.0f,0.0f,0.0f };
-	
+
 
 	// キーボードでの移動
 	if (Keyboard::GetPress(DIK_W)) {
@@ -222,13 +223,13 @@ void Player::Move() {
 	// 正規化してから使用
 	Matrix4x4 cameraRotationMatrix = Matrix4x4::CreateRotateXYZMatrix({ 0.0f, camera_->transform.rotation.y, 0.0f });
 	dir = dir.Normalize() * kPlayerSpeed * cameraRotationMatrix;
-	
+
 
 
 	// 構えているときは動かない
 	if (behavior_ != Behavior::ReadyToThrow && behavior_ != Behavior::Throwing) {
 		model_->transform.translation += dir;
-	
+
 		// 歩いないときの処理
 		if (dir.Length() == 0.0f) {
 			lantern_.WaitSwingAmplitude();
@@ -244,12 +245,12 @@ void Player::Move() {
 	// 重力を付与
 	gravitiesAT += kGravities;
 	model_->transform.translation.y += gravitiesAT;
-	
+
 	// 向きを設定
 	if (dir.Length() > 0.0f) {
 
 		UpAndDownMotion(1.5f);
-		
+
 		// 目的の角度
 		Vector3 goalRotation = { 0.0f, 0.0f, 0.0f };
 		// Y軸周りの角度
@@ -275,100 +276,122 @@ void Player::Move() {
 
 void Player::Action() {
 	switch (behavior_) {
-		case Behavior::GrabLantern:	
-			if (Keyboard::GetTrigger(DIK_SPACE)) {
-				behavior_ = Behavior::ReadyToThrow;
-			}
-			
-			
-			UpAndDownMotion(3.0f);
-			
+	case Behavior::GrabLantern:
+		if (Keyboard::GetTrigger(DIK_SPACE)) {
+			behavior_ = Behavior::ReadyToThrow;
+		}
 
-			if (isMove==true) {
-				UpdateMoveNoHaveArmAnimation();
-			}
 
-			//右腕:ランタン持っている腕
-			rightUpperArmModel_->transform.translation.x = 0.1f;
-			rightUpperArmModel_->transform.translation.y = 0.0f;
-			rightUpperArmModel_->transform.translation.z = -0.1f;
-			rightUpperArmModel_->transform.rotation.y = -1.5f;
-			
-			//左腕 
-			leftUpperArmModel_->transform.translation.x = 0.45f;
-			leftUpperArmModel_->transform.translation.y = 0.28f;
-			leftUpperArmModel_->transform.rotation.z = 0.8f;
+		UpAndDownMotion(3.0f);
 
-			
-			break;
 
-		case Behavior::ReadyToThrow:
-			if (Keyboard::GetTrigger(DIK_C)) {
+		if (isMove == true) {
+			UpdateMoveNoHaveArmAnimation();
+		}
+
+		//右腕:ランタン持っている腕
+		rightUpperArmModel_->transform.translation.x = 0.1f;
+		rightUpperArmModel_->transform.translation.y = 0.0f;
+		rightUpperArmModel_->transform.translation.z = -0.1f;
+		rightUpperArmModel_->transform.rotation.y = -1.5f;
+
+		//左腕 
+		leftUpperArmModel_->transform.translation.x = 0.45f;
+		leftUpperArmModel_->transform.translation.y = 0.28f;
+		leftUpperArmModel_->transform.rotation.z = 0.8f;
+
+
+		break;
+
+	case Behavior::ReadyToThrow:
+		if (Keyboard::GetTrigger(DIK_C)) {
+			behavior_ = Behavior::GrabLantern;
+		}
+		else if (Keyboard::GetRelease(DIK_SPACE)) {
+			behavior_ = Behavior::Throwing;
+			lantern_.Throw(model_->transform.rotation);
+		}
+
+		bodyModel_->transform.translation.y = -0.03f;
+		bodyModel_->transform.rotation.x = -0.03f;
+
+		//右腕:ランタン持っている腕
+		rightUpperArmModel_->transform.translation.x = 0.1f;
+		rightUpperArmModel_->transform.translation.y = 0.0f;
+		rightUpperArmModel_->transform.translation.z = -0.1f;
+		rightUpperArmModel_->transform.rotation.y = -1.5f;
+
+
+		rightForeArmModel_->transform.translation.x = 0.043f;
+		rightForeArmModel_->transform.translation.y = 0.01f;
+		rightForeArmModel_->transform.translation.z = 0.0f;
+
+
+		rightForeArmModel_->transform.rotation.x = -0.2f;
+		rightForeArmModel_->transform.rotation.y = -0.77f;
+		rightForeArmModel_->transform.rotation.z = 0.1f;
+
+
+		//左腕 
+		leftUpperArmModel_->transform.translation.x = -0.01f;
+		leftUpperArmModel_->transform.translation.y = -0.05f;
+		leftUpperArmModel_->transform.translation.z = -0.03f;
+
+
+		leftUpperArmModel_->transform.rotation.x = 0.0f;
+		leftUpperArmModel_->transform.rotation.y = 0.6f;
+		leftUpperArmModel_->transform.rotation.z = 0.0f;
+
+		leftForeArmModel_->transform.translation.x = -0.71f;
+		leftForeArmModel_->transform.translation.y = 0.34f;
+		leftForeArmModel_->transform.translation.z = -0.32f;
+
+
+		leftForeArmModel_->transform.rotation.x = -0.42f;
+		leftForeArmModel_->transform.rotation.y = 2.59f;
+		leftForeArmModel_->transform.rotation.z = -1.0f;
+
+		/*	grabPosition_.translation = { 0.0f,0.7f,0.35f };*/
+
+		break;
+
+	case Behavior::Throwing:
+		behavior_ = Behavior::NoHave;
+		break;
+
+	case Behavior::NoHave:
+		if (Keyboard::GetTrigger(DIK_SPACE)) {
+			if ((model_->transform.translation - lantern_.GetWorldPosition()).Length() <= 0.3f) {
+				behavior_ = Behavior::Throwing;
+				lantern_.Grab(&grabPosition_);
 				behavior_ = Behavior::GrabLantern;
 			}
-			else if (Keyboard::GetRelease(DIK_SPACE)) {
-				behavior_ = Behavior::Throwing;
-				lantern_.Throw(model_->transform.rotation);
-			}
-
-			
-			bodyModel_->transform.translation.y = -0.03f;
-			bodyModel_->transform.rotation.x = -0.03f;
-
-			//右腕:ランタン持っている腕
-			rightUpperArmModel_->transform.translation.x = 0.1f;
-			rightUpperArmModel_->transform.translation.y = -0.05f;
-			rightUpperArmModel_->transform.translation.z = -0.1f;
-			rightUpperArmModel_->transform.rotation.z = 0.1f;
-			rightUpperArmModel_->transform.rotation.y = -1.5f;
-
-			//左腕
-			leftUpperArmModel_->transform.translation.x = -0.1f;
-			leftUpperArmModel_->transform.translation.y = 0.05f;
-			leftUpperArmModel_->transform.translation.z = -0.1f;
-			leftUpperArmModel_->transform.rotation.y = 1.5f;
-		
-			
-
-			break;
-
-		case Behavior::Throwing:
-			behavior_ = Behavior::NoHave;
-			break;
-
-		case Behavior::NoHave:
-			if (Keyboard::GetTrigger(DIK_SPACE)) {
-				if ((model_->transform.translation - lantern_.GetWorldPosition()).Length() <= 0.3f) {
-					behavior_ = Behavior::Throwing;
-					lantern_.Grab(&grabPosition_);
-					behavior_ = Behavior::GrabLantern;
-				}
-			}
+		}
 
 
-			UpAndDownMotion(3.0f);
+		UpAndDownMotion(3.0f);
 
 
-			if (isMove == true) {
-				UpdateMoveNoHaveArmAnimation();
-			}
-			
+		if (isMove == true) {
+			UpdateMoveNoHaveArmAnimation();
+		}
 
-			leftUpperArmModel_->transform.translation = { 0.0f };
 
-			//右腕
-			rightUpperArmModel_->transform.translation.x = -0.45f;
-			rightUpperArmModel_->transform.translation.y = 0.28f;
-			rightUpperArmModel_->transform.rotation.z = -0.8f;
+		leftUpperArmModel_->transform.translation = { 0.0f };
 
-			//左腕
-			leftUpperArmModel_->transform.translation.x = 0.45f;
-			leftUpperArmModel_->transform.translation.y = 0.28f;
-			leftUpperArmModel_->transform.rotation.z = 0.8f;
+		//右腕
+		rightUpperArmModel_->transform.translation.x = -0.45f;
+		rightUpperArmModel_->transform.translation.y = 0.28f;
+		rightUpperArmModel_->transform.rotation.z = -0.8f;
 
-			
+		//左腕
+		leftUpperArmModel_->transform.translation.x = 0.45f;
+		leftUpperArmModel_->transform.translation.y = 0.28f;
+		leftUpperArmModel_->transform.rotation.z = 0.8f;
 
-			break;
+
+
+		break;
 
 	}
 }
@@ -414,7 +437,7 @@ void Player::FollowCameraTurn() {
 	// 正規化してから使用
 	dir = dir.Normalize();
 	// 次の目標回転角を計算
-	cameraGoalRotation_ += Vector3{ dir.x* kFollowCameraSpeed, dir.y* kFollowCameraSpeed, 0.0f };
+	cameraGoalRotation_ += Vector3{ dir.x * kFollowCameraSpeed, dir.y * kFollowCameraSpeed, 0.0f };
 	//goalRotation += { dir.x* kFollowCameraSpeed, dir.y* kFollowCameraSpeed, 0.0f };
 
 	// カメラから追従対象に対する角度を求める
@@ -422,7 +445,7 @@ void Player::FollowCameraTurn() {
 
 	//camera_->transform.translation = goalTranslation;
 	//camera_->transform.rotation = goalRotation;
-	
+
 	// 徐々に追従するように適応
 	camera_->transform.translation = Lerp(camera_->transform.translation, cameraGoalTranslation_, 0.07f);
 	camera_->transform.rotation = Lerp(camera_->transform.rotation, cameraGoalRotation_, 0.06f);
