@@ -41,8 +41,6 @@ private: // ** メンバ変数 ** //
 	LWP::Primitive::Mesh* footModel_ = nullptr;				//下半身
 
 
-
-
 	// プレイヤーのスタート地点
 	LWP::Math::Vector3 startPosition_;
 	// 重力による加速度
@@ -68,6 +66,7 @@ private: // ** メンバ変数 ** //
 	LWP::Math::Vector3 cameraGoalRotation_ = { 0.0f, 0.0f, 0.0f };
 	// カメラのオフセット
 	LWP::Math::Vector3 cameraOffset_ = { 0.0f, 0.0f, -8.0f };
+	int cameraOffsetMultiply = 3;
 	// カメラを追従させるかのフラグ
 	bool isFollowingCamera_ = true;
 

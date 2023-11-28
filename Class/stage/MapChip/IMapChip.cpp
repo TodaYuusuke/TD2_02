@@ -75,3 +75,10 @@ bool IMapChip::CheckGroundCollision(Vector3 checkPos, Vector3* fixVector) {
 
 	return true;
 }
+
+void IMapChip::OnActive() {
+	model_->isActive = true;
+}
+void IMapChip::OffActive() {
+	model_->isActive = false;
+}

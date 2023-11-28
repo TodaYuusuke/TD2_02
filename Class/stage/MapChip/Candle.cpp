@@ -36,3 +36,13 @@ bool Candle::IsMapChipCollision() {
 bool Candle::IsGroundCollision() {
 	return true;
 }
+
+void Candle::OnActive() {
+	model_->isActive = true;
+	candleModel_->isActive = true;
+}
+void Candle::OffActive() {
+	// キャンドルは消えない
+	//model_->isActive = false;
+	//candleModel_->isActive = false;
+}

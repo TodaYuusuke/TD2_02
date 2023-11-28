@@ -12,16 +12,15 @@ void Hole::Init(LWP::Math::Vector3 position, float scale) {
 	leafModel_->transform.translation = position;
 	leafModel_->transform.scale = { scale,scale,scale };
 	leafModel_->material.enableLighting = true;
-	leafModel_->isActive = false;
 }
 
 void Hole::Update() {
 	isGrew_--;
 	if (isGrew_ > 0) {
-		leafModel_->isActive = true;
+		leafModel_->transform.scale = { 1.0f,1.0f,1.0f };
 	}
 	else {
-		leafModel_->isActive = false;
+		leafModel_->transform.scale = { 0.0f,0.0f,0.0f };
 	}
 }
 
@@ -30,7 +29,7 @@ bool Hole::IsMapChipCollision() {
 }
 bool Hole::IsGroundCollision() {
 	// もし葉っぱがあるなら当たり判定あり
-	if (leafModel_->isActive) {
+	if (isGrew_ > 0) {
 		return true;
 	}
 
@@ -39,4 +38,13 @@ bool Hole::IsGroundCollision() {
 
 void Hole::GrawUp() {
 	isGrew_ = 2;
+}
+
+void Hole::OnActive() {
+	model_->isActive = true;
+	leafModel_->isActive = true;
+}
+void Hole::OffActive() {
+	model_->isActive = false;
+	leafModel_->isActive = false;
 }

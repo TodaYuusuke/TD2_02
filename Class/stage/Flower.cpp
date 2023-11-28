@@ -20,11 +20,13 @@ void Flower::Init(Vector2 position) {
 	modelLeaf_[0] = LWP::Resource::LoadModel("Flower/FlowerLeaf.obj");
 	modelLeaf_[0]->transform.translation.x = position.x;
 	modelLeaf_[0]->transform.translation.z = position.y;
+	modelLeaf_[0]->transform.scale = {0.5f,0.5f,0.5f};
 	modelLeaf_[0]->material.enableLighting = true;
 	modelLeaf_[0]->commonColor = new Color(0x00FF07FF);
 	modelLeaf_[1] = LWP::Resource::LoadModel("Flower/FlowerLeaf.obj");
 	modelLeaf_[1]->transform.translation.x = position.x;
 	modelLeaf_[1]->transform.translation.z = position.y;
+	modelLeaf_[1]->transform.scale = {0.5f,0.5f,0.5f};
 	modelLeaf_[1]->transform.rotation.y = 3.14f;
 	modelLeaf_[1]->material.enableLighting = true;
 	modelLeaf_[1]->commonColor = new Color(0x00FF07FF);
@@ -66,11 +68,11 @@ void Flower::Update() {
 
 	// 茎が生えるアニメーション
 	if (lightingTime_ <= 10) {
-		modelStem_->transform.scale.y = easeOut((float)lightingTime_ / 60.0f, 0.0f, 1.0f, 10.0f / 60.0f);
+		modelStem_->transform.scale.y = easeOut((float)lightingTime_ / 60.0f, 0.0f, 0.5f, 10.0f / 60.0f);
 	}
 	// 花が生えるアニメーション
 	else if(lightingTime_ <= 20) {
-		float value = easeOut((float)(lightingTime_ - 10) / 60.0f, 0.0f, 1.0f, 10.0f / 60.0f);
+		float value = easeOut((float)(lightingTime_ - 10) / 60.0f, 0.0f, 0.5f, 10.0f / 60.0f);
 		model_->transform.scale = { value,value,value };
 	}
 }

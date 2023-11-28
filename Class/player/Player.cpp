@@ -340,6 +340,16 @@ Vector3 Player::Slerp(const Vector3& v1, const Vector3& v2, float t) {
 void Player::FollowCameraTurn() {
 	if (!isFollowingCamera_) { return; }	// フラグがfalseのときは追従の計算をしない
 
+	// カメラのズーム段階切り替え
+	if (Keyboard::GetTrigger(DIK_PGUP) || Pad::GetTrigger(0, XBOX_DPAD_UP)) {
+		cameraOffsetMultiply--;
+	}
+	if (Keyboard::GetTrigger(DIK_PGDN) || Pad::GetTrigger(0, XBOX_DPAD_DOWN)) {
+		cameraOffsetMultiply++;
+	}
+	cameraOffsetMultiply = std::clamp<int>(cameraOffsetMultiply, 1, 3);
+	cameraOffset_.z = (static_cast<float>(cameraOffsetMultiply) * -2.0f) - 2.0f;
+
 	// 回転する向き
 	Vector2 dir = { 0.0f,0.0f };
 
@@ -354,7 +364,7 @@ void Player::FollowCameraTurn() {
 		dir.y += 1.0f;
 	}
 	if (Keyboard::GetPress(DIK_RIGHT)) {
-		dir.y -= 1.0f;
+		dir.y -= 1.0f;m
 	}
 
 	// コントローラーでの回転

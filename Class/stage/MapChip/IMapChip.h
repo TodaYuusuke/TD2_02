@@ -47,6 +47,10 @@ public:	// ** メンバ関数 ** //
 	LWP::Primitive::Mesh* GetModel() { if (model_) { return model_; } }
 	void SetModel(LWP::Primitive::Mesh* model) { model_ = model; }
 
+	// isActiveをOnに
+	virtual void OnActive();
+	// isActiveをOffに
+	virtual void OffActive();
 
 protected: // ** メンバ変数 ** //
 

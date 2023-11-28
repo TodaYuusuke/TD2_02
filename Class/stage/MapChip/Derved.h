@@ -29,6 +29,9 @@ public: // ** メンバ関数 ** //
 	bool IsGroundCollision() override;
 	void GrawUp() override;
 
+	void OnActive() override;
+	void OffActive() override;
+
 	// 足場になる葉っぱのモデル
 	LWP::Primitive::Mesh* leafModel_;
 	// 成長済みフラグ
@@ -49,6 +52,9 @@ public: // ** メンバ関数 ** //
 	bool IsGroundCollision() override;
 	bool IsToGrow() override { return true; }
 	void GrawUp() override;
+
+	void OnActive() override;
+	void OffActive() override;
 
 private: // ** プライベートな関数 ** //
 	// t = 
@@ -96,6 +102,9 @@ public: // ** メンバ関数 ** //
 	const int kFrameUntilDeath = 60;
 	// 成長済みフラグ
 	int isGrew_ = 0;
+private:
+	// 光源
+	LWP::Object::PointLight* light_;
 };
 class DarkVineLeaf :public IMapChip {
 public: // ** メンバ関数 ** //
@@ -120,6 +129,9 @@ public: // ** メンバ関数 ** //
 	void Update() override;
 	bool IsMapChipCollision() override;
 	bool IsGroundCollision() override;
+
+	void OnActive() override;
+	void OffActive() override;
 	
 	// 点火済みフラグ
 	bool isIgnited = false;

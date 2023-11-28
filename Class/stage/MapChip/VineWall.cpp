@@ -54,3 +54,12 @@ void VineWall::GrawUp() {
 	isGrew_ = 2;
     lightingTime_ += 2;
 }
+
+void VineWall::OnActive() {
+    model_->isActive = true;
+    treeModel_->isActive = true;
+}
+void VineWall::OffActive() {
+    model_->isActive = false;
+    treeModel_->isActive = false;
+}

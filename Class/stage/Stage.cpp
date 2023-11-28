@@ -25,7 +25,7 @@ void Stage::Init(int level) {
 				case Mapchip::Floor:
 				default:
 					mapChip_[y].push_back(new Floor());
-					flowerCount += 1;
+					flowerCount += 3;
 					break;
 				case Mapchip::Hole:
 					mapChip_[y].push_back(new Hole());
@@ -81,7 +81,7 @@ void Stage::Init(int level) {
 #else
 	// 花を生成
 	Vector2 pos = { 0.0f,0.0f };
-	flowerCount = flowerCount / 3 * 2;
+	//flowerCount = flowerCount / 3 * 2;
 	for (int i = 0; i < flowerCount; i++) {
 		flowers_.push_back(Flower());
 
@@ -123,6 +123,7 @@ void Stage::Update() {
 			mapChip_[y][x]->SetScale(commonScale);
 #endif
 			mapChip_[y][x]->Update();
+			mapChip_[y][x]->OffActive();
 		}
 	}
 
@@ -188,7 +189,7 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 			if (isPlayer && checkPos.y >= 0.0f && dynamic_cast<Hole*>(mapChip_[y][x])) {
 				// ただし葉っぱが育っているならば通常の当たり判定として扱う
 				Hole* hole = dynamic_cast<Hole*>(mapChip_[y][x]);
-				if (hole->leafModel_->isActive) {
+				if (hole->isGrew_ > 0) {
 					result = mapChip_[y][x]->CheckCollision(cPos, fixVector);
 				}
 				else {
@@ -215,21 +216,27 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 }
 
 void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
-	// そも光源がY-ならば判定をとらない
-	if (center.y < 0.0f) { return; }
-
 	// 光源に対してアクションがある当たり判定をチェックする
 	for (int y = 0; y < mapChip_.size(); y++) {
 		for (int x = 0; x < mapChip_[y].size(); x++) {
-
-			// マップチップが反応のあるものでない場合continue
-			if (!mapChip_[y][x]->IsToGrow()) { continue; }
 
 			// 中心に対してのray（3次元）
 			Vector3 ray3 = mapChip_[y][x]->GetModel()->transform.GetWorldPosition();
 
 			// まず灯りの範囲内かをチェックする
-			if ((ray3 - center).Length() > radius) { continue; } // 範囲外なのでこの判定は終了
+			if ((ray3 - center).Length() > radius) {
+				// かなり離れてる場合わけじゃないならactiveにする
+				if ((ray3 - center).Length() < 3.25f + 0.5f) {
+					mapChip_[y][x]->OnActive();
+				}
+				continue;	// 範囲外なのでこの判定は終了
+			}
+			mapChip_[y][x]->OnActive();
+
+			// そも光源がY-ならば判定をとらない
+			if (center.y < 0.0f) { continue; }
+			// マップチップが反応のあるものでない場合continue
+			if (!mapChip_[y][x]->IsToGrow()) { continue; }
 
 			// rayを二次元に
 			Vector2 ray = { ray3.x,ray3.z };
@@ -362,7 +369,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 					for (int n = 0; n < 12; n++) {
 						if (leaves[n] != nullptr) {
 							leaves[n]->isDead_ = true;
-							leaves[n]->GetModel()->isActive = false;
+							leaves[n]->GetModel()->transform.scale = { 0.0f,0.0f,0.0f };
 						}
 					}
 				}
@@ -380,7 +387,9 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 		// まず灯りの範囲内かをチェックする
 		if ((ray3 - center).Length() > radius) {
 			// かなり離れてる場合わけじゃないならactiveにする
-			//flowers_[i].OnActive();
+			if ((ray3 - center).Length() < 3.25f) {
+				flowers_[i].OnActive();
+			}
 			continue;	// 範囲外なのでこの判定は終了
 		}
 		flowers_[i].OnActive();
