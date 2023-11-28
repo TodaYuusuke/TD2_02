@@ -142,3 +142,22 @@ private:
 	// 光源
 	LWP::Object::PointLight* light_;
 };
+class OutLineWall :public IMapChip {
+public: // ** メンバ関数 ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
+	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
+
+	void OnActive() override;
+	void OffActive() override;
+
+private:
+	// 木の数
+	static const int kMaxTree = 4;
+
+	// 幹のモデル
+	LWP::Primitive::Mesh* trunkModel_[kMaxTree];
+	// 葉のモデル
+	LWP::Primitive::Mesh* leavesModel_[kMaxTree];
+};

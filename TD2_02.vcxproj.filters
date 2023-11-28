@@ -87,6 +87,9 @@
     <ClCompile Include="Class\stage\MapChip\DarkVineLeaf.cpp">
       <Filter>Class\stage\MapChip</Filter>
     </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\OutLineWall.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\sence\Title.h">
