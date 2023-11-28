@@ -19,4 +19,7 @@ public:
 	// scene遷移したい場合、ISceneポインタ型のnextSceneに次のシーンの実体を代入
 
 private: //*** これより先に必要な処理や変数を記述 ***//
+
+	LWP::Primitive::Surface* surface_;
+	int stageLevel = 1;
 };

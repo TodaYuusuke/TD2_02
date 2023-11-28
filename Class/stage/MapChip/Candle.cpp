@@ -24,8 +24,8 @@ void Candle::Init(LWP::Math::Vector3 position, float scale) {
 void Candle::Update() {
 	if (isIgnited) {
 		light_->color = LWP::Utility::Color::KelvinToRGB(1700);
-		light_->radius = 3.0f;
-		light_->decay = 1.5f;
+		light_->radius = 2.5f;
+		light_->decay = 2.5f;
 	}
 	// 特になし
 }

@@ -13,8 +13,8 @@ void Lantern::Init() {
 	light_ = LWP::Object::CreateInstance<LWP::Object::PointLight>();
 	light_->transform.translation.y = -1.2f;
 	light_->color = LWP::Utility::Color::KelvinToRGB(1700);
-	light_->radius = 3.0f;
-	light_->decay = 1.5f;
+	light_->radius = 2.5f;
+	light_->decay = 2.5f;
 	light_->isActive = true;
 	light_->name = "Lantern";
 	// 親子関係をセット

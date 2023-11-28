@@ -50,11 +50,25 @@ public: // ** メンバ関数 ** //
 	bool IsToGrow() override { return true; }
 	void GrawUp() override;
 
+private: // ** プライベートな関数 ** //
+	// t = 
+	// b = 開始の値
+	// c = 開始との差分
+	// d = 
+	float easeOut(float t, float b, float c, float d) {
+		t /= d;
+		return -c * t * (t - 2.0f) + b;
+	}
+
 private:
 	// 成長する木のモデル
 	LWP::Primitive::Mesh* treeModel_;
 	// 成長済みフラグ
 	int isGrew_ = 0;
+	// 光の当たっている時間
+	int lightingTime_;
+	// 
+	bool isAnimation_ = false;
 };
 class VineFloor :public IMapChip {
 public: // ** メンバ関数 ** //

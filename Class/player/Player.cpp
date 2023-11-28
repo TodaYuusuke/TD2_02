@@ -191,7 +191,7 @@ void Player::Update(Stage* stage) {
 void Player::Move() {
 	// 平行移動をするかのフラグ
 	bool isParallelMoving = false;
-	if (Keyboard::GetPress(DIK_LSHIFT)) {
+	if (Keyboard::GetPress(DIK_LSHIFT) || Pad::GetPress(0, XBOX_LB)) {
 		isParallelMoving = true;
 	}
 
@@ -274,27 +274,27 @@ void Player::Move() {
 void Player::Action() {
 	switch (behavior_) {
 		case Behavior::GrabLantern:	
-			if (Keyboard::GetTrigger(DIK_SPACE)) {
+			if (Keyboard::GetTrigger(DIK_SPACE) || Pad::GetTrigger(0, XBOX_RB)) {
 				behavior_ = Behavior::ReadyToThrow;
 			}
 			
-			//左腕 :ランタン持っている腕
-			leftUpperArmModel_->transform.rotation.y = -2.0f;
-			leftUpperArmModel_->transform.translation.x = 0.04f;
-			leftUpperArmModel_->transform.translation.y = -0.02f;
+			////左腕 :ランタン持っている腕
+			//leftUpperArmModel_->transform.rotation.y = -2.0f;
+			//leftUpperArmModel_->transform.translation.x = 0.04f;
+			//leftUpperArmModel_->transform.translation.y = -0.02f;
 
-			//右腕
-			rightUpperArmModel_->transform.translation.x = 0.1f;
-			rightUpperArmModel_->transform.translation.y = 0.04f;
-			rightUpperArmModel_->transform.rotation.z = 0.6f;
+			////右腕
+			//rightUpperArmModel_->transform.translation.x = 0.1f;
+			//rightUpperArmModel_->transform.translation.y = 0.04f;
+			//rightUpperArmModel_->transform.rotation.z = 0.6f;
 
 			break;
 
 		case Behavior::ReadyToThrow:
-			if (Keyboard::GetTrigger(DIK_C)) {
+			if (Keyboard::GetTrigger(DIK_C) || Pad::GetTrigger(0, XBOX_B)) {
 				behavior_ = Behavior::GrabLantern;
 			}
-			else if (Keyboard::GetRelease(DIK_SPACE)) {
+			else if (Keyboard::GetRelease(DIK_SPACE) || Pad::GetRelease(0, XBOX_RB)) {
 				behavior_ = Behavior::Throwing;
 				lantern_.Throw(model_->transform.rotation);
 			}
@@ -305,7 +305,7 @@ void Player::Action() {
 			break;
 
 		case Behavior::NoHave:
-			if (Keyboard::GetTrigger(DIK_SPACE)) {
+			if (Keyboard::GetTrigger(DIK_SPACE) || Pad::GetTrigger(0, XBOX_RB)) {
 				if ((model_->transform.translation - lantern_.GetWorldPosition()).Length() <= 0.3f) {
 					behavior_ = Behavior::Throwing;
 					lantern_.Grab(&grabPosition_);
@@ -314,10 +314,10 @@ void Player::Action() {
 			}
 
 			//左腕
-			leftUpperArmModel_->transform.rotation.y = 0.0f;
+			/*leftUpperArmModel_->transform.rotation.y = 0.0f;
 			leftUpperArmModel_->transform.translation.x = 0.1f;
 			leftUpperArmModel_->transform.translation.y = 0.04f;
-			leftUpperArmModel_->transform.rotation.z = 0.6f;
+			leftUpperArmModel_->transform.rotation.z = 0.6f;*/
 
 			break;
 	}

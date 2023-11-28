@@ -10,7 +10,6 @@ void Flower::Init(Vector2 position) {
 	model_->transform.translation.y = 0.05f;
 	model_->transform.scale = { 0.0f,0.0f,0.0f };
 	model_->material.enableLighting = true;
-	model_->commonColor = new Color(ColorPattern::RED);
 	// 茎
 	modelStem_ = LWP::Resource::LoadModel("Flower/FlowerStem.obj");
 	modelStem_->transform.translation.x = position.x;
@@ -34,6 +33,29 @@ void Flower::Init(Vector2 position) {
 	model_->transform.Parent(&modelStem_->transform);
 
 	lightingTime_ = 0;
+
+
+	// 色をランダムに
+	switch (GenerateRandamNum<int>(0, 5)) {
+		case 0:
+			model_->commonColor = new Color(RED);
+			break;
+		case 1:
+			model_->commonColor = new Color(ColorPattern::BLUE);
+			break;
+		case 2:
+			model_->commonColor = new Color(ColorPattern::CYAN);
+			break;
+		case 3:
+			model_->commonColor = new Color(ColorPattern::MAGENTA);
+			break;
+		case 4:
+			model_->commonColor = new Color(ColorPattern::YELLOW);
+			break;
+		case 5:
+			model_->commonColor = new Color(0xD40090FF);
+			break;
+	}
 }
 
 void Flower::Update() {
@@ -41,25 +63,6 @@ void Flower::Update() {
 	lightingTime_--;
 	// 幅は超えないように
 	lightingTime_ = std::clamp<int>(lightingTime_, 0, 20);
-	
-	ImGui::Begin("Flower");
-	if (ImGui::TreeNode("Hontai")) {
-		model_->DebugGUI();
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Stem")) {
-		modelStem_->DebugGUI();
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Leaf0")) {
-		modelLeaf_[0]->DebugGUI();
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("Leaf1")) {
-		modelLeaf_[1]->DebugGUI();
-		ImGui::TreePop();
-	}
-	ImGui::End();
 
 	// 茎が生えるアニメーション
 	if (lightingTime_ <= 10) {

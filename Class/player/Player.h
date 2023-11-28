@@ -19,7 +19,7 @@ public: // ** メンバ関数 ** //
 private: // ** プライベートな定数 ** //
 
 	// プレイヤーの速度
-	const float kPlayerSpeed = 0.04f;
+	const float kPlayerSpeed = 0.02f;
 	// 追従カメラの速度
 	const float kFollowCameraSpeed = 0.033f;
 

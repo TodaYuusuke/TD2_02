@@ -77,10 +77,11 @@ void Stage::Init(int level) {
 		}
 	}
 
-#if DEBUG 
+#if _DEBUG
 #else
 	// 花を生成
 	Vector2 pos = { 0.0f,0.0f };
+	flowerCount = flowerCount / 3 * 2;
 	for (int i = 0; i < flowerCount; i++) {
 		flowers_.push_back(Flower());
 
@@ -90,8 +91,8 @@ void Stage::Init(int level) {
 			pos.y = static_cast<float>(GenerateRandamNum<int>(0, mapChip_.size() * 100 - 1)) / 100.0f;
 
 			// 指定した地点が通常の床じゃなければ再生成
-			int y = static_cast<int>(pos.y / commonScale);
 			int x = static_cast<int>(pos.x / commonScale);
+			int y = static_cast<int>(pos.y / commonScale);
 			if (dynamic_cast<Floor*>(mapChip_[y][x])) {
 				break;
 			}
@@ -125,10 +126,14 @@ void Stage::Update() {
 		}
 	}
 
+#if _DEBUG
+#else
 	// 花更新
 	for (int i = 0; i < flowers_.size(); i++) {
 		flowers_[i].Update();
+		flowers_[i].OffActive();
 	}
+#endif
 	
 	// ろうそくの当たり判定を取る
 	for (int y = 0; y < mapChip_.size(); y++) {
@@ -369,6 +374,8 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 		}
 	}
 
+#if _DEBUG
+#else
 	// 花に対しても行う
 	for (int i = 0; i < flowers_.size(); i++) {
 		// 地点に対してのray（3次元）
@@ -376,13 +383,8 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 
 		// まず灯りの範囲内かをチェックする
 		if ((ray3 - center).Length() > radius) {
-			// かなり離れてる場合はactiveじゃなくさせる
-			if ((ray3 - center).Length() > radius + 1.0f) {
-				flowers_[i].OffActive();
-			}
-			else {
-				flowers_[i].OnActive();
-			}
+			// かなり離れてる場合わけじゃないならactiveにする
+			//flowers_[i].OnActive();
 			continue;	// 範囲外なのでこの判定は終了
 		}
 		flowers_[i].OnActive();
@@ -429,6 +431,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 		// ヒットしていなかったらしいので成長の処理を呼び出す
 		flowers_[i].AddLightingTime();
 	}
+#endif
 }
 
 // ベクトルと線分の交差判定
