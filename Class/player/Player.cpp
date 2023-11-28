@@ -364,7 +364,7 @@ void Player::FollowCameraTurn() {
 		dir.y += 1.0f;
 	}
 	if (Keyboard::GetPress(DIK_RIGHT)) {
-		dir.y -= 1.0f;m
+		dir.y -= 1.0f;
 	}
 
 	// コントローラーでの回転

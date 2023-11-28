@@ -31,6 +31,20 @@ private: // ** メンバ変数 ** //
 	// 照らされている時間
 	int lightingTime_ = 0;
 
+	// 揺れるアニメーション
+	bool isSway_ = false;
+	// アニメーション時間
+	int swayFrame_;
+
+	// 振幅
+	float maxAmplitude_;
+
+	// 定数
+	// 1往復するまでの時間
+	const int swayEndFrame_ = 120;
+	// 1フレーム当たりの変化量
+	const float kCycleSpeed_ = 2 * M_PI / swayEndFrame_;
+
 private: // ** プライベートな関数 ** //
 	// t = 
 	// b = 開始の値
