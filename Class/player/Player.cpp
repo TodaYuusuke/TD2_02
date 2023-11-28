@@ -63,9 +63,9 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	leftForeArmModel_->transform.Parent(&leftUpperArmModel_->transform);
 	rightForeArmModel_->transform.Parent(&rightUpperArmModel_->transform);
 
-	
-	InitializeFloatingGimmick();
 	InitArmPosition();
+	InitializeFloatingGimmick();
+
 }
 
 void Player::Update(Stage* stage) {
@@ -115,9 +115,8 @@ void Player::Update(Stage* stage) {
 
 	// 移動処理
 	Move();
-
+	//腕の座標を指定位置に
 	InitArmPosition();
-	
 	// 行動更新処理
 	Action();
 
@@ -312,46 +311,24 @@ void Player::Action() {
 				lantern_.Throw(model_->transform.rotation);
 			}
 
+			
 			bodyModel_->transform.translation.y = -0.03f;
 			bodyModel_->transform.rotation.x = -0.03f;
 
 			//右腕:ランタン持っている腕
 			rightUpperArmModel_->transform.translation.x = 0.1f;
-			rightUpperArmModel_->transform.translation.y = 0.0f;
+			rightUpperArmModel_->transform.translation.y = -0.05f;
 			rightUpperArmModel_->transform.translation.z = -0.1f;
+			rightUpperArmModel_->transform.rotation.z = 0.1f;
 			rightUpperArmModel_->transform.rotation.y = -1.5f;
 
-
-			rightForeArmModel_->transform.translation.x = 0.043f;
-			rightForeArmModel_->transform.translation.y = 0.01f;
-			rightForeArmModel_->transform.translation.z = 0.0f;
-
-
-			rightForeArmModel_->transform.rotation.x =-0.2f;
-			rightForeArmModel_->transform.rotation.y = -0.77f;
-			rightForeArmModel_->transform.rotation.z = 0.1f;
-
+			//左腕
+			leftUpperArmModel_->transform.translation.x = -0.1f;
+			leftUpperArmModel_->transform.translation.y = 0.05f;
+			leftUpperArmModel_->transform.translation.z = -0.1f;
+			leftUpperArmModel_->transform.rotation.y = 1.5f;
 		
-			//左腕 
-			leftUpperArmModel_->transform.translation.x = -0.01f;
-			leftUpperArmModel_->transform.translation.y = -0.05f;
-			leftUpperArmModel_->transform.translation.z = -0.03f;
-
-
-			leftUpperArmModel_->transform.rotation.x = 0.0f;
-			leftUpperArmModel_->transform.rotation.y = 0.6f;
-			leftUpperArmModel_->transform.rotation.z = 0.0f;
-
-			leftForeArmModel_->transform.translation.x = -0.71f;
-			leftForeArmModel_->transform.translation.y = 0.34f;
-			leftForeArmModel_->transform.translation.z = -0.32f;
-
-
-			leftForeArmModel_->transform.rotation.x = -0.42f;
-			leftForeArmModel_->transform.rotation.y = 2.59f;
-			leftForeArmModel_->transform.rotation.z = -1.0f;
-
-		/*	grabPosition_.translation = { 0.0f,0.7f,0.35f };*/
+			
 
 			break;
 
