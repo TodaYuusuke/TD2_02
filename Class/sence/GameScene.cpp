@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "StageSelectScene.h"
 
 GameScene::GameScene(int level) : level_(level) {}
 
@@ -26,5 +27,9 @@ void GameScene::Update() {
 	// 再読み込み
 	if (LWP::Input::Keyboard::GetTrigger(DIK_R)) {
 		nextScene_ = new GameScene(level_);
+	}
+	// 前のシーンへ戻る
+	if (LWP::Input::Keyboard::GetTrigger(DIK_ESCAPE)) {
+		nextScene_ = new StageSelectScene();
 	}
 }

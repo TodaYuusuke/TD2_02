@@ -7,12 +7,13 @@ void VineWall::Init(LWP::Math::Vector3 position, float scale) {
 	model_->material.enableLighting = true;
 	
 #if _DEBUG
-    treeModel_ = LWP::Resource::LoadModel("Wall/LowPolyWall.obj");
-#else
     treeModel_ = LWP::Resource::LoadModel("Floor/Floor.obj");
+    treeModel_->transform.translation = position;
+    treeModel_->transform.translation.y += 1.0f;
+#else
+    treeModel_ = LWP::Resource::LoadModel("VineWall/VineWall.obj");
+    treeModel_->transform.translation = position;
 #endif
-	treeModel_->transform.translation = position;
-	treeModel_->transform.translation.y += 1.0f;
 	treeModel_->transform.scale = { scale,scale,scale };
 	treeModel_->material.enableLighting = true;
 }

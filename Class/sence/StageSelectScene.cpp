@@ -7,10 +7,13 @@ void StageSelectScene::Initialize() {
 }
 // 更新
 void StageSelectScene::Update() {
-	ImGui::Begin("");
+	ImGui::Begin("SelectLevelMenu");
 	ImGui::SliderInt("StageLevel", &stageLevel, 1, 14);
 	if (ImGui::Button("StartGame")) {
 		nextScene_ = new GameScene(stageLevel);
+	}
+	if (ImGui::Button("StartDebugGame")) {
+		nextScene_ = new GameScene(99);
 	}
 	ImGui::End();
 }

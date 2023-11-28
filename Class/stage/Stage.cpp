@@ -251,7 +251,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 			int mapChipRangeX2 = static_cast<int>(ray3.x / commonScale);
 			for (int yy = min(mapChipRangeY1, mapChipRangeY2); yy <= max(mapChipRangeY1, mapChipRangeY2); yy++) {
 				for (int xx = min(mapChipRangeX1, mapChipRangeX2); xx <= max(mapChipRangeX1, mapChipRangeX2); xx++) {
-					if (yy != y && xx != x) {
+					if (!(yy == y && xx == x)) {
 						mapChipArray.push_back(mapChip_[yy][xx]);
 					}
 				}
