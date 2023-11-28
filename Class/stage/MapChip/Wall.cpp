@@ -2,9 +2,9 @@
 
 void Wall::Init(LWP::Math::Vector3 position, float scale) {
 #if _DEBUG
-	model_ = LWP::Resource::LoadModel("Wall/LowPolyWall.obj");
-#else
 	model_ = LWP::Resource::LoadModel("Wall/Wall.obj");
+#else
+	model_ = LWP::Resource::LoadModel("Wall/LowPolyWall.obj");
 #endif
 	model_->transform.translation = position;
 	model_->transform.rotation.y = static_cast<float>(LWP::Utility::GenerateRandamNum<int>(0, 3)) * 1.57f;

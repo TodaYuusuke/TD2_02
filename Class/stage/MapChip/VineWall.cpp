@@ -31,7 +31,7 @@ void VineWall::Update() {
 
     // 花が生えるアニメーション
     if (lightingTime_ <= 10) {
-        float value = easeOut((float)(lightingTime_) / 60.0f, 0.01f, 1.0f, 10.0f / 60.0f);
+        float value = easeOut((float)(lightingTime_) / 60.0f, 0.07f, 0.93f, 10.0f / 60.0f);
         treeModel_->transform.scale = { value,value,value };
     }
     else if (lightingTime_ == 0) {

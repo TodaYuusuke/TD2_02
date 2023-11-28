@@ -223,17 +223,13 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 		for (int x = 0; x < mapChip_[y].size(); x++) {
 
 			// マップチップが反応のあるものでない場合continue
-			if (!mapChip_[y][x]->IsToGrow()) {
-				continue;
-			}
+			if (!mapChip_[y][x]->IsToGrow()) { continue; }
 
 			// 中心に対してのray（3次元）
 			Vector3 ray3 = mapChip_[y][x]->GetModel()->transform.GetWorldPosition();
 
 			// まず灯りの範囲内かをチェックする
-			if ((ray3 - center).Length() > radius) {
-				continue;	// 範囲外なのでこの判定は終了
-			}
+			if ((ray3 - center).Length() > radius) { continue; } // 範囲外なのでこの判定は終了
 
 			// rayを二次元に
 			Vector2 ray = { ray3.x,ray3.z };
@@ -424,9 +420,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 		}
 
 		// ヒットしていた場合戻る
-		if (isHit) {
-			continue;
-		}
+		if (isHit) { continue; }
 
 		// ヒットしていなかったらしいので成長の処理を呼び出す
 		flowers_[i].AddLightingTime();

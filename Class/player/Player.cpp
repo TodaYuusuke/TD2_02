@@ -32,7 +32,6 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	leftUpperArmModel_->material.enableLighting = true;
 	rightForeArmModel_->material.enableLighting = true;
 	leftForeArmModel_->material.enableLighting = true;
-
 	
 
 	startPosition_ = startPosition;
@@ -44,6 +43,7 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 
 	camera_ = camera;
 	cameraGoalRotation_ = camera_->transform.rotation;
+	cameraGoalRotation_.x = 0.65f;
 
 	// ランタンを初期化
 	lantern_.Init();
@@ -365,19 +365,13 @@ void Player::FollowCameraTurn() {
 	dir = dir.Length() > 1.0f ? dir.Normalize() : dir;
 	// 次の目標回転角を計算
 	cameraGoalRotation_ += Vector3{ dir.x* kFollowCameraSpeed, dir.y* kFollowCameraSpeed, 0.0f };
-	//goalRotation += { dir.x* kFollowCameraSpeed, dir.y* kFollowCameraSpeed, 0.0f };
+	// 角度制限
+	cameraGoalRotation_.x = std::clamp<float>(cameraGoalRotation_.x, 0.1f, 1.3f);
 
 	// カメラから追従対象に対する角度を求める
 	cameraGoalTranslation_ = model_->transform.translation + (cameraOffset_ * Matrix4x4::CreateRotateXYZMatrix(cameraGoalRotation_));
 
-	//camera_->transform.translation = goalTranslation;
-	//camera_->transform.rotation = goalRotation;
-	
 	// 徐々に追従するように適応
 	camera_->transform.translation = Lerp(camera_->transform.translation, cameraGoalTranslation_, 0.07f);
 	camera_->transform.rotation = Lerp(camera_->transform.rotation, cameraGoalRotation_, 0.06f);
-
-	//camera_->transform.translation = Lerp(camera_->transform.translation, goalTranslation, 0.02f);
-	//goalRotation = Lerp({ 0.0f,0.0f,0.0f }, goalRotation, 0.02f);
-	//camera_->transform.rotation += goalRotation;
 }
