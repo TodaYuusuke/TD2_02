@@ -147,13 +147,40 @@ void Title::Initialize() {
 	logo_omote_->isUI = true;
 	logo_ura->isUI = true;
 
+
+	transition_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
+	transition_->vertices[0].position = { 0.0f,0.0f,0.0f };
+	transition_->vertices[1].position = { 1280.0f,0.0f,0.0f };
+	transition_->vertices[2].position = { 1280.0f,720.0f,0.0f };
+	transition_->vertices[3].position = { 0.0f,720.0f,0.0f };
+	transition_->commonColor = new Color(BLACK);	// 背景色をセット
+	transition_->isUI = true;
 }
 
 // 更新
 void Title::Update() {
+	// トランジション更新
+	if (isStart_) {
+		transitionFrame_--;
+		transition_->commonColor->A = static_cast<char>(static_cast<int>(easeOut((float)(transitionFrame_) / 60.0f, 0.0f, 255.0f, 30.0f / 60.0f)));
+
+		if (transitionFrame_ <= 0) {
+			isStart_ = false;
+		}
+	}
+	else if (isEnd_) {
+		transitionFrame_++;
+		transition_->commonColor->A = static_cast<char>(static_cast<int>(easeOut((float)(transitionFrame_) / 60.0f, 0.0f, 255.0f, 30.0f / 60.0f)));
+
+		if (transitionFrame_ >= 30) {
+			nextScene_ = next_;
+		}
+	}
+
 	// ENTERキーを押すとシーン切り替え
 	if (Keyboard::GetTrigger(DIK_RETURN)) {
-		nextScene_ = new StageSelectScene(BLACK);
+		next_ = new StageSelectScene(BLACK);
+		isEnd_ = true;
 	}
 
 	fire.Update();

@@ -63,4 +63,23 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	Floor floor;
 	OutLineWall wall[5];
 	Fire fire;
+
+
+	// シーントランジション
+	LWP::Utility::Color transitionColor_;
+	bool isStart_ = true;
+	bool isEnd_ = false;
+	int transitionFrame_ = 30;
+	LWP::Primitive::Surface* transition_;
+	// 次のシーンの予約
+	IScene* next_ = nullptr;
+
+	// t = 
+	// b = 開始の値
+	// c = 開始との差分
+	// d = 
+	float easeOut(float t, float b, float c, float d) {
+		t /= d;
+		return -c * t * (t - 2.0f) + b;
+	}
 };

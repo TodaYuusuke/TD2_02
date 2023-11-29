@@ -61,9 +61,7 @@ void Fire::Update() {
 }
 
 
-void Fire::Draw()
-{
-}
+void Fire::Draw() {}
 
 
 Particle Fire::CreateParticle(std::mt19937& randomEngine, LWP::Math::Vector3 position)
