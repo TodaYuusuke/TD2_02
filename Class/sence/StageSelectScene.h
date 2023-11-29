@@ -41,6 +41,11 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	// UI
 	LWP::Primitive::Surface* operationUI_[UI_NUM];
 
+	// 戻るボタン
+	LWP::Primitive::Surface* backButton_;
+	// タイトルに戻るUI
+	LWP::Primitive::Surface* backTitleUI_;
+
 	StageSelect stageSelect_;
 	StageSelectPlayer player_;
 
