@@ -30,13 +30,22 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	enum UIType {
 		RB,						// RBボタン
 		LB,						// LBボタン
+		UPBUTTON,				// 上ボタン
 		FONT_THROW,				// 文字_投げ
-		FONT_PARALLEL,  // 文字_平行移動
+		FONT_PARALLEL,			// 文字_平行移動
+		FONT_ZOOM,				// 文字_ズーム
+		TUTORIAL_CANDLE,		// チュートリアル_ろうそく
+		TUTORIAL_GROWLEAF,		// チュートリアル_成長する草
+		TUTORIAL_WITHERLEAF,	// チュートリアル_枯れる草
+		CANDLE,					// ろうそく
+		X,						// 掛ける
 		UI_NUM					// UIの数
 	};
 
 	// UI
 	LWP::Primitive::Surface* operationUI_[UI_NUM];
+	// ろうそくの残り本数
+	LWP::Primitive::Surface* candleNumUI_[4];
 
 	// ステージのレベル
 	const int level_;

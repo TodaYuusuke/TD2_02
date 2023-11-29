@@ -34,8 +34,11 @@ void StageSelectScene::Initialize() {
 	// 画像の張り替え
 	operationUI_[RB]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_RB.png");
 	operationUI_[LB]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_LB.png");
+	operationUI_[UPBUTTON]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/crosskey.png");
 	operationUI_[FONT_START]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_start.png");
 	operationUI_[FONT_PARALLEL]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_parallel.png");
+	operationUI_[FONT_ZOOM]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_zoom.png");
+
 	// 平面の頂点座標を設定
 	// RBボタン
 	operationUI_[RB]->vertices[0].position = { 0.0f,0.0f,0.0f };
@@ -47,6 +50,11 @@ void StageSelectScene::Initialize() {
 	operationUI_[LB]->vertices[1].position = { 200.0f,0.0f,0.0f };
 	operationUI_[LB]->vertices[2].position = { 200.0f,120.0f,0.0f };
 	operationUI_[LB]->vertices[3].position = { 0.0f,120.0f,0.0f };
+	// 上ボタン
+	operationUI_[UPBUTTON]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[UPBUTTON]->vertices[1].position = { 1280.0f,0.0f,0.0f };
+	operationUI_[UPBUTTON]->vertices[2].position = { 1280.0f,1280.0f,0.0f };
+	operationUI_[UPBUTTON]->vertices[3].position = { 0.0f,1280.0f,0.0f };
 	// 文字_スタート
 	operationUI_[FONT_START]->vertices[0].position = { 0.0f,0.0f,0.0f };
 	operationUI_[FONT_START]->vertices[1].position = { 600.0f,0.0f,0.0f };
@@ -57,6 +65,11 @@ void StageSelectScene::Initialize() {
 	operationUI_[FONT_PARALLEL]->vertices[1].position = { 200.0f,0.0f,0.0f };
 	operationUI_[FONT_PARALLEL]->vertices[2].position = { 200.0f,55.0f,0.0f };
 	operationUI_[FONT_PARALLEL]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	// 文字_ズーム
+	operationUI_[FONT_ZOOM]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[FONT_ZOOM]->vertices[1].position = { 200.0f,0.0f,0.0f };
+	operationUI_[FONT_ZOOM]->vertices[2].position = { 200.0f,55.0f,0.0f };
+	operationUI_[FONT_ZOOM]->vertices[3].position = { 0.0f,55.0f,0.0f };
 
 	// UIの座標と大きさ
 	// RBボタン
@@ -65,12 +78,18 @@ void StageSelectScene::Initialize() {
 	// LBボタン
 	operationUI_[LB]->transform.translation = { 10, 70, 0 };
 	operationUI_[LB]->transform.scale = { 0.4f, 0.4f, 1.0f };
+	// 上ボタン
+	operationUI_[UPBUTTON]->transform.translation = { 15, 130, 0 };
+	operationUI_[UPBUTTON]->transform.scale = { 0.05f, 0.05f, 1.0f };
 	// 文字_スタート
 	operationUI_[FONT_START]->transform.translation = { 95, 25, 0 };
 	operationUI_[FONT_START]->transform.scale = { 0.5f, 0.5f, 1.0f };
 	// 文字_平行移動
 	operationUI_[FONT_PARALLEL]->transform.translation = { 100, 85, 0 };
 	operationUI_[FONT_PARALLEL]->transform.scale = { 0.6f, 0.6f, 1.0f };
+	// 文字_ズーム
+	operationUI_[FONT_ZOOM]->transform.translation = { 100, 145, 0 };
+	operationUI_[FONT_ZOOM]->transform.scale = { 0.6f, 0.6f, 1.0f };
 
 	stageSelect_.Init(&player_);
 	player_.Init(stageSelect_.GetPlayerStartPosition(), mainCamera);

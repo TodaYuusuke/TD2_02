@@ -31,6 +31,11 @@ public:	// ** メンバ関数 ** //
 	// ろうそくが全て点火されたかを返す関数
 	bool IsCleared() { return ignitedCandle >= kCandleCount; }
 
+	// ろうそくの数
+	int GetCandleCount() { return kCandleCount; }
+	// ろうそくが点火した数
+	int GetIgnitedCandle() { return ignitedCandle; }
+
 protected: // ** メンバ変数 ** //
 
 	// マップチップ
