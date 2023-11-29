@@ -165,6 +165,11 @@ public: // ** メンバ関数 ** //
 	// 成長済みフラグ
 	int isGrew_ = 0;
 private:
+	// 茎のモデル
+	LWP::Primitive::Mesh* stemModel_;
+	// 花のモデル
+	LWP::Primitive::Mesh* flowerModel_;
+
 	// 光源
 	LWP::Object::PointLight* light_;
 };
@@ -174,9 +179,6 @@ public: // ** メンバ関数 ** //
 	void Update() override;
 	bool IsMapChipCollision() override;
 	bool IsGroundCollision() override;
-
-	//void OnActive() override;
-	//void OffActive() override;
 
 	// 葉の向きを設定
 	void SetRotateY(float rotateY) { model_->transform.rotation.y = rotateY; }
