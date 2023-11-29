@@ -83,7 +83,6 @@ Particle Fire::CreateParticle(std::mt19937& randomEngine, LWP::Math::Vector3 pos
 	particle.fire->material.enableLighting = false;
 	particle.fire->isActive = true;
 
-
 	return particle;
 }
 
