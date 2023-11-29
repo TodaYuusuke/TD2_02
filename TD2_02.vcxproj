@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Class\effect\Fire.cpp" />
     <ClCompile Include="Class\player\Lantern.cpp" />
     <ClCompile Include="Class\player\Player.cpp" />
     <ClCompile Include="Class\player\StageSelectPlayer.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Class\effect\Fire.h" />
     <ClInclude Include="Class\player\Lantern.h" />
     <ClInclude Include="Class\player\Player.h" />
     <ClInclude Include="Class\player\StageSelectPlayer.h" />

@@ -1,9 +1,10 @@
 #include <Adapter.h>
 #include "Class/sence/GameScene.h"
 #include "Class/sence/StageSelectScene.h"
+#include "Class/sence/Title.h"
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	LWP::System::Run(new StageSelectScene(LWP::Utility::BLACK));
+	LWP::System::Run(new Title());
 	return 0;
 }
