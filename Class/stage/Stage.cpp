@@ -95,6 +95,48 @@ void Stage::Init(int level) {
 		}
 	}
 
+	// 枯れ草の初期化
+	for (int y = 0; y < mapChip_.size(); y++) {
+		for (int x = 0; x < mapChip_[y].size(); x++) {
+			if (dynamic_cast<DarkVineFloor*>(mapChip_[y][x])) {
+				DarkVineLeaf* leave{ nullptr };	// 葉っぱのポインタ
+				// 回りの葉っぱを検知
+				for (int plus = 1; plus <= 3; plus++) {
+					if (y + plus < mapChip_.size() && dynamic_cast<DarkVineLeaf*>(mapChip_[y + plus][x])) {
+						leave = dynamic_cast<DarkVineLeaf*>(mapChip_[y + plus][x]);
+						leave->SetBeginAnimationFrame(24 - 8 * plus);
+						leave->SetRotateY(0);
+					}
+					else { break; }
+				}
+				for (int plus = 1; plus <= 3; plus++) {
+					if (y - plus >= 0 && dynamic_cast<DarkVineLeaf*>(mapChip_[y - plus][x])) {
+						leave = dynamic_cast<DarkVineLeaf*>(mapChip_[y - plus][x]);
+						leave->SetBeginAnimationFrame(24 - 8 * plus);
+						leave->SetRotateY(1.57f * 2);
+					}
+					else { break; }
+				}
+				for (int plus = 1; plus <= 3; plus++) {
+					if (x + plus < mapChip_[0].size() && dynamic_cast<DarkVineLeaf*>(mapChip_[y][x + plus])) {
+						leave = dynamic_cast<DarkVineLeaf*>(mapChip_[y][x + plus]);
+						leave->SetBeginAnimationFrame(24 - 8 * plus);
+						leave->SetRotateY(1.57f);
+					}
+					else { break; }
+				}
+				for (int plus = 1; plus <= 3; plus++) {
+					if (x - plus >= 0 && dynamic_cast<DarkVineLeaf*>(mapChip_[y][x - plus])) {
+						leave = dynamic_cast<DarkVineLeaf*>(mapChip_[y][x - plus]);
+						leave->SetBeginAnimationFrame(24 - 8 * plus);
+						leave->SetRotateY(1.57f * 3);
+					}
+					else { break; }
+				}
+			}
+		}
+	}
+
 #if _DEBUG
 #else
 	// 花を生成
@@ -153,7 +195,7 @@ void Stage::Update() {
 		flowers_[i].OffActive();
 	}
 #endif
-	
+
 	// ろうそくの当たり判定を取る
 	for (int y = 0; y < mapChip_.size(); y++) {
 		for (int x = 0; x < mapChip_[y].size(); x++) {
@@ -219,7 +261,7 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 			else {
 				result = mapChip_[y][x]->CheckCollision(cPos, fixVector);
 			}
-			
+
 			// ヒットしていてろうそくの場合
 			if (isGrabLantern && result && dynamic_cast<Candle*>(mapChip_[y][x])) {
 				Candle* candle = dynamic_cast<Candle*>(mapChip_[y][x]);
@@ -262,7 +304,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 			bool isHit = false;
 
 			// もしプレイヤーの影になっているならば -> 処理を行わない
-			if (IsPlayerIntersecting({center.x,center.z}, ray)) { continue; }
+			if (IsPlayerIntersecting({ center.x,center.z }, ray)) { continue; }
 
 			// rayと重なっている可能性のあるマップチップを洗い出す
 			std::vector<IMapChip*> mapChipArray;
@@ -303,40 +345,48 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 				for (int plus = 1; plus <= 3; plus++) {
 					if (y + plus < mapChip_.size() && dynamic_cast<Hole*>(mapChip_[y + plus][x])) {
 						holes[i++] = dynamic_cast<Hole*>(mapChip_[y + plus][x]);
-						if (holes[i - 1]->isGrew_ > 1) {
-							holes[i - 1] = nullptr;
-							break;
-						}
+						//if (holes[i - 1]->isGrew_ > 1) {
+						//	holes[i - 1] = nullptr;
+						//	break;
+						//}
+						holes[i - 1]->SetFlowerRotateY(0);
+						holes[i - 1]->SetBeginAnimationFrame(6 - 2 * i);
 					}
 					else { break; }
 				}
 				for (int plus = 1; plus <= 3; plus++) {
 					if (y - plus >= 0 && dynamic_cast<Hole*>(mapChip_[y - plus][x])) {
 						holes[i++] = dynamic_cast<Hole*>(mapChip_[y - plus][x]);
-						if (holes[i - 1]->isGrew_ > 1) {
-							holes[i - 1] = nullptr;
-							break;
-						}
+						//if (holes[i - 1]->isGrew_ > 1) {
+						//	holes[i - 1] = nullptr;
+						//	break;
+						//}
+						holes[i - 1]->SetFlowerRotateY(1.57f * 2);
+						holes[i - 1]->SetBeginAnimationFrame(6 - 2 * i);
 					}
 					else { break; }
 				}
 				for (int plus = 1; plus <= 3; plus++) {
 					if (x + plus < mapChip_[0].size() && dynamic_cast<Hole*>(mapChip_[y][x + plus])) {
 						holes[i++] = dynamic_cast<Hole*>(mapChip_[y][x + plus]);
-						if (holes[i - 1]->isGrew_ > 1) {
+						/*if (holes[i - 1]->isGrew_ > 1) {
 							holes[i - 1] = nullptr;
 							break;
-						}
+						}*/
+						holes[i - 1]->SetFlowerRotateY(1.57f * 1);
+						holes[i - 1]->SetBeginAnimationFrame(6 - 2 * i);
 					}
 					else { break; }
 				}
 				for (int plus = 1; plus <= 3; plus++) {
 					if (x - plus >= 0 && dynamic_cast<Hole*>(mapChip_[y][x - plus])) {
 						holes[i++] = dynamic_cast<Hole*>(mapChip_[y][x - plus]);
-						if (holes[i - 1]->isGrew_ > 1) {
+						/*if (holes[i - 1]->isGrew_ > 1) {
 							holes[i - 1] = nullptr;
 							break;
-						}
+						}*/
+						holes[i - 1]->SetFlowerRotateY(1.57f * 3);
+						holes[i - 1]->SetBeginAnimationFrame(6 - 2 * i);
 					}
 					else { break; }
 				}
@@ -409,7 +459,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 				flowers_[i].OnActive();
 			}
 			continue;	// 範囲外なのでこの判定は終了
-		}
+	}
 		flowers_[i].OnActive();
 
 		// rayを二次元に
@@ -419,7 +469,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 
 
 		// もしプレイヤーの影になっているならば -> 処理を行わない
-		if (IsPlayerIntersecting({center.x,center.z}, ray)) { continue; }
+		if (IsPlayerIntersecting({ center.x,center.z }, ray)) { continue; }
 
 
 		// rayと重なっている可能性のあるマップチップを洗い出す
@@ -451,7 +501,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 
 		// ヒットしていなかったらしいので成長の処理を呼び出す
 		flowers_[i].AddLightingTime();
-	}
+}
 #endif
 }
 
@@ -459,8 +509,8 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 bool Stage::IsIntersecting(Vector2 start, Vector2 end, Vector3 mapChipTransform) {
 	Vector2 mapChipPos = { mapChipTransform.x,mapChipTransform.z };
 	float v1 = CrossProduct(end - start, (mapChipPos + Vector2{ -0.5f,-0.5f }) - start);
-	float v2 = CrossProduct(end - start, (mapChipPos + Vector2{  0.5f,-0.5f }) - start);
-	float v3 = CrossProduct(end - start, (mapChipPos + Vector2{  0.5f, 0.5f }) - start);
+	float v2 = CrossProduct(end - start, (mapChipPos + Vector2{ 0.5f,-0.5f }) - start);
+	float v3 = CrossProduct(end - start, (mapChipPos + Vector2{ 0.5f, 0.5f }) - start);
 	float v4 = CrossProduct(end - start, (mapChipPos + Vector2{ -0.5f, 0.5f }) - start);
 
 	// 線分と矩形の辺が交差するかどうかを判定
@@ -478,10 +528,10 @@ bool Stage::IsPlayerIntersecting(Vector2 start, Vector2 end) {
 	if (sToe.Length() < sTop.Length()) { return false; }
 
 	Vector3 playerPos[4] = {
-		playerCurrentPosition_ + Vector3{-0.05f,0.0f,-0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
-		playerCurrentPosition_ + Vector3{ 0.05f,0.0f,-0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
-		playerCurrentPosition_ + Vector3{ 0.05f,0.0f, 0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
-		playerCurrentPosition_ + Vector3{-0.05f,0.0f, 0.05f,} * Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
+		playerCurrentPosition_ + Vector3{-0.05f,0.0f,-0.05f,} *Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
+		playerCurrentPosition_ + Vector3{ 0.05f,0.0f,-0.05f,} *Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
+		playerCurrentPosition_ + Vector3{ 0.05f,0.0f, 0.05f,} *Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
+		playerCurrentPosition_ + Vector3{-0.05f,0.0f, 0.05f,} *Matrix4x4::CreateRotateXYZMatrix(playerCurrentRotation_),
 	};
 
 	float v1 = CrossProduct(end - start, Vector2{ playerPos[0].x,playerPos[0].z } - start);

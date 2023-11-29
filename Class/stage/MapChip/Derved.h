@@ -50,10 +50,46 @@ public: // ** メンバ関数 ** //
 	void OnActive() override;
 	void OffActive() override;
 
+	// それぞれの向きに対応して葉の向きを変える
+	void SetFlowerRotateY(float rotateY) { leafModel_->transform.rotation.y = rotateY; }
+	// 波打って見えるようにアニメーションフレームをわずかにずらす
+	void SetBeginAnimationFrame(int beginFrame) { startAnimationFrame_ = beginFrame; }
+
+private: // ** プライベートな関数 ** //
+	// t = 
+	// b = 開始の値
+	// c = 開始との差分
+	// d = 
+	float easeOut(float t, float b, float c, float d) {
+		t /= d;
+		return -c * t * (t - 2.0f) + b;
+	}
+
+public:
 	// 足場になる葉っぱのモデル
 	LWP::Primitive::Mesh* leafModel_;
 	// 成長済みフラグ
 	int isGrew_ = 0;
+
+	// 照らされている時間
+	int lightingTime_ = 0;
+
+	// 揺れるアニメーション
+	bool isAnimation_ = false;
+	// アニメーション時間
+	int swayFrame_;
+
+	int waitFrame_ = 0;
+	int startAnimationFrame_ = 0;
+
+	// 振幅
+	float maxAmplitude_;
+
+	// 定数
+	// 1往復するまでの時間
+	const int swayEndFrame_ = 120;
+	// 1フレーム当たりの変化量
+	const float kCycleSpeed_ = 2 * M_PI / swayEndFrame_;
 };
 class Wall :public IMapChip {
 public: // ** メンバ関数 ** //
@@ -139,8 +175,29 @@ public: // ** メンバ関数 ** //
 	bool IsMapChipCollision() override;
 	bool IsGroundCollision() override;
 
+	//void OnActive() override;
+	//void OffActive() override;
+
+	// 葉の向きを設定
+	void SetRotateY(float rotateY) { model_->transform.rotation.y = rotateY; }
+	// 波打って見えるようにアニメーションフレームをわずかにずらす
+	void SetBeginAnimationFrame(int beginFrame) { swayFrame_ += beginFrame; }
+
 	// すでに枯れたフラグ
 	bool isDead_ = false;
+
+private:
+	// アニメーション時間
+	int swayFrame_;
+
+	// 振幅
+	float maxAmplitude_;
+
+	// 定数
+	// 1往復するまでの時間
+	const int swayEndFrame_ = 120;
+	// 1フレーム当たりの変化量
+	const float kCycleSpeed_ = 2 * M_PI / swayEndFrame_;
 };
 class Start :public IMapChip {
 public: // ** メンバ関数 ** //

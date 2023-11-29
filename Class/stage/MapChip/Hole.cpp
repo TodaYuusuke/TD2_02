@@ -12,15 +12,45 @@ void Hole::Init(LWP::Math::Vector3 position, float scale) {
 	leafModel_->transform.translation = position;
 	leafModel_->transform.scale = { scale,scale,scale };
 	leafModel_->material.enableLighting = true;
+
+	maxAmplitude_ = 0.01f;
 }
 
 void Hole::Update() {
 	isGrew_--;
 	if (isGrew_ > 0) {
-		leafModel_->transform.scale = { 1.0f,1.0f,1.0f };
+		isAnimation_ = true;
 	}
-	else {
-		leafModel_->transform.scale = { 0.0f,0.0f,0.0f };
+
+	if (swayFrame_ >= swayEndFrame_) {
+		isAnimation_ = false;
+		swayFrame_ = startAnimationFrame_;
+	}
+	// 上下に揺れるアニメーション
+	if (isAnimation_) {
+
+		leafModel_->transform.translation.y = maxAmplitude_ * sinf(swayFrame_ * kCycleSpeed_);
+
+		swayFrame_++;
+	}
+	if (!isAnimation_) {
+		waitFrame_++;
+	}
+	if (waitFrame_ >= startAnimationFrame_) {
+		isAnimation_ = true;
+	}
+
+	// 照らされている時間をマイナス
+	lightingTime_--;
+	// 幅は超えないように
+	lightingTime_ = std::clamp<int>(lightingTime_, 0, 2);
+	// 花が生えるアニメーション
+	if (lightingTime_ <= 2) {
+		float value = easeOut((float)(lightingTime_) / 60.0f, 0.00f, 1.0f, 2.0f / 60.0f);
+		leafModel_->transform.scale = { value,value,value };
+	}
+	else if (lightingTime_ == 0) {
+		isAnimation_ = false;
 	}
 }
 
@@ -38,6 +68,7 @@ bool Hole::IsGroundCollision() {
 
 void Hole::GrawUp() {
 	isGrew_ = 2;
+	lightingTime_ += 2;
 }
 
 void Hole::OnActive() {

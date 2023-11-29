@@ -24,6 +24,7 @@ public:
 
 private: //*** これより先に必要な処理や変数を記述 ***//
 
+	LWP::Resource::Audio* bgm_[3];
 	// 背景
 	LWP::Primitive::Surface* backGround_;
 

@@ -18,6 +18,19 @@ void GameScene::Initialize() {
 
 	stage_.Init(level_);
 	player_.Init(stage_.GetPlayerStartPosition(), mainCamera);
+
+	// 音の読み込み
+	bgm_[0] = LWP::Resource::LoadAudio("BGM_playStage.wav");
+	bgm_[1] = LWP::Resource::LoadAudio("BGM_bird.wav");
+	bgm_[2] = LWP::Resource::LoadAudio("BGM_leafWindow.wav");
+
+	bgm_[0]->SetVolume(0.05f);
+	bgm_[2]->SetVolume(0.05f);
+	// 音の再生(ループ再生)
+	for (int i = 0; i < 3; i++) {
+		bgm_[i]->SetLoopCount(255);
+		bgm_[i]->Play();
+	}
 }
 
 void GameScene::Update() {
