@@ -47,8 +47,8 @@ void OutLineWall::Init(LWP::Math::Vector3 position, float scale) {
 		for (int n = 0; n < 3; n++) {
 			leavesModel_[i][n]->transform.Parent(&trunkModel_[i]->transform);
 			leavesModel_[i][n]->transform.rotation.y = static_cast<float>(GenerateRandamNum<int>(0, 628)) / 100.0f;
-			float ss = static_cast<float>(GenerateRandamNum<int>(80, 120)) / 100.0f;
-			leavesModel_[i][n]->transform.scale = {ss,ss,ss};
+			//float ss = static_cast<float>(GenerateRandamNum<int>(80, 120)) / 100.0f;
+			//leavesModel_[i][n]->transform.scale = {s,s,s};
 			leavesModel_[i][n]->commonColor = new Color(0x021f03FF);
 			leavesModel_[i][n]->material.enableLighting = true;
 		}

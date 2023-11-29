@@ -15,7 +15,7 @@ void StageSelectScene::Initialize() {
 #endif
 	backGround_->isUI = true;
 
-	stageSelect_.Init();
+	stageSelect_.Init(&player_);
 	player_.Init(stageSelect_.GetPlayerStartPosition(), mainCamera);
 }
 // 更新
@@ -28,7 +28,8 @@ void StageSelectScene::Update() {
 		nextScene_ = new StageSelectScene();
 	}
 	// もしステージが選択されたならステージを進める
-	if (int level = player_.GetSelectedStageLevel() != -1) {
+	int level = player_.GetSelectedStageLevel();
+	if (level != -1) {
 		nextScene_ = new GameScene(level);
 	}
 }

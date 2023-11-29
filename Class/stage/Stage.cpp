@@ -51,6 +51,9 @@ void Stage::Init(int level) {
 				case Mapchip::Candle:
 					mapChip_[y].push_back(new Candle());
 					break;
+				case Mapchip::OutLine:
+					mapChip_[y].push_back(new OutLineWall());
+					break;
 			}
 		}
 		// 列をずらす

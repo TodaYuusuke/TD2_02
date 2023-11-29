@@ -1,6 +1,8 @@
 #pragma once
 #include "IMapChip.h"
 
+class Player;
+
 // マップチップを定義
 enum class Mapchip : int {
 	Floor = 00,	// 何もなし（床）
@@ -27,6 +29,7 @@ enum class Mapchip : int {
 	Stage12,
 	Stage13,
 	Stage14,
+	OutLine = 999,
 };
 
 class Floor :public IMapChip {
@@ -195,20 +198,39 @@ public: // ** メンバ関数 ** //
 	void OffActive() override;
 	
 	// プレイヤーが近くにいるときに呼ばれる関数
-	void NearPlayer(LWP::Math::Vector3 playerPosition);
+	void NearPlayer();
 
 	// 自身が持つステージ番号
 	int stageNum;
+	// 方向追従用のプレイヤーポインタ
+	Player* player;
 
 private:
 	// 木の数
-	static const int kMaxTree = 13;
+	static const int kMaxTree = 9;
 	
 	// 幹のモデル
 	LWP::Primitive::Mesh* trunkModel_[kMaxTree];
 	// 葉のモデル
 	LWP::Primitive::Mesh* leavesModel_[kMaxTree][3];
-
 	// 看板のモデル
 	LWP::Primitive::Mesh* signModel_;
+
+	// 光の当たっている時間
+	int lightingTime_;
+
+private: // ** 関数 ** //
+	// t = 
+	// b = 開始の値
+	// c = 開始との差分
+	// d = 
+	float easeOut(float t, float b, float c, float d) {
+		t /= d;
+		return -c * t * (t - 2.0f) + b;
+	}
+
+	// 球面線形補間（あとでエンジンのUtilityに持ってく）
+	LWP::Math::Vector3 Slerp(const LWP::Math::Vector3& v1, const LWP::Math::Vector3& v2, float t) {
+		return v1 * (1 - t) + v2 * t;
+	}
 };

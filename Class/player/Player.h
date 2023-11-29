@@ -16,6 +16,9 @@ public: // ** メンバ関数 ** //
 	// カメラの追従切り替え
 	void ChangeFollowCamera();
 
+	// ワールド座標を受け取る
+	LWP::Math::Vector3 GetWorldPosition() { return model_->transform.GetWorldPosition(); }
+
 protected: // ** プライベートな定数 ** //
 
 	// プレイヤーの速度

@@ -7,7 +7,7 @@ using namespace LWP::Utility;
 void Flower::Init(Vector2 position) {
 	// 花
 	model_ = LWP::Resource::LoadModel("Flower/Flower.obj");
-	model_->transform.translation.y = 0.05f;
+	model_->transform.translation.y = 0.04f;
 	model_->transform.scale = { 0.0f,0.0f,0.0f };
 	model_->material.enableLighting = true;
 	// 茎
@@ -81,7 +81,7 @@ void Flower::Update() {
 	// 花が生えるアニメーション
 	else if (lightingTime_ <= 20) {
 		float value = easeOut((float)(lightingTime_ - 10) / 60.0f, 0.0f, 0.5f, 10.0f / 60.0f);
-		model_->transform.scale = { value,value,value };
+		model_->transform.scale = { value,value * 2.0f,value };
 		isSway_ = true;
 	}
 

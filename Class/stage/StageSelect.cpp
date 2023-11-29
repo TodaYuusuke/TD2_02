@@ -5,7 +5,7 @@
 using namespace LWP::Math;
 using namespace LWP::Utility;
 
-void StageSelect::Init() {
+void StageSelect::Init(Player* player) {
 	// レベルのステージデータを読み込む
 	std::ifstream ifs("resources/stage/StageSelect.csv");
 	std::string line;	// 1行分のデータ
@@ -51,9 +51,13 @@ void StageSelect::Init() {
 				case Mapchip::Candle:
 					mapChip_[y].push_back(new Candle());
 					break;
+				case Mapchip::OutLine:
+					mapChip_[y].push_back(new OutLineWall());
+					break;
 				default:
 					StageMap* stageMap = new StageMap();
 					stageMap->stageNum = static_cast<int>(chipNum) - 100;
+					stageMap->player = player;
 					mapChip_[y].push_back(stageMap);
 			}
 		}
@@ -137,12 +141,12 @@ int StageSelect::CheckNearStageSelectMapChip(LWP::Math::Vector3 playerPosition) 
 			Vector3 ray3 = mapChip_[y][x]->GetModel()->transform.GetWorldPosition();
 
 			// 範囲内かをチェックする
-			if ((ray3 - playerPosition).Length() > 1.5f) {
+			if ((ray3 - playerPosition).Length() > 0.5f) {
 				continue;	// 範囲外なのでこの判定は終了
 			}
 
 			// 近くにいる際の呼び出し
-			stageMap->NearPlayer(playerPosition);
+			stageMap->NearPlayer();
 			return stageMap->stageNum;
 		}
 	}
