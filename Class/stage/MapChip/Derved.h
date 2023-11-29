@@ -133,8 +133,11 @@ private: // ** プライベートな関数 ** //
 	}
 
 private:
-	// 成長する木のモデル
-	LWP::Primitive::Mesh* treeModel_;
+	// 幹のモデル
+	LWP::Primitive::Mesh* trunkModel_;
+	// 葉のモデル
+	LWP::Primitive::Mesh* leavesModel_[3];
+
 	// 成長済みフラグ
 	int isGrew_ = 0;
 	// 光の当たっている時間
