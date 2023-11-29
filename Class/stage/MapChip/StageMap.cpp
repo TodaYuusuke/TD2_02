@@ -3,7 +3,7 @@
 using namespace LWP::Math;
 using namespace LWP::Utility;
 
-void OutLineWall::Init(LWP::Math::Vector3 position, float scale) {
+void StageMap::Init(LWP::Math::Vector3 position, float scale) {
 #if _DEBUG
 	model_ = LWP::Resource::LoadModel("Floor/Floor.obj");
 	model_->transform.translation = position;
@@ -16,11 +16,17 @@ void OutLineWall::Init(LWP::Math::Vector3 position, float scale) {
 	model_->transform.scale = { scale,scale,scale };
 	model_->material.enableLighting = true;
 
+	// 看板読み込み
+	signModel_ = LWP::Resource::LoadModel("StageSelect/Sign.obj");
+	signModel_->transform.translation = position;
+	signModel_->transform.scale = { scale,scale,scale };
+	signModel_->material.enableLighting = true;
+
 	LWP::Math::Vector3 vec[4] = {
-		{0.27f,0.0f,0.27f},
-		{-0.27f,0.0f,0.27f},
-		{0.27f,0.0f,-0.27f},
-		{-0.27f,0.0f,-0.27f}
+		{0.3f,0.0f,0.3f},
+		{-0.3f,0.0f,0.3f},
+		{0.3f,0.0f,-0.3f},
+		{-0.3f,0.0f,-0.3f}
 	};
 
 	for (int i = 0; i < kMaxTree; i++) {
@@ -30,7 +36,7 @@ void OutLineWall::Init(LWP::Math::Vector3 position, float scale) {
 		trunkModel_[i]->transform.translation = vec[i];
 		trunkModel_[i]->transform.translation.x += static_cast<float>(GenerateRandamNum<int>(-10, 10)) / 100.0f;
 		trunkModel_[i]->transform.translation.z += static_cast<float>(GenerateRandamNum<int>(-10, 10)) / 100.0f;
-		float s = static_cast<float>(GenerateRandamNum<int>(250 - 20, 250 + 20)) / 100.0f;
+		float s = static_cast<float>(GenerateRandamNum<int>(80, 120)) / 100.0f;
 		//float s = 2.5f;
 		trunkModel_[i]->transform.scale = { s,s,s };
 		trunkModel_[i]->transform.rotation.y = static_cast<float>(GenerateRandamNum<int>(0, 628)) / 100.0f;
@@ -47,8 +53,8 @@ void OutLineWall::Init(LWP::Math::Vector3 position, float scale) {
 		for (int n = 0; n < 3; n++) {
 			leavesModel_[i][n]->transform.Parent(&trunkModel_[i]->transform);
 			leavesModel_[i][n]->transform.rotation.y = static_cast<float>(GenerateRandamNum<int>(0, 628)) / 100.0f;
-			float ss = static_cast<float>(GenerateRandamNum<int>(80, 120)) / 100.0f;
-			leavesModel_[i][n]->transform.scale = {ss,ss,ss};
+			//float ss = static_cast<float>(GenerateRandamNum<int>(80, 120)) / 100.0f;
+			//leavesModel_[i][n]->transform.scale = { ss,ss,ss };
 			leavesModel_[i][n]->commonColor = new Color(0x021f03FF);
 			leavesModel_[i][n]->material.enableLighting = true;
 		}
@@ -56,18 +62,18 @@ void OutLineWall::Init(LWP::Math::Vector3 position, float scale) {
 #endif
 }
 
-void OutLineWall::Update() {
+void StageMap::Update() {
 	// 特になし
 }
 
-bool OutLineWall::IsMapChipCollision() {
-	return true;
+bool StageMap::IsMapChipCollision() {
+	return false;
 }
-bool OutLineWall::IsGroundCollision() {
+bool StageMap::IsGroundCollision() {
 	return true;
 }
 
-void OutLineWall::OnActive() {
+void StageMap::OnActive() {
     model_->isActive = true;
 #if _DEBUG
 #else
@@ -79,7 +85,7 @@ void OutLineWall::OnActive() {
 	}
 #endif
 }
-void OutLineWall::OffActive() {
+void StageMap::OffActive() {
     model_->isActive = false;
 #if _DEBUG
 #else
@@ -90,4 +96,9 @@ void OutLineWall::OffActive() {
 		}
 	}
 #endif
+}
+
+void StageMap::NearPlayer(LWP::Math::Vector3 playerPosition) {
+	// アニメーション用のフレームでもカウントアップさせる予定
+	playerPosition;
 }

@@ -3,7 +3,7 @@
 #include "Flower.h"
 #include <string>
 
-class Stage final {
+class Stage {
 public:	// ** メンバ関数 ** //
 
 	// 初期化（読み込むレベル）
@@ -25,7 +25,7 @@ public:	// ** メンバ関数 ** //
 		playerCurrentRotation_ = rot;
 	}
 
-private: // ** メンバ変数 ** //
+protected: // ** メンバ変数 ** //
 
 	// マップチップ
 	std::vector<std::vector<IMapChip*>> mapChip_;
@@ -41,7 +41,7 @@ private: // ** メンバ変数 ** //
 	// マップチップ共通のスケール
 	float commonScale = 1.0f;
 
-private: // ** プライベートな関数 ** //
+protected: // ** プライベートな関数 ** //
 
 	// 光の当たり判定用の、ベクトルとマップチップの交差判定
 	bool IsIntersecting(LWP::Math::Vector2 start, LWP::Math::Vector2 end, LWP::Math::Vector3 mapChipTransform);

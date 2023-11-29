@@ -2,6 +2,9 @@
 #include <Adapter.h>
 #include "../Engine/scene/IScene.h"
 
+#include "../stage/StageSelect.h"
+#include "../player/StageSelectPlayer.h"
+
 class StageSelectScene final
 	: public IScene {
 public:
@@ -20,6 +23,9 @@ public:
 
 private: //*** これより先に必要な処理や変数を記述 ***//
 
-	LWP::Primitive::Surface* surface_;
-	int stageLevel = 1;
+	// 背景
+	LWP::Primitive::Surface* backGround_;
+
+	StageSelect stageSelect_;
+	StageSelectPlayer player_;
 };

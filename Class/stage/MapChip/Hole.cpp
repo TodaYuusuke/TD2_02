@@ -8,7 +8,7 @@ void Hole::Init(LWP::Math::Vector3 position, float scale) {
 	model_->material.enableLighting = true;
 
 	// 足場になる葉っぱのモデル
-	leafModel_ = LWP::Resource::LoadModel("Floor/Floor.obj");
+	leafModel_ = LWP::Resource::LoadModel("VineFloor/VineFloorLeaf.obj");
 	leafModel_->transform.translation = position;
 	leafModel_->transform.scale = { scale,scale,scale };
 	leafModel_->material.enableLighting = true;

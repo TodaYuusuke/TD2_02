@@ -59,20 +59,24 @@ void Stage::Init(int level) {
 
 	// 最後にYを反転させる
 	std::reverse(mapChip_.begin(), mapChip_.end());
-	// 外周に壁を追加
+	// 外周2マスに壁を追加
 	int sizeX = mapChip_[0].size();
-	mapChip_.insert(mapChip_.begin(), std::vector<IMapChip*>());	// 一番手前にデータを追加
-	mapChip_.push_back(std::vector<IMapChip*>());	// 一番奥にデータを追加
-	// Xの長さ分ループしてWallをセットする
-	for (int x = 0; x < sizeX; x++) {
-		mapChip_[0].push_back(new OutLineWall());
-		mapChip_.back().push_back(new OutLineWall());
+	for (int i = 0; i < 4; i++) {
+		mapChip_.insert(mapChip_.begin(), std::vector<IMapChip*>());	// 一番手前にデータを追加
+		mapChip_.push_back(std::vector<IMapChip*>());	// 一番奥にデータを追加
+		// Xの長さ分ループしてWallをセットする
+		for (int x = 0; x < sizeX; x++) {
+			mapChip_[0].push_back(new OutLineWall());
+			mapChip_.back().push_back(new OutLineWall());
+		}
 	}
 
 	// 初期化
 	for (int y = 0; y < mapChip_.size(); y++) {
-		mapChip_[y].insert(mapChip_[y].begin(), new OutLineWall());
-		mapChip_[y].push_back(new OutLineWall());
+		for (int i = 0; i < 4; i++) {
+			mapChip_[y].insert(mapChip_[y].begin(), new OutLineWall());
+			mapChip_[y].push_back(new OutLineWall());
+		}
 		for (int x = 0; x < mapChip_[y].size(); x++) {
 			Vector3 position = {
 				static_cast<float>(x) + 0.5f,

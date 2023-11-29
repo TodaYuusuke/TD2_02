@@ -90,6 +90,12 @@
     <ClCompile Include="Class\stage\MapChip\OutLineWall.cpp">
       <Filter>Class\stage\MapChip</Filter>
     </ClCompile>
+    <ClCompile Include="Class\stage\MapChip\StageMap.cpp">
+      <Filter>Class\stage\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Class\player\StageSelectPlayer.cpp">
+      <Filter>Class\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\sence\Title.h">
@@ -121,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="Class\stage\Flower.h">
       <Filter>Class\stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\player\StageSelectPlayer.h">
+      <Filter>Class\player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

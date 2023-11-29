@@ -107,6 +107,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXGame\Adapter;$(SolutionDir)DirectXGame\Engine</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -126,6 +127,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXGame\Adapter;$(SolutionDir)DirectXGame\Engine</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Class\player\Lantern.cpp" />
     <ClCompile Include="Class\player\Player.cpp" />
+    <ClCompile Include="Class\player\StageSelectPlayer.cpp" />
     <ClCompile Include="Class\sence\GameScene.cpp" />
     <ClCompile Include="Class\sence\StageSelectScene.cpp" />
     <ClCompile Include="Class\sence\Title.cpp" />
@@ -150,6 +153,7 @@
     <ClCompile Include="Class\stage\MapChip\Hole.cpp" />
     <ClCompile Include="Class\stage\MapChip\IMapChip.cpp" />
     <ClCompile Include="Class\stage\MapChip\OutLineWall.cpp" />
+    <ClCompile Include="Class\stage\MapChip\StageMap.cpp" />
     <ClCompile Include="Class\stage\MapChip\Start.cpp" />
     <ClCompile Include="Class\stage\MapChip\VineFloor.cpp" />
     <ClCompile Include="Class\stage\MapChip\VineWall.cpp" />
@@ -161,6 +165,7 @@
   <ItemGroup>
     <ClInclude Include="Class\player\Lantern.h" />
     <ClInclude Include="Class\player\Player.h" />
+    <ClInclude Include="Class\player\StageSelectPlayer.h" />
     <ClInclude Include="Class\sence\GameScene.h" />
     <ClInclude Include="Class\sence\StageSelectScene.h" />
     <ClInclude Include="Class\sence\Title.h" />

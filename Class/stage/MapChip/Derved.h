@@ -11,7 +11,22 @@ enum class Mapchip : int {
 	DarkVineFloor = 12,	// 足場になるツタが生えてるブロック（照らすと死ぬ）
 	DarkVineLeaf = 13, // 上のマップチップから生えてる葉っぱ
 	Start = 98,	// スタート地点
-	Candle = 99	// ろうそく（クリア条件	）
+	Candle = 99, // ろうそく（クリア条件	）
+	// 100以降は-100した値のレベルのステージセレクト
+	Stage1 = 101,
+	Stage2,
+	Stage3,
+	Stage4,
+	Stage5,
+	Stage6,
+	Stage7,
+	Stage8,
+	Stage9,
+	Stage10,
+	Stage11,
+	Stage12,
+	Stage13,
+	Stage14,
 };
 
 class Floor :public IMapChip {
@@ -85,7 +100,15 @@ public: // ** メンバ関数 ** //
 	bool IsToGrow() override { return true; }
 	void GrawUp() override;
 
+	void OnActive() override;
+	void OffActive() override;
+
 private:
+	// 茎のモデル
+	LWP::Primitive::Mesh* stemModel_;
+	// 花のモデル
+	LWP::Primitive::Mesh* flowerModel_;
+
 	// 成長済みフラグ
 	int isGrew_ = 0;
 };
@@ -159,5 +182,33 @@ private:
 	// 幹のモデル
 	LWP::Primitive::Mesh* trunkModel_[kMaxTree];
 	// 葉のモデル
-	LWP::Primitive::Mesh* leavesModel_[kMaxTree];
+	LWP::Primitive::Mesh* leavesModel_[kMaxTree][3];
+};
+class StageMap :public IMapChip {
+public: // ** メンバ関数 ** //
+	void Init(LWP::Math::Vector3 position, float scale) override;
+	void Update() override;
+	bool IsMapChipCollision() override;
+	bool IsGroundCollision() override;
+
+	void OnActive() override;
+	void OffActive() override;
+	
+	// プレイヤーが近くにいるときに呼ばれる関数
+	void NearPlayer(LWP::Math::Vector3 playerPosition);
+
+	// 自身が持つステージ番号
+	int stageNum;
+
+private:
+	// 木の数
+	static const int kMaxTree = 13;
+	
+	// 幹のモデル
+	LWP::Primitive::Mesh* trunkModel_[kMaxTree];
+	// 葉のモデル
+	LWP::Primitive::Mesh* leavesModel_[kMaxTree][3];
+
+	// 看板のモデル
+	LWP::Primitive::Mesh* signModel_;
 };

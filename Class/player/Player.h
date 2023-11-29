@@ -5,7 +5,7 @@
 // 前方宣言
 class Stage;
 
-class Player final {
+class Player {
 public: // ** メンバ関数 ** //
 
 	// 初期化
@@ -16,7 +16,7 @@ public: // ** メンバ関数 ** //
 	// カメラの追従切り替え
 	void ChangeFollowCamera();
 
-private: // ** プライベートな定数 ** //
+protected: // ** プライベートな定数 ** //
 
 	// プレイヤーの速度
 	const float kPlayerSpeed = 0.02f;
@@ -27,7 +27,7 @@ private: // ** プライベートな定数 ** //
 	const float kGravities = -9.8f / 60.0f / 100.0f;
 
 
-private: // ** メンバ変数 ** //
+protected: // ** メンバ変数 ** //
 
 	// モデル
 	LWP::Primitive::Mesh* model_ = nullptr;
@@ -71,15 +71,18 @@ private: // ** メンバ変数 ** //
 	bool isFollowingCamera_ = true;
 
 
-private: // ** プライベートな関数 ** //
+protected: // ** プライベートな関数 ** //
 
 	// 移動
 	void Move();
 	// ランタンに関する処理
-	void Action();
+	virtual void Action();
 
 	// カメラの追従処理
 	void FollowCameraTurn();
+
+	// 派生クラス用更新処理
+	virtual void UpdateDerved(Stage* stage);
 
 	// 線形補完
 	LWP::Math::Vector3 Lerp(const LWP::Math::Vector3& v1, const LWP::Math::Vector3& v2, float t);

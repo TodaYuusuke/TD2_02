@@ -186,6 +186,9 @@ void Player::Update(Stage* stage) {
 
 	// カメラを追従させる
 	FollowCameraTurn();
+
+	// 派生先用更新処理
+	UpdateDerved(stage);
 }
 
 void Player::Move() {
@@ -384,4 +387,9 @@ void Player::FollowCameraTurn() {
 	// 徐々に追従するように適応
 	camera_->transform.translation = Lerp(camera_->transform.translation, cameraGoalTranslation_, 0.07f);
 	camera_->transform.rotation = Lerp(camera_->transform.rotation, cameraGoalRotation_, 0.06f);
+}
+
+void Player::UpdateDerved(Stage* stage) {
+	// 何もしない
+	stage;
 }
