@@ -26,11 +26,31 @@ void GameScene::Initialize() {
 		operationUI_[i] = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 		operationUI_[i]->isUI = true;
 	}
+	// ろうそくの数
+	for (int i = 0; i < 4; i++) {
+		// 実体を生成
+		candleNumUI_[i] = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
+		candleNumUI_[i]->isUI = false;
+	}
+
 	// 画像の張り替え
 	operationUI_[RB]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_RB.png");
 	operationUI_[LB]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_LB.png");
+	operationUI_[UPBUTTON]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/crosskey.png");
 	operationUI_[FONT_THROW]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_throw.png");
 	operationUI_[FONT_PARALLEL]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_parallel.png");
+	operationUI_[FONT_ZOOM]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_zoom.png");
+	operationUI_[TUTORIAL_CANDLE]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_lightFire.png");
+	operationUI_[TUTORIAL_GROWLEAF]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_growGrass.png");
+	operationUI_[TUTORIAL_WITHERLEAF]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_witherGrass.png");
+	operationUI_[CANDLE]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/candle.png");
+	operationUI_[X]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_x.png");
+	// ろうそくの数
+	candleNumUI_[0]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_1.png");
+	candleNumUI_[1]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_2.png");
+	candleNumUI_[2]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_3.png");
+	candleNumUI_[3]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_4.png");
+
 	// 平面の頂点座標を設定
 	// RBボタン
 	operationUI_[RB]->vertices[0].position = { 0.0f,0.0f,0.0f };
@@ -42,6 +62,11 @@ void GameScene::Initialize() {
 	operationUI_[LB]->vertices[1].position = { 200.0f,0.0f,0.0f };
 	operationUI_[LB]->vertices[2].position = { 200.0f,120.0f,0.0f };
 	operationUI_[LB]->vertices[3].position = { 0.0f,120.0f,0.0f };
+	// 上ボタン
+	operationUI_[UPBUTTON]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[UPBUTTON]->vertices[1].position = { 1280.0f,0.0f,0.0f };
+	operationUI_[UPBUTTON]->vertices[2].position = { 1280.0f,1280.0f,0.0f };
+	operationUI_[UPBUTTON]->vertices[3].position = { 0.0f,1280.0f,0.0f };
 	// 文字_投げる
 	operationUI_[FONT_THROW]->vertices[0].position = { 0.0f,0.0f,0.0f };
 	operationUI_[FONT_THROW]->vertices[1].position = { 200.0f,0.0f,0.0f };
@@ -52,6 +77,50 @@ void GameScene::Initialize() {
 	operationUI_[FONT_PARALLEL]->vertices[1].position = { 200.0f,0.0f,0.0f };
 	operationUI_[FONT_PARALLEL]->vertices[2].position = { 200.0f,55.0f,0.0f };
 	operationUI_[FONT_PARALLEL]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	// 文字_ズーム
+	operationUI_[FONT_ZOOM]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[FONT_ZOOM]->vertices[1].position = { 200.0f,0.0f,0.0f };
+	operationUI_[FONT_ZOOM]->vertices[2].position = { 200.0f,55.0f,0.0f };
+	operationUI_[FONT_ZOOM]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	// ろうそく
+	operationUI_[CANDLE]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[CANDLE]->vertices[1].position = { 1280.0f,0.0f,0.0f };
+	operationUI_[CANDLE]->vertices[2].position = { 1280.0f,1280.0f,0.0f };
+	operationUI_[CANDLE]->vertices[3].position = { 0.0f,1280.0f,0.0f };
+	// 掛ける
+	operationUI_[X]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[X]->vertices[1].position = { 60.0f,0.0f,0.0f };
+	operationUI_[X]->vertices[2].position = { 60.0f,55.0f,0.0f };
+	operationUI_[X]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	// チュートリアル用の文字
+	if (level_ == 1) {
+		// チュートリアル_ろうそく
+		operationUI_[TUTORIAL_CANDLE]->vertices[0].position = { 0.0f,0.0f,0.0f };
+		operationUI_[TUTORIAL_CANDLE]->vertices[1].position = { 720.0f,0.0f,0.0f };
+		operationUI_[TUTORIAL_CANDLE]->vertices[2].position = { 720.0f,55.0f,0.0f };
+		operationUI_[TUTORIAL_CANDLE]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	}
+	if (level_ == 2 || level_ == 3) {
+		// チュートリアル_成長する草
+		operationUI_[TUTORIAL_GROWLEAF]->vertices[0].position = { 0.0f,0.0f,0.0f };
+		operationUI_[TUTORIAL_GROWLEAF]->vertices[1].position = { 720.0f,0.0f,0.0f };
+		operationUI_[TUTORIAL_GROWLEAF]->vertices[2].position = { 720.0f,55.0f,0.0f };
+		operationUI_[TUTORIAL_GROWLEAF]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	}
+	if (level_ == 4) {
+		// チュートリアル_成長する草
+		operationUI_[TUTORIAL_WITHERLEAF]->vertices[0].position = { 0.0f,0.0f,0.0f };
+		operationUI_[TUTORIAL_WITHERLEAF]->vertices[1].position = { 720.0f,0.0f,0.0f };
+		operationUI_[TUTORIAL_WITHERLEAF]->vertices[2].position = { 720.0f,55.0f,0.0f };
+		operationUI_[TUTORIAL_WITHERLEAF]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	}
+	// ろうそくの数
+	for (int i = 0; i < 4; i++) {
+		candleNumUI_[i]->vertices[0].position = { 0.0f,0.0f,0.0f };
+		candleNumUI_[i]->vertices[1].position = { 60.0f,0.0f,0.0f };
+		candleNumUI_[i]->vertices[2].position = { 60.0f,55.0f,0.0f };
+		candleNumUI_[i]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	}
 
 	// UIの座標と大きさ
 	// RBボタン
@@ -60,12 +129,33 @@ void GameScene::Initialize() {
 	// LBボタン
 	operationUI_[LB]->transform.translation = { 10, 70, 0 };
 	operationUI_[LB]->transform.scale = { 0.4f, 0.4f, 1.0f };
+	// 上ボタン
+	operationUI_[UPBUTTON]->transform.translation = { 15, 130, 0 };
+	operationUI_[UPBUTTON]->transform.scale = { 0.05f, 0.05f, 1.0f };
 	// 文字_投げる
 	operationUI_[FONT_THROW]->transform.translation = { 100, 25, 0 };
 	operationUI_[FONT_THROW]->transform.scale = { 0.6f, 0.6f, 1.0f };
 	// 文字_平行移動
 	operationUI_[FONT_PARALLEL]->transform.translation = { 100, 85, 0 };
 	operationUI_[FONT_PARALLEL]->transform.scale = { 0.6f, 0.6f, 1.0f };
+	// 文字_ズーム
+	operationUI_[FONT_ZOOM]->transform.translation = { 100, 145, 0 };
+	operationUI_[FONT_ZOOM]->transform.scale = { 0.6f, 0.6f, 1.0f };
+	// チュートリアル_ろうそく
+	operationUI_[TUTORIAL_CANDLE]->transform.translation = { 360, 20, 0 };
+	// チュートリアル_成長する草
+	operationUI_[TUTORIAL_GROWLEAF]->transform.translation = { 360, 20, 0 };
+	// チュートリアル_枯れる草
+	operationUI_[TUTORIAL_WITHERLEAF]->transform.translation = { 360, 20, 0 };
+	// ろうそく
+	operationUI_[CANDLE]->transform.translation = { 1100, 10, 0 };
+	operationUI_[CANDLE]->transform.scale = { 0.05f, 0.05f, 1.0f };
+	// 掛ける
+	operationUI_[X]->transform.translation = { 1150, 10, 0 };
+	// ろうそくの数
+	for (int i = 0; i < 4; i++) {
+		candleNumUI_[i]->transform.translation = { 1210, 10, 0 };
+	}
 
 	stage_.Init(level_);
 	player_.Init(stage_.GetPlayerStartPosition(), mainCamera);
@@ -82,6 +172,16 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	// ステージ上に残っているろうそくの本数を調べる
+	for (int i = 0; i < 4; i++) {
+		if (stage_.GetCandleCount() - stage_.GetIgnitedCandle() == i + 1) {
+			candleNumUI_[i]->isUI = true;
+		}
+		else {
+			candleNumUI_[i]->isUI = false;
+		}
+	}
+
 	// トランジション更新
 	if (isStart_) {
 		stage_.Update();

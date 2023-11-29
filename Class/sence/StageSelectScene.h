@@ -31,8 +31,10 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	enum UIType {
 		RB,						// RBボタン
 		LB,						// LBボタン
+		UPBUTTON,				// 上ボタン
 		FONT_START,				// 文字_ゲーム開始
 		FONT_PARALLEL,			// 文字_平行移動
+		FONT_ZOOM,				// 文字_ズーム
 		UI_NUM					// UIの数
 	};
 
