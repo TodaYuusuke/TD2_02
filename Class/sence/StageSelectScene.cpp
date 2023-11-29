@@ -9,7 +9,8 @@ StageSelectScene::StageSelectScene(Color startTransitionColor) {
 
 StageSelectScene::StageSelectScene(LWP::Utility::Color startTransitionColor, LWP::Math::Vector3 startPosition) {
 	transitionColor_ = startTransitionColor;
-
+	isSelectStartPosition_ = true;
+	startPosition_ = startPosition;
 }
 
 void StageSelectScene::Initialize() {
@@ -73,7 +74,12 @@ void StageSelectScene::Initialize() {
 	operationUI_[FONT_PARALLEL]->transform.scale = { 0.6f, 0.6f, 1.0f };
 
 	stageSelect_.Init(&player_);
-	player_.Init(stageSelect_.GetPlayerStartPosition(), mainCamera);
+	if (isSelectStartPosition_) {
+		player_.Init(startPosition_, mainCamera);
+	}
+	else {
+		player_.Init(stageSelect_.GetPlayerStartPosition(), mainCamera);
+	}
 
 	transition_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 	transition_->vertices[0].position = { 0.0f,0.0f,0.0f };
@@ -118,7 +124,7 @@ void StageSelectScene::Update() {
 		// もしステージが選択されたならステージを進める
 		int level = player_.GetSelectedStageLevel();
 		if (level != -1) {
-			next_ = new GameScene(level);
+			next_ = new GameScene(level, player_.GetWorldPosition());
 			transition_->commonColor = new Color(BLACK);	// 背景色をセット
 			isEnd_ = true;
 		}

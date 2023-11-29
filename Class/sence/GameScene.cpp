@@ -3,7 +3,9 @@
 
 using namespace LWP::Utility;
 
-GameScene::GameScene(int level) : level_(level) {}
+GameScene::GameScene(int level, LWP::Math::Vector3 prevScenePosition) : level_(level) {
+	prevScenePosition_ = prevScenePosition;
+}
 
 void GameScene::Initialize() {
 	backGround_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
@@ -105,19 +107,19 @@ void GameScene::Update() {
 
 		// クリアチェック
 		if (stage_.IsCleared()) {
-			next_ = new StageSelectScene(0xB4B4B4FF);
+			next_ = new StageSelectScene(0xB4B4B4FF, prevScenePosition_);
 			transition_->commonColor = new Color(0xB4B4B400);	// 色をセット
 			isEnd_ = true;
 		}
 
 		// リスタート
-		if (LWP::Input::Keyboard::GetTrigger(DIK_R)) {
-			next_ = new GameScene(level_);
+		if (LWP::Input::Keyboard::GetTrigger(DIK_R) || player_.IsRetry()) {
+			next_ = new GameScene(level_, prevScenePosition_);
 			isEnd_ = true;
 		}
 		// 前のシーンへ戻る
 		if (LWP::Input::Keyboard::GetTrigger(DIK_ESCAPE)) {
-			next_ = new StageSelectScene(BLACK);
+			next_ = new StageSelectScene(BLACK, prevScenePosition_);
 			isEnd_ = true;
 		}
 	}

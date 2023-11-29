@@ -167,10 +167,10 @@ void Player::Update(Stage* stage) {
 		}
 	}
 
-	// プレイヤーが一定以上下に落ちたとき -> 元の座標に戻す
+	// プレイヤーが一定以上下に落ちたとき
 	if (model_->transform.translation.y < -2.0f) {
 		isFollowingCamera_ = false;
-		if (model_->transform.translation.y < -8.0f) {
+		if (model_->transform.translation.y < -6.0f) {
 			model_->transform.translation = startPosition_;
 			gravitiesAT = 0.0f;
 			isFollowingCamera_ = true;
@@ -188,6 +188,18 @@ void Player::Update(Stage* stage) {
 
 	// 派生先用更新処理
 	UpdateDerved(stage);
+}
+
+bool Player::IsRetry() {
+	// プレイヤーが一定以上下に落ちたとき
+	if (model_->transform.translation.y < -2.0f || lantern_.GetWorldPosition().y < -2.0f) {
+		isFollowingCamera_ = false;
+		if (model_->transform.translation.y < -4.0f || lantern_.GetWorldPosition().y < -4.0f) {
+			return true;	// リトライを要求
+		}
+	}
+
+	return false;
 }
 
 void Player::Move() {

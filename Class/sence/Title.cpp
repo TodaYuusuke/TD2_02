@@ -1,5 +1,5 @@
 #include "Title.h"
-#include "GameScene.h"
+#include "StageSelectScene.h"
 
 using namespace LWP;
 using namespace LWP::Input;
@@ -31,6 +31,6 @@ void Title::Initialize() {
 void Title::Update() {
 	// ENTERキーを押すとシーン切り替え
 	if (Keyboard::GetTrigger(DIK_RETURN)) {
-		nextScene_ = new GameScene(1);
+		nextScene_ = new StageSelectScene(BLACK);
 	}
 }

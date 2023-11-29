@@ -19,6 +19,9 @@ public: // ** メンバ関数 ** //
 	// ワールド座標を受け取る
 	LWP::Math::Vector3 GetWorldPosition() { return model_->transform.GetWorldPosition(); }
 
+	// リトライを要求するフラグ
+	bool IsRetry();
+
 protected: // ** プライベートな定数 ** //
 
 	// プレイヤーの速度

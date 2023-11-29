@@ -137,12 +137,6 @@ void Lantern::Update(Stage* stage) {
 		}
 	}
 
-	// 一定以上下に落ちたとき -> 
-	if (handleModel_->transform.translation.y < -2.5f) { 
-		/* 後で追加 */ 
-		handleModel_->transform.translation.y = -2.5f;
-	}
-
 	// 光源の当たり判定をチェックする
 	stage->CheckLightCollision(light_->transform.GetWorldPosition(), 2.5f);
 }

@@ -10,7 +10,7 @@ class GameScene final
 public:
 
 	// コンストラクタの定義も自由に可
-	GameScene(int level);
+	GameScene(int level, LWP::Math::Vector3 prevScenePosition);
 	GameScene() = default;
 
 	//*** 純粋仮想関数の実体宣言 ***//
@@ -45,8 +45,9 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 
 	// プレイヤー
 	Player player_;
+	// ステージ選択シーンでの最後の位置を保持
+	LWP::Math::Vector3 prevScenePosition_;
 
-	
 	// シーントランジション
 	bool isStart_ = true;
 	bool isEnd_ = false;
