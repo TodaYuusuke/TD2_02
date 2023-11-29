@@ -6,8 +6,9 @@ void DarkVineLeaf::Init(LWP::Math::Vector3 position, float scale) {
 	model_ = LWP::Resource::LoadModel("VineFloor/VineFloorLeaf.obj");
 	model_->transform.translation = position;
 	model_->transform.scale = { scale,scale,scale };
-	//model_->commonColor = new Color(ColorPattern::RED);
+	model_->commonColor = new Color(0xFF1408FF);
 	model_->material.enableLighting = true;
+	model_->texture = LWP::Resource::LoadTextureLongPath("resources/obj/VineFloor/DarkVineLeaf.png");
 
 	maxAmplitude_ = 0.01f;
 }
@@ -25,11 +26,3 @@ bool DarkVineLeaf::IsMapChipCollision() {
 bool DarkVineLeaf::IsGroundCollision() {
 	return !isDead_;
 }
-
-//void DarkVineLeaf::OnActive() {
-//	model_->isActive = true;
-//};
-//void DarkVineLeaf::OffActive() {
-//	model_->isActive = false;
-//	isAnimation_ = false;
-//};
