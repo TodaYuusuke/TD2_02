@@ -280,17 +280,6 @@ void Player::Action() {
 			if (Keyboard::GetTrigger(DIK_SPACE) || Pad::GetTrigger(0, XBOX_RB)) {
 				behavior_ = Behavior::ReadyToThrow;
 			}
-			
-			////左腕 :ランタン持っている腕
-			//leftUpperArmModel_->transform.rotation.y = -2.0f;
-			//leftUpperArmModel_->transform.translation.x = 0.04f;
-			//leftUpperArmModel_->transform.translation.y = -0.02f;
-
-			////右腕
-			//rightUpperArmModel_->transform.translation.x = 0.1f;
-			//rightUpperArmModel_->transform.translation.y = 0.04f;
-			//rightUpperArmModel_->transform.rotation.z = 0.6f;
-
 			break;
 
 		case Behavior::ReadyToThrow:
@@ -315,13 +304,6 @@ void Player::Action() {
 					behavior_ = Behavior::GrabLantern;
 				}
 			}
-
-			//左腕
-			/*leftUpperArmModel_->transform.rotation.y = 0.0f;
-			leftUpperArmModel_->transform.translation.x = 0.1f;
-			leftUpperArmModel_->transform.translation.y = 0.04f;
-			leftUpperArmModel_->transform.rotation.z = 0.6f;*/
-
 			break;
 	}
 }
