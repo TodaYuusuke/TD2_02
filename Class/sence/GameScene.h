@@ -49,6 +49,11 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	// ろうそくの残り本数
 	LWP::Primitive::Surface* candleNumUI_[4];
 
+	// 戻るボタン
+	LWP::Primitive::Surface* backButton_;
+	// ステージ選択に戻るUI
+	LWP::Primitive::Surface* selectStageUI_;
+
 	// ステージのレベル
 	const int level_;
 	// ステージデータ

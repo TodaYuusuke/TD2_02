@@ -178,6 +178,31 @@ void GameScene::Initialize() {
 		candleNumUI_[i]->transform.translation = { 1210, 10, 0 };
 	}
 
+	backButton_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
+	backButton_->isUI = true;
+	backButton_->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_backButton.png");
+	backButton_->vertices[0].position = { 0.0f,0.0f,0.0f };
+	backButton_->vertices[1].position = { 1280.0f,0.0f,0.0f };
+	backButton_->vertices[2].position = { 1280.0f,1280.0f,0.0f };
+	backButton_->vertices[3].position = { 0.0f,1280.0f,0.0f };
+	// UIの座標と大きさ
+	// RBボタン
+	backButton_->transform.translation = { 10, 640, 0 };
+	backButton_->transform.scale = { 0.05f, 0.05f, 1.0f };
+
+	// ステージセレクトに戻るボタン
+	selectStageUI_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
+	selectStageUI_->isUI = true;
+	selectStageUI_->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_stageSelect.png");
+	selectStageUI_->vertices[0].position = { 0.0f,0.0f,0.0f };
+	selectStageUI_->vertices[1].position = { 600.0f,0.0f,0.0f };
+	selectStageUI_->vertices[2].position = { 600.0f,55.0f,0.0f };
+	selectStageUI_->vertices[3].position = { 0.0f,55.0f,0.0f };
+	// UIの座標と大きさ
+	// RBボタン
+	selectStageUI_->transform.translation = { 60, 660, 0 };
+	selectStageUI_->transform.scale = { 0.6f, 0.6f, 1.0f };
+
 	transition_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 	transition_->vertices[0].position = { 0.0f,0.0f,0.0f };
 	transition_->vertices[1].position = { 1280.0f,0.0f,0.0f };

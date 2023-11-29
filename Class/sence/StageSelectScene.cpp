@@ -101,6 +101,31 @@ void StageSelectScene::Initialize() {
 	operationUI_[FONT_ZOOM]->transform.translation = { 100, 145, 0 };
 	operationUI_[FONT_ZOOM]->transform.scale = { 0.6f, 0.6f, 1.0f };
 
+	backButton_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
+	backButton_->isUI = true;
+	backButton_->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_backButton.png");
+	backButton_->vertices[0].position = { 0.0f,0.0f,0.0f };
+	backButton_->vertices[1].position = { 1280.0f,0.0f,0.0f };
+	backButton_->vertices[2].position = { 1280.0f,1280.0f,0.0f };
+	backButton_->vertices[3].position = { 0.0f,1280.0f,0.0f };
+	// UIの座標と大きさ
+	// RBボタン
+	backButton_->transform.translation = { 10, 640, 0 };
+	backButton_->transform.scale = { 0.05f, 0.05f, 1.0f };
+
+	// タイトルに戻るボタン
+	backTitleUI_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
+	backTitleUI_->isUI = true;
+	backTitleUI_->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_backTitle.png");
+	backTitleUI_->vertices[0].position = { 0.0f,0.0f,0.0f };
+	backTitleUI_->vertices[1].position = { 720.0f,0.0f,0.0f };
+	backTitleUI_->vertices[2].position = { 720.0f,55.0f,0.0f };
+	backTitleUI_->vertices[3].position = { 0.0f,55.0f,0.0f };
+	// UIの座標と大きさ
+	// RBボタン
+	backTitleUI_->transform.translation = { 80, 660, 0 };
+	backTitleUI_->transform.scale = { 0.6f, 0.6f, 1.0f };
+
 	transition_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 	transition_->vertices[0].position = { 0.0f,0.0f,0.0f };
 	transition_->vertices[1].position = { 1280.0f,0.0f,0.0f };
