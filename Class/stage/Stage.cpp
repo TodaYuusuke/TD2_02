@@ -263,8 +263,8 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 				result = mapChip_[y][x]->CheckCollision(cPos, fixVector);
 			}
 
-			// ヒットしていてろうそくの場合
-			if (isGrabLantern && result && dynamic_cast<Candle*>(mapChip_[y][x])) {
+			// ヒットしていてろうそくの場合かつY軸が下過ぎない場合
+			if (isGrabLantern && result && checkPos.y >= -0.1f && dynamic_cast<Candle*>(mapChip_[y][x])) {
 				Candle* candle = dynamic_cast<Candle*>(mapChip_[y][x]);
 				// 未点火なら点火
 				if (!candle->isIgnited) {

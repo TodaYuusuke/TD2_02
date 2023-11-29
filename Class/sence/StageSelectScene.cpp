@@ -7,6 +7,11 @@ StageSelectScene::StageSelectScene(Color startTransitionColor) {
 	transitionColor_ = startTransitionColor;
 }
 
+StageSelectScene::StageSelectScene(LWP::Utility::Color startTransitionColor, LWP::Math::Vector3 startPosition) {
+	transitionColor_ = startTransitionColor;
+
+}
+
 void StageSelectScene::Initialize() {
 	backGround_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 	backGround_->vertices[0].position = { 0.0f,0.0f,1000.0f };

@@ -11,6 +11,7 @@ public:
 
 	// コンストラクタの定義も自由に可
 	StageSelectScene(LWP::Utility::Color startTransitionColor);
+	StageSelectScene(LWP::Utility::Color startTransitionColor, LWP::Math::Vector3 startPosition);
 
 	//*** 純粋仮想関数の実体宣言 ***//
 
@@ -40,6 +41,10 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 
 	StageSelect stageSelect_;
 	StageSelectPlayer player_;
+
+	// 開始地点を指定するフラグ
+	bool isSelectStartPosition_ = false;
+	LWP::Math::Vector3 startPosition_;
 
 	// シーントランジション
 	LWP::Utility::Color transitionColor_;
