@@ -37,9 +37,11 @@ void GameScene::Initialize() {
 	operationUI_[RB]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_RB.png");
 	operationUI_[LB]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_LB.png");
 	operationUI_[UPBUTTON]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/crosskey.png");
+	operationUI_[START]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_startButton.png");
 	operationUI_[FONT_THROW]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_throw.png");
 	operationUI_[FONT_PARALLEL]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_parallel.png");
 	operationUI_[FONT_ZOOM]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_zoom.png");
+	operationUI_[FONT_RESET]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_reset.png");
 	operationUI_[TUTORIAL_CANDLE]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_lightFire.png");
 	operationUI_[TUTORIAL_GROWLEAF]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_growGrass.png");
 	operationUI_[TUTORIAL_WITHERLEAF]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_witherGrass.png");
@@ -67,6 +69,11 @@ void GameScene::Initialize() {
 	operationUI_[UPBUTTON]->vertices[1].position = { 1280.0f,0.0f,0.0f };
 	operationUI_[UPBUTTON]->vertices[2].position = { 1280.0f,1280.0f,0.0f };
 	operationUI_[UPBUTTON]->vertices[3].position = { 0.0f,1280.0f,0.0f };
+	// スタートボタン
+	operationUI_[START]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[START]->vertices[1].position = { 1280.0f,0.0f,0.0f };
+	operationUI_[START]->vertices[2].position = { 1280.0f,1280.0f,0.0f };
+	operationUI_[START]->vertices[3].position = { 0.0f,1280.0f,0.0f };
 	// 文字_投げる
 	operationUI_[FONT_THROW]->vertices[0].position = { 0.0f,0.0f,0.0f };
 	operationUI_[FONT_THROW]->vertices[1].position = { 200.0f,0.0f,0.0f };
@@ -82,6 +89,11 @@ void GameScene::Initialize() {
 	operationUI_[FONT_ZOOM]->vertices[1].position = { 200.0f,0.0f,0.0f };
 	operationUI_[FONT_ZOOM]->vertices[2].position = { 200.0f,55.0f,0.0f };
 	operationUI_[FONT_ZOOM]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	// 文字_リセット
+	operationUI_[FONT_RESET]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[FONT_RESET]->vertices[1].position = { 600.0f,0.0f,0.0f };
+	operationUI_[FONT_RESET]->vertices[2].position = { 600.0f,55.0f,0.0f };
+	operationUI_[FONT_RESET]->vertices[3].position = { 0.0f,55.0f,0.0f };
 	// ろうそく
 	operationUI_[CANDLE]->vertices[0].position = { 0.0f,0.0f,0.0f };
 	operationUI_[CANDLE]->vertices[1].position = { 1280.0f,0.0f,0.0f };
@@ -132,6 +144,9 @@ void GameScene::Initialize() {
 	// 上ボタン
 	operationUI_[UPBUTTON]->transform.translation = { 15, 130, 0 };
 	operationUI_[UPBUTTON]->transform.scale = { 0.05f, 0.05f, 1.0f };
+	// スタートボタン
+	operationUI_[START]->transform.translation = { 20, 200, 0 };
+	operationUI_[START]->transform.scale = { 0.04f, 0.04f, 1.0f };
 	// 文字_投げる
 	operationUI_[FONT_THROW]->transform.translation = { 100, 25, 0 };
 	operationUI_[FONT_THROW]->transform.scale = { 0.6f, 0.6f, 1.0f };
@@ -141,6 +156,9 @@ void GameScene::Initialize() {
 	// 文字_ズーム
 	operationUI_[FONT_ZOOM]->transform.translation = { 100, 145, 0 };
 	operationUI_[FONT_ZOOM]->transform.scale = { 0.6f, 0.6f, 1.0f };
+	// 文字_リセット
+	operationUI_[FONT_RESET]->transform.translation = { 100, 215, 0 };
+	operationUI_[FONT_RESET]->transform.scale = { 0.5f, 0.5f, 1.0f };
 	// チュートリアル_ろうそく
 	operationUI_[TUTORIAL_CANDLE]->transform.translation = { 360, 20, 0 };
 	// チュートリアル_成長する草
@@ -213,7 +231,7 @@ void GameScene::Update() {
 		}
 
 		// リスタート
-		if (LWP::Input::Keyboard::GetTrigger(DIK_R) || player_.IsRetry()) {
+		if (LWP::Input::Pad::GetTrigger(0,XBOX_START) || player_.IsRetry()) {
 			next_ = new GameScene(level_, prevScenePosition_);
 			isEnd_ = true;
 		}

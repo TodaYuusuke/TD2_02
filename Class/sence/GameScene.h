@@ -31,9 +31,11 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 		RB,						// RBボタン
 		LB,						// LBボタン
 		UPBUTTON,				// 上ボタン
+		START,					// スタートボタン
 		FONT_THROW,				// 文字_投げ
 		FONT_PARALLEL,			// 文字_平行移動
 		FONT_ZOOM,				// 文字_ズーム
+		FONT_RESET,				// 文字_リセット
 		TUTORIAL_CANDLE,		// チュートリアル_ろうそく
 		TUTORIAL_GROWLEAF,		// チュートリアル_成長する草
 		TUTORIAL_WITHERLEAF,	// チュートリアル_枯れる草
