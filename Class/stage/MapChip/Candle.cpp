@@ -19,6 +19,9 @@ void Candle::Init(LWP::Math::Vector3 position, float scale) {
 	light_->radius = 1.0f;
 	light_->decay = 5.0f;
 	light_->isActive = true;
+	// 点火音
+	se_ = LWP::Resource::LoadAudio("SE_candleFire.wav");
+	se_->SetLoopCount(0);
 }
 
 void Candle::Update() {

@@ -268,7 +268,9 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 				Candle* candle = dynamic_cast<Candle*>(mapChip_[y][x]);
 				// 未点火なら点火
 				if (!candle->isIgnited) {
+					
 					candle->isIgnited = true;
+					candle->FireSound();
 					ignitedCandle++;
 				}
 			}

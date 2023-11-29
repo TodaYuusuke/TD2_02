@@ -217,6 +217,9 @@ public: // ** メンバ関数 ** //
 
 	void OnActive() override;
 	void OffActive() override;
+
+	// 点火音を出力
+	void FireSound() { se_->Play(); }
 	
 	// 点火済みフラグ
 	bool isIgnited = false;
@@ -226,6 +229,8 @@ private:
 	LWP::Primitive::Mesh* candleModel_;
 	// 光源
 	LWP::Object::PointLight* light_;
+	// SE
+	LWP::Resource::Audio* se_;
 };
 class OutLineWall :public IMapChip {
 public: // ** メンバ関数 ** //

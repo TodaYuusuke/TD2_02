@@ -20,6 +20,9 @@ void GameScene::Initialize() {
 #endif
 	backGround_->isUI = true;
 
+	stage_.Init(level_);
+	player_.Init(stage_.GetPlayerStartPosition(), mainCamera);
+
 	// 常に表示するUI
 	for (int i = 0; i < UI_NUM; i++) {
 		// 実体を生成
@@ -174,11 +177,6 @@ void GameScene::Initialize() {
 	for (int i = 0; i < 4; i++) {
 		candleNumUI_[i]->transform.translation = { 1210, 10, 0 };
 	}
-
-	stage_.Init(level_);
-	player_.Init(stage_.GetPlayerStartPosition(), mainCamera);
-
-
 
 	transition_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 	transition_->vertices[0].position = { 0.0f,0.0f,0.0f };

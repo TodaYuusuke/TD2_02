@@ -26,6 +26,14 @@ void StageSelectScene::Initialize() {
 #endif
 	backGround_->isUI = true;
 
+	stageSelect_.Init(&player_);
+	if (isSelectStartPosition_) {
+		player_.Init(startPosition_, mainCamera);
+	}
+	else {
+		player_.Init(stageSelect_.GetPlayerStartPosition(), mainCamera);
+	}
+
 	// 常に表示するUI
 	for (int i = 0; i < UI_NUM; i++) {
 		// 実体を生成
@@ -91,14 +99,6 @@ void StageSelectScene::Initialize() {
 	// 文字_ズーム
 	operationUI_[FONT_ZOOM]->transform.translation = { 100, 145, 0 };
 	operationUI_[FONT_ZOOM]->transform.scale = { 0.6f, 0.6f, 1.0f };
-
-	stageSelect_.Init(&player_);
-	if (isSelectStartPosition_) {
-		player_.Init(startPosition_, mainCamera);
-	}
-	else {
-		player_.Init(stageSelect_.GetPlayerStartPosition(), mainCamera);
-	}
 
 	transition_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 	transition_->vertices[0].position = { 0.0f,0.0f,0.0f };
