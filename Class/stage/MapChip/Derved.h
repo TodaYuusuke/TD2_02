@@ -97,6 +97,18 @@ public: // ** メンバ関数 ** //
 	void Update() override;
 	bool IsMapChipCollision() override;
 	bool IsGroundCollision() override;
+
+	void OnActive() override;
+	void OffActive() override;
+
+private:
+	// 木の数
+	static const int kMaxTree = 5;
+
+	// 幹のモデル
+	LWP::Primitive::Mesh* trunkModel_[kMaxTree];
+	// 葉のモデル
+	LWP::Primitive::Mesh* leavesModel_[kMaxTree][3];
 };
 class VineWall :public IMapChip {
 public: // ** メンバ関数 ** //

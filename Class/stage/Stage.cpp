@@ -31,7 +31,7 @@ void Stage::Init(int level) {
 					mapChip_[y].push_back(new Hole());
 					break;
 				case Mapchip::Wall:
-					mapChip_[y].push_back(new OutLineWall());
+					mapChip_[y].push_back(new Wall());
 					break;
 				case Mapchip::VineWall:
 					mapChip_[y].push_back(new VineWall());
