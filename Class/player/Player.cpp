@@ -19,11 +19,8 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	rightForeArmModel_ = LWP::Resource::LoadModel("Player/player_right_foreArm.obj");
 	leftForeArmModel_ = LWP::Resource::LoadModel("Player/player_left_foreArm.obj");
 
-
-
 	model_->transform.translation = startPosition;
 	bodyModel_->transform.translation = startPosition;
-	
 
 	headModel_->material.enableLighting = true;
 	bodyModel_->material.enableLighting = true;
@@ -42,8 +39,10 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 	model_->isActive = false;
 
 	camera_ = camera;
+	camera_->transform.rotation.x = 0.65f;
 	cameraGoalRotation_ = camera_->transform.rotation;
-	cameraGoalRotation_.x = 0.65f;
+	camera_->transform.translation = model_->transform.translation + (cameraOffset_ * Matrix4x4::CreateRotateXYZMatrix(cameraGoalRotation_));
+	cameraGoalTranslation_ = camera_->transform.translation;
 
 	// ランタンを初期化
 	lantern_.Init();

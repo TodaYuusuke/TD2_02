@@ -50,6 +50,7 @@ void Stage::Init(int level) {
 					break;
 				case Mapchip::Candle:
 					mapChip_[y].push_back(new Candle());
+					kCandleCount++;
 					break;
 				case Mapchip::OutLine:
 					mapChip_[y].push_back(new OutLineWall());
@@ -265,7 +266,11 @@ bool Stage::CheckCollision(LWP::Math::Vector3 checkPos, LWP::Math::Vector3* fixV
 			// ヒットしていてろうそくの場合
 			if (isGrabLantern && result && dynamic_cast<Candle*>(mapChip_[y][x])) {
 				Candle* candle = dynamic_cast<Candle*>(mapChip_[y][x]);
-				candle->isIgnited = true;
+				// 未点火なら点火
+				if (!candle->isIgnited) {
+					candle->isIgnited = true;
+					ignitedCandle++;
+				}
 			}
 
 			return result;
@@ -432,7 +437,6 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 						else { break; }
 					}
 
-
 					// 穴の葉をOnに
 					for (int n = 0; n < 12; n++) {
 						if (leaves[n] != nullptr) {
@@ -440,6 +444,7 @@ void Stage::CheckLightCollision(LWP::Math::Vector3 center, float radius) {
 							leaves[n]->GetModel()->transform.scale = { 0.0f,0.0f,0.0f };
 						}
 					}
+
 				}
 			}
 		}

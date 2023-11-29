@@ -28,6 +28,9 @@ public:	// ** メンバ関数 ** //
 	// プレイヤーがステージ選択マップチップの近くにいるか検証
 	virtual int CheckNearStageSelectMapChip(LWP::Math::Vector3 playerPosition);
 
+	// ろうそくが全て点火されたかを返す関数
+	bool IsCleared() { return ignitedCandle >= kCandleCount; }
+
 protected: // ** メンバ変数 ** //
 
 	// マップチップ
@@ -43,6 +46,11 @@ protected: // ** メンバ変数 ** //
 	LWP::Math::Vector3 playerCurrentRotation_ = { 0.0f,0.0f,0.0f };
 	// マップチップ共通のスケール
 	float commonScale = 1.0f;
+
+	// ろうそくの数をカウント
+	int kCandleCount;
+	// 点火したろうそくの数
+	int ignitedCandle = 0;
 
 protected: // ** プライベートな関数 ** //
 

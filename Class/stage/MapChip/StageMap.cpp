@@ -98,6 +98,7 @@ bool StageMap::IsGroundCollision() {
 
 void StageMap::OnActive() {
     model_->isActive = true;
+	signModel_->isActive = true;
 	for (int i = 0; i < kMaxTree; i++) {
 		trunkModel_[i]->isActive = true;
 		for (int n = 0; n < 3; n++) {
@@ -107,6 +108,7 @@ void StageMap::OnActive() {
 }
 void StageMap::OffActive() {
     model_->isActive = false;
+	signModel_->isActive = false;
 	for (int i = 0; i < kMaxTree; i++) {
 		trunkModel_[i]->isActive = false;
 		for (int n = 0; n < 3; n++) {
