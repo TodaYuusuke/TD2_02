@@ -134,12 +134,6 @@ void StageSelectScene::Update() {
 		stageSelect_.Update();
 		player_.Update(&stageSelect_);
 
-		// 再読み込み
-		if (LWP::Input::Keyboard::GetTrigger(DIK_R)) {
-			next_ = new StageSelectScene(BLACK);
-			transition_->commonColor = new Color(BLACK);	// 背景色をセット
-			isEnd_ = true;
-		}
 		// もしステージが選択されたならステージを進める
 		int level = player_.GetSelectedStageLevel();
 		if (level != -1) {
