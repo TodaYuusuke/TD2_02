@@ -28,6 +28,9 @@
     <Filter Include="Class\stage\MapChip">
       <UniqueIdentifier>{173b86a8-6e55-4f11-83d8-740f6ab29cae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Class\effect">
+      <UniqueIdentifier>{ed805f8d-6b84-422e-a752-ce8c3392c98f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -96,6 +99,9 @@
     <ClCompile Include="Class\player\StageSelectPlayer.cpp">
       <Filter>Class\player</Filter>
     </ClCompile>
+    <ClCompile Include="Class\effect\Fire.cpp">
+      <Filter>Class\effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Class\sence\Title.h">
@@ -130,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="Class\player\StageSelectPlayer.h">
       <Filter>Class\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Class\effect\Fire.h">
+      <Filter>Class\effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
