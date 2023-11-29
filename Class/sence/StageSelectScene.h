@@ -26,6 +26,18 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	// 背景
 	LWP::Primitive::Surface* backGround_;
 
+	// UIの種類
+	enum UIType {
+		RB,						// RBボタン
+		LB,						// LBボタン
+		FONT_START,				// 文字_ゲーム開始
+		FONT_PARALLEL,			// 文字_平行移動
+		UI_NUM					// UIの数
+	};
+
+	// UI
+	LWP::Primitive::Surface* operationUI_[UI_NUM];
+
 	StageSelect stageSelect_;
 	StageSelectPlayer player_;
 

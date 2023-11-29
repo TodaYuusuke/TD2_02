@@ -19,6 +19,15 @@ public:
 	// scene遷移したい場合、ISceneポインタ型のnextSceneに次のシーンの実体を代入
 
 private: //*** これより先に必要な処理や変数を記述 ***//
+	enum BGMType {
+		LEAFSWAY, // 葉の揺れる音
+		BIRD,	  // 鳥の鳴き声
+		PIANO,	  // ピアノ    (使用したサイトは甘茶の音楽工房、曲名は夢。利用規約を見たところ著作権表示は必須ではない)
+		BGM_NUM  // これは使用しないで
+	};
+	// BGM
+	LWP::Resource::Audio* bgm_[BGM_NUM];
+
 	LWP::Primitive::Sphere* sphere;
 	// プレイヤーモデル
 	LWP::Object::WorldTransform player_;

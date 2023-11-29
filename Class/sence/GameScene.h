@@ -23,10 +23,20 @@ public:
 	// scene遷移したい場合、ISceneポインタ型のnextSceneに次のシーンの実体を代入
 
 private: //*** これより先に必要な処理や変数を記述 ***//
-
-	LWP::Resource::Audio* bgm_[3];
 	// 背景
 	LWP::Primitive::Surface* backGround_;
+
+	// UIの種類
+	enum UIType {
+		RB,						// RBボタン
+		LB,						// LBボタン
+		FONT_THROW,				// 文字_投げ
+		FONT_PARALLEL,  // 文字_平行移動
+		UI_NUM					// UIの数
+	};
+
+	// UI
+	LWP::Primitive::Surface* operationUI_[UI_NUM];
 
 	// ステージのレベル
 	const int level_;

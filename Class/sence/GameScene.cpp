@@ -18,21 +18,57 @@ void GameScene::Initialize() {
 #endif
 	backGround_->isUI = true;
 
+	// 常に表示するUI
+	for (int i = 0; i < UI_NUM; i++) {
+		// 実体を生成
+		operationUI_[i] = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
+		operationUI_[i]->isUI = true;
+	}
+	// 画像の張り替え
+	operationUI_[RB]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_RB.png");
+	operationUI_[LB]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_LB.png");
+	operationUI_[FONT_THROW]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_throw.png");
+	operationUI_[FONT_PARALLEL]->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_parallel.png");
+	// 平面の頂点座標を設定
+	// RBボタン
+	operationUI_[RB]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[RB]->vertices[1].position = { 200.0f,0.0f,0.0f };
+	operationUI_[RB]->vertices[2].position = { 200.0f,120.0f,0.0f };
+	operationUI_[RB]->vertices[3].position = { 0.0f,120.0f,0.0f };
+	// LBボタン
+	operationUI_[LB]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[LB]->vertices[1].position = { 200.0f,0.0f,0.0f };
+	operationUI_[LB]->vertices[2].position = { 200.0f,120.0f,0.0f };
+	operationUI_[LB]->vertices[3].position = { 0.0f,120.0f,0.0f };
+	// 文字_投げる
+	operationUI_[FONT_THROW]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[FONT_THROW]->vertices[1].position = { 200.0f,0.0f,0.0f };
+	operationUI_[FONT_THROW]->vertices[2].position = { 200.0f,55.0f,0.0f };
+	operationUI_[FONT_THROW]->vertices[3].position = { 0.0f,55.0f,0.0f };
+	// 文字_平行移動
+	operationUI_[FONT_PARALLEL]->vertices[0].position = { 0.0f,0.0f,0.0f };
+	operationUI_[FONT_PARALLEL]->vertices[1].position = { 200.0f,0.0f,0.0f };
+	operationUI_[FONT_PARALLEL]->vertices[2].position = { 200.0f,55.0f,0.0f };
+	operationUI_[FONT_PARALLEL]->vertices[3].position = { 0.0f,55.0f,0.0f };
+
+	// UIの座標と大きさ
+	// RBボタン
+	operationUI_[RB]->transform.translation = { 10, 10, 0 };
+	operationUI_[RB]->transform.scale = { 0.4f, 0.4f, 1.0f };
+	// LBボタン
+	operationUI_[LB]->transform.translation = { 10, 70, 0 };
+	operationUI_[LB]->transform.scale = { 0.4f, 0.4f, 1.0f };
+	// 文字_投げる
+	operationUI_[FONT_THROW]->transform.translation = { 100, 25, 0 };
+	operationUI_[FONT_THROW]->transform.scale = { 0.6f, 0.6f, 1.0f };
+	// 文字_平行移動
+	operationUI_[FONT_PARALLEL]->transform.translation = { 100, 85, 0 };
+	operationUI_[FONT_PARALLEL]->transform.scale = { 0.6f, 0.6f, 1.0f };
+
 	stage_.Init(level_);
 	player_.Init(stage_.GetPlayerStartPosition(), mainCamera);
 
-	// 音の読み込み
-	bgm_[0] = LWP::Resource::LoadAudio("BGM_playStage.wav");
-	bgm_[1] = LWP::Resource::LoadAudio("BGM_bird.wav");
-	bgm_[2] = LWP::Resource::LoadAudio("BGM_leafWindow.wav");
 
-	// 音の再生(ループ再生)
-	for (int i = 0; i < 3; i++) {
-		bgm_[i]->SetLoopCount(255);
-		bgm_[i]->Play();
-		bgm_[i]->SetVolume(0.00f);
-	}
-	bgm_[1]->SetVolume(0.00f);
 
 	transition_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 	transition_->vertices[0].position = { 0.0f,0.0f,0.0f };
