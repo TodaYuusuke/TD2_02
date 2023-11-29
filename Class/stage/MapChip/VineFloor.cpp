@@ -12,7 +12,7 @@ void VineFloor::Init(LWP::Math::Vector3 position, float scale) {
 	stemModel_ = LWP::Resource::LoadModel("VineFloor/VineFloorStem.obj");
 	stemModel_->transform.translation = position;
 	stemModel_->transform.scale = { scale,scale,scale };
-	stemModel_->commonColor = new Color(0x00FF07FF);
+	stemModel_->commonColor = new Color(0x021f03FF);
 	stemModel_->material.enableLighting = true;
 	// 花のモデル読み込み
 	flowerModel_ = LWP::Resource::LoadModel("VineFloor/VineFloorFlower.obj");
