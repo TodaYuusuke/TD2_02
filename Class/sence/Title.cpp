@@ -7,6 +7,9 @@ using namespace LWP::Primitive;
 using namespace LWP::Math;
 using namespace LWP::Utility;
 
+Title::Title(bool isPlayAllow) {
+	isPlayAllow_ = isPlayAllow;
+}
 // 初期化
 void Title::Initialize() {
 	// BGMの読み込み
@@ -15,14 +18,16 @@ void Title::Initialize() {
 	bgm_[PIANO] = LWP::Resource::LoadAudio("BGM_piano.wav");
 
 	// 音の再生(全てループ再生をさせる)
-	for (int i = 0; i < BGM_NUM; i++) {
-		bgm_[i]->SetLoopCount(255);
-		bgm_[i]->Play();
+	if (isPlayAllow_) {
+		for (int i = 0; i < BGM_NUM; i++) {
+			bgm_[i]->SetLoopCount(255);
+			bgm_[i]->Play();
+		}
+		// 音量調整
+		bgm_[LEAFSWAY]->SetVolume(0.07f);
+		bgm_[BIRD]->SetVolume(0.04f);
+		bgm_[PIANO]->SetVolume(0.05f);
 	}
-	// 音量調整
-	bgm_[LEAFSWAY]->SetVolume(0.07f);
-	bgm_[BIRD]->SetVolume(0.04f);
-	bgm_[PIANO]->SetVolume(0.05f);
 
 	//背景
 

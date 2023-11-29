@@ -1,5 +1,6 @@
 #include "StageSelectScene.h"
 #include "GameScene.h"
+#include "Title.h"
 
 using namespace LWP::Utility;
 
@@ -134,6 +135,12 @@ void StageSelectScene::Update() {
 		stageSelect_.Update();
 		player_.Update(&stageSelect_);
 
+		// タイトルへ戻る
+		if (LWP::Input::Keyboard::GetTrigger(DIK_ESCAPE) || LWP::Input::Pad::GetTrigger(0, XBOX_BACK)) {
+			isEnd_ = true;
+			transition_->commonColor = new Color(BLACK);	// 背景色をセット
+			next_ = new Title(false);
+		}
 		// もしステージが選択されたならステージを進める
 		int level = player_.GetSelectedStageLevel();
 		if (level != -1) {

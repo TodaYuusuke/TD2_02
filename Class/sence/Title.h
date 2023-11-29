@@ -10,7 +10,7 @@ class Title final
 public:
 
 	// コンストラクタの定義も自由に可
-	Title() = default;
+	Title(bool isPlayAllow);
 
 	//*** 純粋仮想関数の実体宣言 ***//
 
@@ -30,6 +30,8 @@ private: //*** これより先に必要な処理や変数を記述 ***//
 	};
 	// BGM
 	LWP::Resource::Audio* bgm_[BGM_NUM];
+	// BGMを止めるかのフラグ
+	bool isPlayAllow_ = false;
 
 	// 背景
 	LWP::Primitive::Surface* backGround_;

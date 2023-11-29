@@ -229,12 +229,12 @@ void GameScene::Update() {
 		}
 
 		// リスタート
-		if (LWP::Input::Pad::GetTrigger(0,XBOX_START) || player_.IsRetry()) {
+		if (LWP::Input::Keyboard::GetTrigger(DIK_R) || LWP::Input::Pad::GetTrigger(0, XBOX_START) || player_.IsRetry()) {
 			next_ = new GameScene(level_, prevScenePosition_);
 			isEnd_ = true;
 		}
 		// 前のシーンへ戻る
-		if (LWP::Input::Keyboard::GetTrigger(DIK_ESCAPE)) {
+		if (LWP::Input::Keyboard::GetTrigger(DIK_ESCAPE) || LWP::Input::Pad::GetTrigger(0, XBOX_BACK)) {
 			next_ = new StageSelectScene(BLACK, prevScenePosition_);
 			isEnd_ = true;
 		}
