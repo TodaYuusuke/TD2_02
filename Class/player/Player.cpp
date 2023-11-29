@@ -296,12 +296,11 @@ void Player::Action() {
 			break;
 
 		case Behavior::NoHave:
-			if (Keyboard::GetTrigger(DIK_SPACE) || Pad::GetTrigger(0, XBOX_RB)) {
-				if ((model_->transform.translation - lantern_.GetWorldPosition()).Length() <= 0.3f) {
-					behavior_ = Behavior::Throwing;
-					lantern_.Grab(&grabPosition_);
-					behavior_ = Behavior::GrabLantern;
-				}
+			// 自動で取得
+			if ((model_->transform.translation - lantern_.GetWorldPosition()).Length() <= 0.3f) {
+				behavior_ = Behavior::Throwing;
+				lantern_.Grab(&grabPosition_);
+				behavior_ = Behavior::GrabLantern;
 			}
 			break;
 	}
