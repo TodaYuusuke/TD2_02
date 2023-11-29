@@ -27,8 +27,8 @@ void StageSelectScene::Update() {
 	if (LWP::Input::Keyboard::GetTrigger(DIK_R)) {
 		nextScene_ = new StageSelectScene();
 	}
-	// 前のシーンへ戻る
-	if (LWP::Input::Keyboard::GetTrigger(DIK_ESCAPE)) {
-
+	// もしステージが選択されたならステージを進める
+	if (int level = player_.GetSelectedStageLevel() != -1) {
+		nextScene_ = new GameScene(level);
 	}
 }

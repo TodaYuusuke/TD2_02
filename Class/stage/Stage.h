@@ -25,6 +25,9 @@ public:	// ** メンバ関数 ** //
 		playerCurrentRotation_ = rot;
 	}
 
+	// プレイヤーがステージ選択マップチップの近くにいるか検証
+	virtual int CheckNearStageSelectMapChip(LWP::Math::Vector3 playerPosition);
+
 protected: // ** メンバ変数 ** //
 
 	// マップチップ

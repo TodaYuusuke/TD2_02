@@ -494,3 +494,9 @@ bool Stage::IsPlayerIntersecting(Vector2 start, Vector2 end) {
 float Stage::CrossProduct(Vector2 v1, Vector2 v2) {
 	return v1.x * v2.y - v2.x * v1.y;
 }
+
+int Stage::CheckNearStageSelectMapChip(LWP::Math::Vector3 playerPosition) {
+	// 継承先のためだけに作られた関数
+	playerStartPosition;
+	return -1;
+}

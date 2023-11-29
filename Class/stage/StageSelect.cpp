@@ -54,7 +54,7 @@ void StageSelect::Init() {
 				default:
 					StageMap* stageMap = new StageMap();
 					stageMap->stageNum = static_cast<int>(chipNum) - 100;
-					mapChip_[y].push_back(new StageMap());
+					mapChip_[y].push_back(stageMap);
 			}
 		}
 		// 列をずらす

@@ -9,5 +9,5 @@ public:	// ** メンバ関数 ** //
 	void Init();
 
 	// プレイヤーがステージ選択マップチップの近くにいるか検証
-	int CheckNearStageSelectMapChip(LWP::Math::Vector3 playerPosition);
+	int CheckNearStageSelectMapChip(LWP::Math::Vector3 playerPosition) override;
 };

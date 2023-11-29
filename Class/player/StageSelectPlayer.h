@@ -9,7 +9,7 @@ class StageSelectPlayer final
 	: public Player {
 public: // ** メンバ関数 ** //
 
-	int GetSelectedStageLevel() { return selectedStageLevel; }
+	int GetSelectedStageLevel() { return isSendAllow ? selectedStageLevel : -1; }
 
 private: // ** プライベートな関数 ** //
 
@@ -21,5 +21,7 @@ private: // ** プライベートな関数 ** //
 
 private: // ** メンバ変数 ** //
 
+	// 選択されたステージを送るかのフラグ
+	bool isSendAllow = false;
 	int selectedStageLevel = -1;
 };
