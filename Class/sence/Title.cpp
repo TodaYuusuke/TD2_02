@@ -152,6 +152,15 @@ void Title::Initialize() {
 	logo_omote_->isUI = true;
 	logo_ura->isUI = true;
 
+	// ゲームを始めるUIを表示
+	LWP::Primitive::Surface* startUI = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
+	startUI->vertices[0].position = { 0.0f,0.0f,0.0f };
+	startUI->vertices[1].position = { 720.0f,0.0f,0.0f };
+	startUI->vertices[2].position = { 720.0f,55.0f,0.0f };
+	startUI->vertices[3].position = { 0.0f,55.0f,0.0f };
+	startUI->transform.translation = { 60.0f, 500.0f, 0.0f };
+	startUI->texture = LWP::Resource::LoadTextureLongPath("resources/UI/UI_bottonToStart.png");
+	startUI->isUI = true;
 
 	transition_ = LWP::Primitive::CreateInstance<LWP::Primitive::Surface>();
 	transition_->vertices[0].position = { 0.0f,0.0f,0.0f };
@@ -183,7 +192,7 @@ void Title::Update() {
 	}
 
 	// ENTERキーを押すとシーン切り替え
-	if (Keyboard::GetTrigger(DIK_RETURN)) {
+	if (Keyboard::GetTrigger(DIK_RETURN) || Pad::GetTrigger(0, 0xFFFFFFFFFF)) {
 		next_ = new StageSelectScene(BLACK);
 		isEnd_ = true;
 	}

@@ -24,16 +24,15 @@ void Fire::Initialize(LWP::Math::Vector3 Position)
 	
 	position_ = Position;
 	position_.y += 0.01;
+
+	// 新しいパーティクルを追加
+	for (int i = 0; i < kMaxParticles; i++)	{
+		particles.push_back(CreateParticle(randomEngine, position_));
+		Update();
+	}
 }
 
 void Fire::Update() {
-
-	// 新しいパーティクルを追加
-	if (particles.size() < kMaxParticles)
-	{
-		particles.push_back(CreateParticle(randomEngine, position_));
-	}
-
 	// 上へあげる処理
 	for (std::vector<Particle>::iterator it = particles.begin(); it != particles.end();)
 	{

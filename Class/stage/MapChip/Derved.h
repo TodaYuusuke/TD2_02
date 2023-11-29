@@ -13,7 +13,7 @@ enum class Mapchip : int {
 	DarkVineFloor = 12,	// 足場になるツタが生えてるブロック（照らすと死ぬ）
 	DarkVineLeaf = 13, // 上のマップチップから生えてる葉っぱ
 	Start = 98,	// スタート地点
-	Candle = 99, // ろうそく（クリア条件	）
+	Candle = 99, // ろうそく（クリア条件）
 	// 100以降は-100した値のレベルのステージセレクト
 	Stage1 = 101,
 	Stage2,
@@ -219,7 +219,10 @@ public: // ** メンバ関数 ** //
 	void OffActive() override;
 
 	// 点火音を出力
-	void FireSound() { se_->Play(); }
+	void FireSound() {
+		se_->Play();
+		se_->SetVolume(0.5f);
+	}
 	
 	// 点火済みフラグ
 	bool isIgnited = false;
