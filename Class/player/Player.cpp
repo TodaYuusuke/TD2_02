@@ -58,6 +58,9 @@ void Player::Init(Vector3 startPosition, LWP::Object::Camera* camera) {
 
 	leftForeArmModel_->transform.Parent(&leftUpperArmModel_->transform);
 	rightForeArmModel_->transform.Parent(&rightUpperArmModel_->transform);
+
+	InitializeFloatingGimmick();
+
 }
 
 void Player::Update(Stage* stage) {
@@ -107,6 +110,9 @@ void Player::Update(Stage* stage) {
 
 	// 移動処理
 	Move();
+
+	InitArmPosition();
+
 	// 行動更新処理
 	Action();
 
@@ -248,9 +254,11 @@ void Player::Move() {
 		// 歩いないときの処理
 		if (dir.Length() == 0.0f) {
 			lantern_.WaitSwingAmplitude();
+			isMove = false;
 		}
 		else {
 			lantern_.MoveSwingAmplitude();
+			isMove = true;
 		}
 	}
 
@@ -260,6 +268,9 @@ void Player::Move() {
 	
 	// 向きを設定
 	if (dir.Length() > 0.0f) {
+
+		UpAndDownMotion(2.5f);
+
 		// 目的の角度
 		Vector3 goalRotation = { 0.0f, 0.0f, 0.0f };
 		// Y軸周りの角度
@@ -291,6 +302,23 @@ void Player::Action() {
 			if (Keyboard::GetTrigger(DIK_SPACE) || Pad::GetTrigger(0, XBOX_RB)) {
 				behavior_ = Behavior::ReadyToThrow;
 			}
+
+			UpAndDownMotion(1.5f);
+
+			if (isMove == true) {
+				UpdateMoveNoHaveArmAnimation();
+			}
+
+			//左腕
+			rightUpperArmModel_->transform.translation.x = 0.1f;
+			rightUpperArmModel_->transform.translation.y = 0.02f;
+			rightUpperArmModel_->transform.rotation.z= 0.5f;
+
+			//右腕 :ランタン持っている腕
+			leftUpperArmModel_->transform.translation.x = -0.0f;
+			leftUpperArmModel_->transform.translation.y = 0.0f;
+			leftUpperArmModel_->transform.rotation.y = -1.5f;
+		
 			break;
 
 		case Behavior::ReadyToThrow:
@@ -301,6 +329,23 @@ void Player::Action() {
 				behavior_ = Behavior::Throwing;
 				lantern_.Throw(model_->transform.rotation);
 			}
+
+			bodyModel_->transform.rotation.x = -0.05f;
+			bodyModel_->transform.translation.y = -0.03f;
+
+			//左腕
+			rightUpperArmModel_->transform.translation.x = -0.01f;
+			rightUpperArmModel_->transform.rotation.y= 1.5f;
+
+			//右腕 
+			leftUpperArmModel_->transform.translation.x = 0.08f;
+			leftUpperArmModel_->transform.translation.y = -0.01f;
+			leftUpperArmModel_->transform.translation.z = 0.04f;
+
+			leftUpperArmModel_->transform.rotation.x = -0.2f;
+			leftUpperArmModel_->transform.rotation.y = 1.5f;
+			leftUpperArmModel_->transform.rotation.z = -0.05f;
+
 			break;
 
 		case Behavior::Throwing:
@@ -314,6 +359,25 @@ void Player::Action() {
 				lantern_.Grab(&grabPosition_);
 				behavior_ = Behavior::GrabLantern;
 			}
+
+
+			if (isMove == true) {
+				UpdateMoveNoHaveArmAnimation();
+			}
+
+
+			UpAndDownMotion(1.5f);
+
+			//左腕
+			rightUpperArmModel_->transform.translation.x = 0.1f;
+			rightUpperArmModel_->transform.translation.y = 0.02f;
+			rightUpperArmModel_->transform.rotation.z = 0.5f;
+
+			//右腕 
+			leftUpperArmModel_->transform.translation.x = -0.1f;
+			leftUpperArmModel_->transform.translation.y = 0.02f;
+			leftUpperArmModel_->transform.rotation.z = -0.5f;
+
 			break;
 	}
 }
@@ -384,4 +448,59 @@ void Player::FollowCameraTurn() {
 void Player::UpdateDerved(Stage* stage) {
 	// 何もしない
 	stage;
+}
+
+void Player::InitArmPosition()
+{
+	rightUpperArmModel_->transform.translation = { 0,0,0 };
+	leftUpperArmModel_->transform.translation = { 0,0,0 };
+	rightForeArmModel_->transform.translation = { 0,0,0 };
+	leftForeArmModel_->transform.translation = { 0,0,0 };
+
+	rightUpperArmModel_->transform.rotation = { 0,0,0 };
+	leftUpperArmModel_->transform.rotation = { 0,0,0 };
+	rightForeArmModel_->transform.rotation = { 0,0,0 };
+	leftForeArmModel_->transform.rotation = { 0,0,0 };
+}
+
+void Player::InitializeFloatingGimmick() {
+
+	//浮遊ギミックの媒介変数
+	UpdownParameter_ = 0.0f;
+	swingParameter_ = 0.0f;
+	//浮遊移動のサイクル<frame>
+	uint16_t cycle_ = 60;
+	//浮遊の振動<m>
+	amplitude_ = 0.01f;
+	swing_ = 0.4f;
+	throw_ = 0.1f;
+}
+
+
+void Player::UpAndDownMotion(float time)
+{
+	//1フレームでのパラメータ加算値
+	const float step = time * 3.14f / cycle_;
+	//パラメータを１ステップ分加算
+	UpdownParameter_ += step;
+	//2πを超えたら０に戻す
+	UpdownParameter_ = std::fmod(UpdownParameter_, 2.0f * 3.14f);
+	//浮遊を座標に反映
+	bodyModel_->transform.translation.y = std::sin(UpdownParameter_) * amplitude_;
+}
+
+void Player::UpdateMoveNoHaveArmAnimation()
+{
+
+	//1フレームでのパラメータ加算値
+	const float swinStep = 3.0f * 3.14f / cycle_;
+	//パラメータを１ステップ分加算
+	swingParameter_ += swinStep;
+	//2πを超えたら０に戻す
+	swingParameter_ = std::fmod(swingParameter_, 2.0f * 3.14f);
+
+	rightUpperArmModel_->transform.rotation.y = std::sin(swingParameter_) * swing_;
+
+	float leftArmOffset = (3.14f / 3.0f) * cycle_;  // 左腕を右腕よりも遅らせるためにオフセットを設定
+	leftUpperArmModel_->transform.rotation.y = std::sin(swingParameter_ - leftArmOffset) * swing_;
 }

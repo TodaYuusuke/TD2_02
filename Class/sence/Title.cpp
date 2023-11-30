@@ -90,13 +90,13 @@ void Title::Initialize() {
 
 	//右腕
 	rightUpperArmModel_->transform.translation.x = 0.1f;
-	rightUpperArmModel_->transform.translation.y = 0.05f;
-	rightUpperArmModel_->transform.rotation.z = 0.5f;
+	rightUpperArmModel_->transform.translation.y = 0.02f;
+	rightUpperArmModel_->transform.rotation.z = 0.7f;
 
 	//左腕
 	leftUpperArmModel_->transform.translation.x = -0.1f;
-	leftUpperArmModel_->transform.translation.y = 0.05f;
-	leftUpperArmModel_->transform.rotation.z = -0.5f;
+	leftUpperArmModel_->transform.translation.y = 0.02f;
+	leftUpperArmModel_->transform.rotation.z = -0.7f;
 
 
 	cameraOffset_ = { 0.02f, 0.0f, -0.0f };

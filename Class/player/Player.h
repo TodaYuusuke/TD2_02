@@ -76,6 +76,17 @@ protected: // ** メンバ変数 ** //
 	// カメラを追従させるかのフラグ
 	bool isFollowingCamera_ = true;
 
+	//浮遊ギミックの媒介変数
+	float UpdownParameter_ = 0.0f;
+	float swingParameter_ = 0.0f;
+	float throwParameter_ = 0.0f;
+	//浮遊移動のサイクル<frame>
+	uint16_t cycle_ = 60;
+	//浮遊の振動<m>
+	float amplitude_ = 0.1f;
+	float swing_ = 0.1f;
+	float throw_ = 0.1f;
+	bool isMove = false;
 
 protected: // ** プライベートな関数 ** //
 
@@ -89,6 +100,14 @@ protected: // ** プライベートな関数 ** //
 
 	// 派生クラス用更新処理
 	virtual void UpdateDerved(Stage* stage);
+
+	void InitArmPosition();
+
+	void InitializeFloatingGimmick();
+
+	void UpAndDownMotion(float time);
+
+	void UpdateMoveNoHaveArmAnimation();
 
 	// 線形補完
 	LWP::Math::Vector3 Lerp(const LWP::Math::Vector3& v1, const LWP::Math::Vector3& v2, float t);
