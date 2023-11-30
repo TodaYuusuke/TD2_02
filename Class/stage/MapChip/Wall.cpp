@@ -9,10 +9,10 @@ void Wall::Init(LWP::Math::Vector3 position, float scale) {
 	model_->material.enableLighting = true;
 
 	LWP::Math::Vector3 vec[5] = {
-		{0.27f,0.0f,0.27f},
-		{-0.27f,0.0f,0.27f},
-		{0.27f,0.0f,-0.27f},
-		{-0.27f,0.0f,-0.27f},
+		{0.37f,0.0f,0.37f},
+		{-0.37f,0.0f,0.37f},
+		{0.37f,0.0f,-0.37f},
+		{-0.37f,0.0f,-0.37f},
 		{0.0f,0.0f,0.0f}
 	};
 
@@ -21,8 +21,8 @@ void Wall::Init(LWP::Math::Vector3 position, float scale) {
 		trunkModel_[i] = LWP::Resource::LoadModel("Tree/Trunk.obj");
 		trunkModel_[i]->transform.Parent(&model_->transform);
 		trunkModel_[i]->transform.translation = vec[i];
-		trunkModel_[i]->transform.translation.x += static_cast<float>(GenerateRandamNum<int>(-10, 10)) / 100.0f;
-		trunkModel_[i]->transform.translation.z += static_cast<float>(GenerateRandamNum<int>(-10, 10)) / 100.0f;
+		//trunkModel_[i]->transform.translation.x += static_cast<float>(GenerateRandamNum<int>(-10, 10)) / 100.0f;
+		//trunkModel_[i]->transform.translation.z += static_cast<float>(GenerateRandamNum<int>(-10, 10)) / 100.0f;
 		float s = static_cast<float>(GenerateRandamNum<int>(250 - 20, 250 + 20)) / 100.0f;
 		//float s = 2.5f;
 		trunkModel_[i]->transform.scale = { s + 0.5f,s,s + 0.5f };
